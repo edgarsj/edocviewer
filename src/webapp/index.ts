@@ -1,4 +1,4 @@
-import "../webapp/main.css";
+import "./main.css";
 import { FileDropzone } from "../components/FileDropzone";
 import {
   parseEdocFile,
