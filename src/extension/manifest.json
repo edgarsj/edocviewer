@@ -1,0 +1,49 @@
+{
+  "manifest_version": 3,
+  "name": "eDoc Viewer",
+  "version": "0.1.0",
+  "description": "View and verify EU standard ASiC-E and Latvian eDoc files",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "eDoc Viewer"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "file_handlers": [
+    {
+      "action": "open-edoc",
+      "name": "eDoc Viewer",
+      "accept": {
+        "application/octet-stream": [".edoc", ".asice"]
+      }
+    }
+  ],
+  "permissions": [
+    "downloads",
+    "storage"
+  ],
+  "file_browser_handlers": [
+    {
+      "id": "edoc-viewer",
+      "default_title": "Open with eDoc Viewer",
+      "file_filters": [
+        "*.edoc",
+        "*.asice"
+      ]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["viewer.html"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

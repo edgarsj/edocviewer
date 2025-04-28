@@ -1,0 +1,45 @@
+{
+  "name": "edoc-viewer",
+  "version": "0.1.0",
+  "description": "Viewer for ASiC-E/eDoc files",
+  "main": "dist/webapp/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "webpack serve --config webpack.webapp.js --mode development",
+    "build:webapp": "webpack --config webpack.webapp.js --mode production",
+    "build:extension": "webpack --config webpack.extension.js --mode production",
+    "build": "npm run build:webapp && npm run build:extension",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "asice",
+    "edoc",
+    "viewer"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "edockit": "latest",
+    "i18next": "^22.4.10",
+    "i18next-browser-languagedetector": "^7.0.1"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.246",
+    "@types/node": "^18.15.0",
+    "autoprefixer": "^10.4.14",
+    "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.7.3",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.7.3",
+    "postcss": "^8.4.21",
+    "postcss-loader": "^7.1.0",
+    "style-loader": "^3.3.2",
+    "tailwindcss": "^3.2.7",
+    "ts-loader": "^9.4.2",
+    "typescript": "^4.9.5",
+    "webpack": "^5.76.1",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.11.1",
+    "webpack-merge": "^5.8.0"
+  }
+}

@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>eDoc Viewer</title>
+        <link rel="icon" href="/icons/edoc-icon.svg" type="image/svg+xml" />
+    </head>
+    <body class="bg-gray-100 min-h-screen py-8">
+        <div class="container mx-auto px-4">
+            <header class="mb-8 text-center">
+                <div class="flex justify-center items-center gap-3 mb-2">
+                    <img
+                        src="/icons/edoc-icon.svg"
+                        alt="eDoc Viewer Logo"
+                        class="h-12 w-12"
+                    />
+                    <h1 class="text-3xl font-bold text-edoc-800">
+                        eDoc Viewer
+                    </h1>
+                </div>
+                <p class="text-gray-600" id="app-description">
+                    View and verify EU standard ASiC-E and Latvian eDoc files
+                </p>
+                <div class="mt-4 flex justify-center">
+                    <div class="language-selector inline-flex items-center">
+                        <span class="mr-2 text-sm text-gray-700" id="lang-label"
+                            >Language:</span
+                        >
+                        <select
+                            id="language-selector"
+                            class="bg-white border border-gray-300 rounded px-2 py-1 text-sm"
+                        >
+                            <option value="auto">Auto (Browser)</option>
+                            <option value="en">English</option>
+                            <option value="lv">Latvian</option>
+                        </select>
+                    </div>
+                </div>
+            </header>
+
+            <main>
+                <!-- File Upload Section -->
+                <div id="upload-section" class="edoc-container mb-8">
+                    <div id="dropzone" class="dropzone">
+                        <div class="flex flex-col items-center">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-12 w-12 text-edoc-600 mb-2"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                                />
+                            </svg>
+                            <p class="text-lg mb-2" id="dropzone-title">
+                                Drop your eDoc file here
+                            </p>
+                            <p
+                                class="text-gray-500 mb-3"
+                                id="dropzone-description"
+                            >
+                                or click to browse files
+                            </p>
+                            <button
+                                id="select-file-btn"
+                                class="bg-edoc-700 text-white px-4 py-2 rounded hover:bg-edoc-800 transition-colors"
+                            >
+                                Select File
+                            </button>
+                            <input
+                                id="file-input"
+                                type="file"
+                                accept=".edoc,.asice"
+                                class="hidden"
+                            />
+                            <div
+                                id="suggested-file-container"
+                                class="mt-3 hidden"
+                            >
+                                <p
+                                    class="text-sm text-gray-600"
+                                    id="suggested-file-label"
+                                >
+                                    Suggested file:
+                                </p>
+                                <p
+                                    id="suggested-file-name"
+                                    class="font-medium text-edoc-800"
+                                ></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Result Section - Hidden Initially -->
+                <div id="result-section" class="hidden">
+                    <!-- Action Buttons -->
+                    <div class="flex justify-between mb-4">
+                        <button
+                            id="back-btn"
+                            class="flex items-center text-edoc-700 hover:text-edoc-800"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5 mr-1"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z"
+                                    clip-rule="evenodd"
+                                />
+                            </svg>
+                            <span id="back-btn-text">Back</span>
+                        </button>
+                        <button
+                            id="download-original-btn"
+                            class="flex items-center text-edoc-700 hover:text-edoc-800"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5 mr-1"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"
+                                />
+                            </svg>
+                            <span id="download-original-btn-text"
+                                >Download Original</span
+                            >
+                        </button>
+                    </div>
+
+                    <!-- Content Area -->
+                    <div id="content" class="edoc-container">
+                        <div id="loading" class="py-8 text-center">
+                            <svg
+                                class="animate-spin h-8 w-8 text-edoc-600 mx-auto"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                            >
+                                <circle
+                                    class="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    stroke-width="4"
+                                ></circle>
+                                <path
+                                    class="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                ></path>
+                            </svg>
+                            <p class="mt-3 text-gray-600" id="loading-text">
+                                Loading...
+                            </p>
+                        </div>
+
+                        <div
+                            id="error-container"
+                            class="hidden bg-red-100 text-red-700 p-4 rounded border border-red-300"
+                        >
+                            <div class="flex items-start">
+                                <svg
+                                    class="h-5 w-5 mr-2 mt-0.5 flex-shrink-0"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                >
+                                    <path
+                                        fill-rule="evenodd"
+                                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                        clip-rule="evenodd"
+                                    />
+                                </svg>
+                                <div>
+                                    <h3 class="font-medium" id="error-title">
+                                        Error
+                                    </h3>
+                                    <p id="error-message"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Signature Section (Will be populated by JS) -->
+                        <div id="signatures-container" class="hidden"></div>
+
+                        <!-- Document Files Section (Will be populated by JS) -->
+                        <div id="documents-container" class="hidden"></div>
+
+                        <!-- Metadata Section (Will be populated by JS) -->
+                        <div id="metadata-container" class="hidden"></div>
+                    </div>
+                </div>
+            </main>
+
+            <footer class="mt-8 text-center text-sm text-gray-500">
+                <p>&copy; <span id="current-year"></span> eDoc Viewer</p>
+            </footer>
+        </div>
+
+        <!-- Templates -->
+        <template id="signature-template">
+            <div class="signature-section mb-6">
+                <h3 class="section-title" data-i18n="signatures.title">
+                    Signatures
+                </h3>
+                <div class="signature-items"></div>
+            </div>
+        </template>
+
+        <template id="signature-item-template">
+            <div
+                class="signature-info bg-white p-4 rounded border border-edoc-200 mb-4"
+            >
+                <div class="signer-info mb-2"></div>
+                <div class="signature-status mb-2"></div>
+                <div class="file-coverage-details hidden"></div>
+            </div>
+        </template>
+
+        <template id="documents-template">
+            <div class="document-section mb-6">
+                <h3 class="section-title" data-i18n="documents.title">
+                    Document Files
+                </h3>
+                <div
+                    class="files bg-white rounded border border-edoc-200"
+                ></div>
+            </div>
+        </template>
+
+        <template id="metadata-template">
+            <div class="metadata-section">
+                <div
+                    class="metadata-header cursor-pointer p-3 bg-edoc-200 rounded flex items-center"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="expand-icon h-5 w-5 mr-2"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                            clip-rule="evenodd"
+                        />
+                    </svg>
+                    <h3 class="font-medium" data-i18n="metadata.title">
+                        Metadata Files (Advanced)
+                    </h3>
+                </div>
+                <div class="metadata-content hidden mt-3">
+                    <div
+                        class="files bg-white rounded border border-edoc-200"
+                    ></div>
+                </div>
+            </div>
+        </template>
+
+        <template id="file-item-template">
+            <div class="file-item">
+                <span class="file-name truncate pr-4"></span>
+                <div class="flex items-center">
+                    <button
+                        class="view-btn mr-2 bg-edoc-600 text-white py-1.5 px-3 rounded hover:bg-edoc-700 transition-colors hidden"
+                    >
+                        <span data-i18n="file.view">View</span>
+                    </button>
+                    <button class="download-btn">
+                        <span data-i18n="file.download">Download</span>
+                    </button>
+                </div>
+            </div>
+        </template>
+    </body>
+</html>

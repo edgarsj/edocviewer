@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .edoc-container {
+        @apply max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md;
+    }
+
+    .signature-section {
+        @apply bg-edoc-100 p-4 rounded mb-6 border border-edoc-200;
+    }
+
+    .document-section {
+        @apply bg-edoc-100 p-4 rounded mb-6 border border-edoc-200;
+    }
+
+    .metadata-section {
+        @apply bg-edoc-100 p-4 rounded mb-6 border border-edoc-200;
+    }
+
+    .section-title {
+        @apply font-semibold mb-3 text-lg text-edoc-800;
+    }
+
+    .file-item {
+        @apply py-3 px-4 border-b border-edoc-200 flex justify-between items-center;
+    }
+
+    .file-item:last-child {
+        @apply border-b-0;
+    }
+
+    .download-btn {
+        @apply bg-edoc-700 text-white py-1.5 px-3 rounded hover:bg-edoc-800 transition-colors;
+    }
+
+    .valid {
+        @apply text-edoc-700 font-semibold;
+    }
+
+    .invalid {
+        @apply text-red-600 font-semibold;
+    }
+
+    .dropzone {
+        @apply border-2 border-dashed border-edoc-400 bg-edoc-50 p-6 rounded-lg text-center cursor-pointer transition-colors hover:bg-edoc-100;
+    }
+
+    .dropzone-active {
+        @apply bg-edoc-200 border-edoc-600;
+    }
+}
