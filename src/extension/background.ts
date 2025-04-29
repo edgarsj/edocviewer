@@ -78,12 +78,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 // Listen for extension installation or update
 chrome.runtime.onInstalled.addListener((details) => {
-  if (details.reason === "install") {
-    // First time installation - open welcome page
-    chrome.tabs.create({
-      url: chrome.runtime.getURL("welcome.html"),
-    });
-  }
+  console.log("Extension installed or updated:", details.reason);
 });
 
 // Ensure the extension is registered as a file handler for .edoc and .asice files

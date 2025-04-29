@@ -17,27 +17,12 @@
     "service_worker": "background.js",
     "type": "module"
   },
-  "file_handlers": [
-    {
-      "action": "open-edoc",
-      "name": "eDoc Viewer",
-      "accept": {
-        "application/octet-stream": [".edoc", ".asice"]
-      }
-    }
-  ],
-  "permissions": [
-    "downloads",
-    "storage"
-  ],
+  "permissions": ["downloads", "storage"],
   "file_browser_handlers": [
     {
       "id": "edoc-viewer",
       "default_title": "Open with eDoc Viewer",
-      "file_filters": [
-        "*.edoc",
-        "*.asice"
-      ]
+      "file_filters": ["*.edoc", "*.asice"]
     }
   ],
   "web_accessible_resources": [
