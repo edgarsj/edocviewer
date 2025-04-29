@@ -15,6 +15,18 @@ export default merge(commonConfig, {
     filename: "js/[name].[contenthash].js",
     clean: true,
   },
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          chunks: "all",
+        },
+      },
+    },
+  },
   plugins: [
     new HtmlWebpackPlugin({
       template: "./public/index.html",
