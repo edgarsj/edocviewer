@@ -8,6 +8,56 @@ import {
 } from "../core/parser";
 import { downloadFile, deriveFilename } from "../utils/download";
 import i18n, { SupportedLanguage } from "../utils/i18n";
+import { setupOfflineDetection } from "../utils/offline";
+
+// Register service worker for PWA functionality
+async function registerServiceWorker() {
+  if ("serviceWorker" in navigator) {
+    try {
+      const registration =
+        await navigator.serviceWorker.register("/service-worker.js");
+      console.log("Service Worker registered with scope:", registration.scope);
+
+      // Setup file handling when the service worker is active
+      setupFileHandling();
+    } catch (error) {
+      console.error("Service Worker registration failed:", error);
+    }
+  }
+}
+
+// Initialize the app when the DOM is loaded
+document.addEventListener("DOMContentLoaded", () => {
+  new EdocViewer();
+  // Register service worker after DOM is loaded
+  registerServiceWorker();
+  // Setup offline detection
+  setupOfflineDetection();
+});
+
+// Register for file handling API
+async function setupFileHandling() {
+  if ("launchQueue" in window && "files" in LaunchParams.prototype) {
+    // @ts-ignore - TypeScript may not recognize the launchQueue API yet
+    window.launchQueue.setConsumer((launchParams) => {
+      if (!launchParams.files.length) {
+        return;
+      }
+
+      // Get the first file
+      const filePromises = launchParams.files.map((fileHandle) =>
+        fileHandle.getFile(),
+      );
+      Promise.all(filePromises).then((files) => {
+        // Pass to the app instance - dispatch custom event for this
+        const event = new CustomEvent("fileHandlingFiles", {
+          detail: { files },
+        });
+        window.dispatchEvent(event);
+      });
+    });
+  }
+}
 
 class EdocViewer {
   private container: EdocContainer | null = null;
@@ -18,6 +68,13 @@ class EdocViewer {
 
   constructor() {
     this.initializeApp();
+
+    // Listen for file handling events
+    window.addEventListener("fileHandlingFiles", ((event: CustomEvent) => {
+      if (event.detail && event.detail.files && event.detail.files.length > 0) {
+        this.handleFileSelection(event.detail.files[0]);
+      }
+    }) as EventListener);
   }
 
   /**
@@ -63,6 +120,58 @@ class EdocViewer {
     // Apply initial translations
     i18n.applyTranslations();
     this.updateDynamicTranslations();
+
+    // Show install prompt if app is installable
+    this.setupInstallPrompt();
+  }
+
+  /**
+   * Setup PWA install prompt
+   */
+  private setupInstallPrompt(): void {
+    let deferredPrompt: any;
+    const installButton = document.getElementById("install-pwa-btn");
+
+    if (installButton) {
+      // Initially hide the button
+      installButton.classList.add("hidden");
+
+      window.addEventListener("beforeinstallprompt", (e) => {
+        // Prevent the mini-infobar from appearing on mobile
+        e.preventDefault();
+        // Stash the event so it can be triggered later
+        deferredPrompt = e;
+        // Show the install button
+        installButton.classList.remove("hidden");
+
+        installButton.addEventListener("click", () => {
+          // Hide the install button
+          installButton.classList.add("hidden");
+          // Show the prompt
+          deferredPrompt.prompt();
+          // Wait for the user to respond to the prompt
+          deferredPrompt.userChoice.then(
+            (choiceResult: { outcome: string }) => {
+              if (choiceResult.outcome === "accepted") {
+                console.log("User accepted the install prompt");
+              } else {
+                console.log("User dismissed the install prompt");
+              }
+              // Clear the saved prompt since it can't be used again
+              deferredPrompt = null;
+            },
+          );
+        });
+      });
+    }
+
+    // Hide button after installation
+    window.addEventListener("appinstalled", () => {
+      if (installButton) {
+        installButton.classList.add("hidden");
+      }
+      console.log("PWA was installed");
+    });
   }
 
   /**
@@ -106,6 +215,17 @@ class EdocViewer {
       langLabel.textContent = i18n.translate("language.label");
     }
 
+    // Update dropzone text
+    const dropzoneTitle = document.getElementById("dropzone-title");
+    if (dropzoneTitle) {
+      dropzoneTitle.textContent = i18n.translate("upload.dragDrop");
+    }
+
+    const dropzoneDescription = document.getElementById("dropzone-description");
+    if (dropzoneDescription) {
+      dropzoneDescription.textContent = i18n.translate("upload.or");
+    }
+
     // Update button texts
     const backBtn = document.getElementById("back-btn-text");
     if (backBtn) {
@@ -129,6 +249,19 @@ class EdocViewer {
     const errorTitle = document.getElementById("error-title");
     if (errorTitle) {
       errorTitle.textContent = i18n.translate("error.title");
+    }
+
+    // Update install button text if present
+    const installBtnText = document.getElementById("install-btn-text");
+    if (installBtnText) {
+      installBtnText.textContent =
+        i18n.translate("buttons.installApp") || "Install App";
+    }
+
+    // Update suggested file label
+    const suggestedFileLabel = document.getElementById("suggested-file-label");
+    if (suggestedFileLabel) {
+      suggestedFileLabel.textContent = i18n.translate("upload.suggestedFile");
     }
   }
 
@@ -351,7 +484,7 @@ class EdocViewer {
     } else {
       signaturesContainer.innerHTML = `
         <div class="signature-section">
-          <h3 class="section-title">${i18n.translate("signatures.title")}</h3>
+          <h3 class="section-title" data-i18n="signatures.title">Signatures</h3>
           <p class="text-gray-600">${i18n.translate("signatures.noSignatures")}</p>
         </div>
       `;
@@ -409,7 +542,7 @@ class EdocViewer {
     } else {
       documentsContainer.innerHTML = `
         <div class="document-section">
-          <h3 class="section-title">${i18n.translate("documents.title")}</h3>
+          <h3 class="section-title" data-i18n="documents.title">Document Files</h3>
           <p class="text-gray-600">${i18n.translate("documents.noDocuments")}</p>
         </div>
       `;
@@ -603,8 +736,3 @@ class EdocViewer {
     }
   }
 }
-
-// Initialize the app when the DOM is loaded
-document.addEventListener("DOMContentLoaded", () => {
-  new EdocViewer();
-});

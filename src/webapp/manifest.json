@@ -1,0 +1,37 @@
+{
+  "name": "eDoc Viewer",
+  "short_name": "eDoc",
+  "description": "View and verify EU standard ASiC-E and Latvian eDoc files",
+  "icons": [
+    {
+      "src": "icons/edoc-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "index.html",
+  "display": "standalone",
+  "theme_color": "#4A5568",
+  "background_color": "#F9FAFB",
+  "file_handlers": [
+    {
+      "action": "index.html",
+      "accept": {
+        "application/vnd.etsi.asic-e+zip": [".asice"],
+        "application/octet-stream": [".edoc"]
+      }
+    }
+  ]
+}

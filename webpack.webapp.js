@@ -29,6 +29,15 @@ export default merge(commonConfig, {
             ignore: ["**/index.html"],
           },
         },
+        // Copy PWA files
+        {
+          from: "./src/webapp/manifest.json",
+          to: "manifest.json",
+        },
+        {
+          from: "./src/webapp/service-worker.js",
+          to: "service-worker.js",
+        },
       ],
     }),
   ],
@@ -39,5 +48,9 @@ export default merge(commonConfig, {
     compress: true,
     port: 8080,
     hot: true,
+    // Allow requests from any origin during development
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
   },
 });

@@ -3,8 +3,15 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+            name="description"
+            content="View and verify EU standard ASiC-E and Latvian eDoc files"
+        />
+        <meta name="theme-color" content="#4A5568" />
         <title>eDoc Viewer</title>
         <link rel="icon" href="/icons/edoc-icon.svg" type="image/svg+xml" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/icons/icon-192.png" />
     </head>
     <body class="bg-gray-100 min-h-screen py-8">
         <div class="container mx-auto px-4">
@@ -22,7 +29,7 @@
                 <p class="text-gray-600" id="app-description">
                     View and verify EU standard ASiC-E and Latvian eDoc files
                 </p>
-                <div class="mt-4 flex justify-center">
+                <div class="mt-4 flex justify-center flex-wrap gap-2">
                     <div class="language-selector inline-flex items-center">
                         <span class="mr-2 text-sm text-gray-700" id="lang-label"
                             >Language:</span
@@ -36,6 +43,27 @@
                             <option value="lv">Latvian</option>
                         </select>
                     </div>
+                    <!-- Install PWA button -->
+                    <button
+                        id="install-pwa-btn"
+                        class="hidden inline-flex items-center bg-edoc-700 text-white px-3 py-1 rounded text-sm hover:bg-edoc-800 transition-colors ml-2"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-4 w-4 mr-1"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                            />
+                        </svg>
+                        <span id="install-btn-text">Install App</span>
+                    </button>
                 </div>
             </header>
 
@@ -288,5 +316,44 @@
                 </div>
             </div>
         </template>
+
+        <!-- Offline notification -->
+        <div
+            id="offline-message"
+            class="fixed bottom-4 right-4 p-4 bg-yellow-100 border border-yellow-400 rounded shadow-lg hidden"
+        >
+            <div class="flex items-center">
+                <svg
+                    class="w-5 h-5 text-yellow-600 mr-2"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                >
+                    <path
+                        fill-rule="evenodd"
+                        d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                        clip-rule="evenodd"
+                    />
+                </svg>
+                <span id="offline-text"
+                    >You are currently offline. Some features may be
+                    limited.</span
+                >
+            </div>
+            <button id="close-offline-msg" class="absolute top-2 right-2">
+                <svg
+                    class="w-4 h-4 text-yellow-600"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                >
+                    <path
+                        fill-rule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clip-rule="evenodd"
+                    />
+                </svg>
+            </button>
+        </div>
     </body>
 </html>
