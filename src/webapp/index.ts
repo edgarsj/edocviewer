@@ -309,19 +309,22 @@ class EdocViewer {
     this.showLoading();
 
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = async (e) => {
       try {
         this.fileData = new Uint8Array(e.target!.result as ArrayBuffer);
-        this.processEdocFile(this.fileData);
+
+        await this.processEdocFile(this.fileData);
       } catch (error) {
         this.showError(
           `${i18n.translate("error.processingError")}: ${(error as Error).message}`,
         );
+        this.hideLoading();
       }
     };
 
     reader.onerror = () => {
       this.showError(i18n.translate("error.fileNotFound"));
+      this.hideLoading();
     };
 
     reader.readAsArrayBuffer(file);
@@ -342,11 +345,13 @@ class EdocViewer {
 
       const arrayBuffer = await response.arrayBuffer();
       this.fileData = new Uint8Array(arrayBuffer);
-      this.processEdocFile(this.fileData);
+
+      await this.processEdocFile(this.fileData);
     } catch (error) {
       this.showError(
         `${i18n.translate("error.processingError")}: ${(error as Error).message}`,
       );
+      this.hideLoading();
       this.setupUploadInterface(); // Show upload interface as fallback
     }
   }
@@ -356,10 +361,13 @@ class EdocViewer {
    */
   private async processEdocFile(fileData: Uint8Array): Promise<void> {
     try {
-      // Parse the container
-      this.container = parseEdocFile(fileData);
+      // Show loading indicator with optional message about loading parser
+      this.showLoading();
 
-      // Verify signatures
+      // Parse the container (now async)
+      this.container = await parseEdocFile(fileData);
+
+      // Verify signatures (already async)
       const signatureResults = await verifyEdocSignatures(this.container);
 
       // Display the results
@@ -368,6 +376,9 @@ class EdocViewer {
       this.showError(
         `${i18n.translate("error.processingError")}: ${(error as Error).message}`,
       );
+    } finally {
+      // Make sure we hide the loading indicator
+      this.hideLoading();
     }
   }
 
@@ -671,11 +682,19 @@ class EdocViewer {
     }
   }
 
+  // Optional: You might want to enhance the loading UI to inform users about loading the parser
   /**
    * Show loading indicator
    */
-  private showLoading(): void {
-    document.getElementById("loading")!.classList.remove("hidden");
+  private showLoading(message?: string): void {
+    const loading = document.getElementById("loading")!;
+    const loadingText = document.getElementById("loading-text");
+
+    if (loadingText && message) {
+      loadingText.textContent = message;
+    }
+
+    loading.classList.remove("hidden");
   }
 
   /**

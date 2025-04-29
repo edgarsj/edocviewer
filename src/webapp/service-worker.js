@@ -1,16 +1,9 @@
 // Service Worker for eDoc Viewer PWA
 const CACHE_NAME = "edoc-viewer-cache-v1";
 
-// Assets to cache on install
-const INITIAL_ASSETS = [
-  "/",
-  "/index.html",
-  "/js/main.js", // This will be the main bundle
-  "/css/main.css", // This will be the main CSS
-  "/icons/edoc-icon.svg",
-  "/icons/icon-192.png",
-  "/icons/icon-512.png",
-];
+// This line will be replaced by the Workbox plugin with the list of assets
+// DO NOT modify this line or define self.__WB_MANIFEST anywhere else
+const precacheManifest = self.__WB_MANIFEST;
 
 // Install event - cache the initial assets
 self.addEventListener("install", (event) => {
@@ -18,7 +11,13 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       console.log("Service Worker: Caching app shell");
-      return cache.addAll(INITIAL_ASSETS);
+
+      // Get URLs from the precache manifest
+      const urlsToCache = precacheManifest
+        ? precacheManifest.map((entry) => entry.url || entry)
+        : ["/", "/index.html"];
+
+      return cache.addAll(urlsToCache);
     }),
   );
 });
@@ -60,7 +59,58 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Standard cache-first strategy for assets
+  // Handle navigation requests differently - use a network-first strategy for HTML
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      fetch(event.request).catch(() => {
+        return caches.match("/index.html");
+      }),
+    );
+    return;
+  }
+
+  // For JS/CSS files with content hash in filename, use cache-first strategy
+  if (event.request.url.match(/\.(js|css)$/)) {
+    event.respondWith(
+      caches.match(event.request).then((response) => {
+        // Return cached response if found
+        if (response) {
+          return response;
+        }
+
+        // Clone the request because it's a one-time use stream
+        const fetchRequest = event.request.clone();
+
+        return fetch(fetchRequest)
+          .then((response) => {
+            // Check if response is valid
+            if (
+              !response ||
+              response.status !== 200 ||
+              response.type !== "basic"
+            ) {
+              return response;
+            }
+
+            // Clone the response because it's a one-time use stream
+            const responseToCache = response.clone();
+
+            // Cache the fetched resource
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseToCache);
+            });
+
+            return response;
+          })
+          .catch((error) => {
+            console.log("Service Worker: Fetch failed for JS/CSS:", error);
+          });
+      }),
+    );
+    return;
+  }
+
+  // Standard cache-first strategy for other assets
   event.respondWith(
     caches.match(event.request).then((response) => {
       // Return cached response if found

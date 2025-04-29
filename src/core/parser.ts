@@ -1,5 +1,3 @@
-import { parseEdoc, verifySignature } from "edockit";
-
 export interface SignerInfo {
   signerName: string;
   personalId: string;
@@ -23,13 +21,32 @@ export interface EdocContainer {
   signatures: any[];
 }
 
+// Keep track of the loading promise to avoid multiple imports
+let edockitLoading: Promise<typeof import("edockit")> | null = null;
+
+/**
+ * Dynamically load the edockit library
+ * @returns A promise that resolves to the edockit module
+ */
+async function loadEdockit() {
+  if (!edockitLoading) {
+    // Only create the import promise once
+    edockitLoading = import(/* webpackChunkName: "edockit-bundle" */ "edockit");
+  }
+  return edockitLoading;
+}
+
 /**
  * Parse an ASiC-E/eDoc file
  * @param fileData Binary data of the eDoc file
  * @returns Parsed container object
  */
-export function parseEdocFile(fileData: Uint8Array): EdocContainer {
+export async function parseEdocFile(
+  fileData: Uint8Array,
+): Promise<EdocContainer> {
   try {
+    // Dynamically import edockit only when needed
+    const { parseEdoc } = await loadEdockit();
     return parseEdoc(fileData);
   } catch (error) {
     console.error("Error parsing eDoc file:", error);
@@ -46,6 +63,9 @@ export async function verifyEdocSignatures(
   container: EdocContainer,
 ): Promise<SignatureValidationResult[]> {
   try {
+    // Dynamically import edockit only when needed
+    const { verifySignature } = await loadEdockit();
+
     const signatureResults = await Promise.all(
       container.signatures.map(async (signature) => {
         try {

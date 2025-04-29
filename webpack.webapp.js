@@ -1,6 +1,7 @@
 import { merge } from "webpack-merge";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import CopyWebpackPlugin from "copy-webpack-plugin";
+import { InjectManifest } from "workbox-webpack-plugin";
 import path from "path";
 import { fileURLToPath } from "url";
 import commonConfig from "./webpack.common.js";
@@ -13,16 +14,49 @@ export default merge(commonConfig, {
   output: {
     path: path.resolve(__dirname, "dist/webapp"),
     filename: "js/[name].[contenthash].js",
+    chunkFilename: "js/[name].[contenthash].js", // For dynamically imported chunks
     clean: true,
   },
   optimization: {
     splitChunks: {
       chunks: "all",
       cacheGroups: {
-        vendor: {
-          test: /[\\/]node_modules[\\/]/,
+        // Regular vendor chunk for other dependencies
+        defaultVendors: {
+          test: (module) => {
+            // Return false for edockit and its dependencies
+            if (
+              module.resource &&
+              (module.resource.includes("node_modules/edockit") ||
+                module.resource.includes("node_modules/@peculiar/x509") ||
+                module.resource.includes("node_modules/@xmldom/xmldom") ||
+                module.resource.includes("node_modules/fflate") ||
+                module.resource.includes("node_modules/xpath"))
+            ) {
+              return false;
+            }
+            // Return true for all other node_modules
+            return /[\\/]node_modules[\\/]/.test(module.resource);
+          },
           name: "vendors",
           chunks: "all",
+          priority: 10,
+        },
+        // Create a separate chunk for edockit and its dependencies
+        edockitBundle: {
+          test: (module) => {
+            return (
+              module.resource &&
+              (module.resource.includes("node_modules/edockit") ||
+                module.resource.includes("node_modules/@peculiar/x509") ||
+                module.resource.includes("node_modules/@xmldom/xmldom") ||
+                module.resource.includes("node_modules/fflate") ||
+                module.resource.includes("node_modules/xpath"))
+            );
+          },
+          name: "edockit-bundle",
+          chunks: "all",
+          priority: 20, // Higher priority than vendors
         },
       },
     },
@@ -41,16 +75,17 @@ export default merge(commonConfig, {
             ignore: ["**/index.html"],
           },
         },
-        // Copy PWA files
         {
           from: "./src/webapp/manifest.json",
           to: "manifest.json",
         },
-        {
-          from: "./src/webapp/service-worker.js",
-          to: "service-worker.js",
-        },
       ],
+    }),
+    // Use InjectManifest to generate service worker with precached assets
+    new InjectManifest({
+      swSrc: "./src/webapp/service-worker.js",
+      swDest: "service-worker.js",
+      maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB
     }),
   ],
   devServer: {
