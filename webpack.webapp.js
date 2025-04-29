@@ -72,7 +72,7 @@ export default merge(commonConfig, {
           from: "public",
           to: ".",
           globOptions: {
-            ignore: ["**/index.html"],
+            ignore: ["**/index.html", "**/.DS_Store"],
           },
         },
         {
