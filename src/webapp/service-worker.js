@@ -1,9 +1,10 @@
 // Service Worker for eDoc Viewer PWA
 const CACHE_NAME = "edoc-viewer-cache-v1";
+const SHOELACE_ASSETS_CACHE = "shoelace-assets-cache-v1";
 
 // This line will be replaced by the Workbox plugin with the list of assets
 // DO NOT modify this line or define self.__WB_MANIFEST anywhere else
-const precacheManifest = self.__WB_MANIFEST;
+const precacheManifest = self.__WB_MANIFEST || [];
 
 // Install event - cache the initial assets
 self.addEventListener("install", (event) => {
@@ -17,7 +18,23 @@ self.addEventListener("install", (event) => {
         ? precacheManifest.map((entry) => entry.url || entry)
         : ["/", "/index.html"];
 
-      return cache.addAll(urlsToCache);
+      // Use Promise.all to catch and handle individual cache failures
+      return Promise.all(
+        urlsToCache.map((url) =>
+          cache.add(url).catch((error) => {
+            console.log(`Failed to cache ${url}:`, error);
+          }),
+        ),
+      );
+    }),
+  );
+
+  // Cache essential Shoelace assets
+  event.waitUntil(
+    caches.open(SHOELACE_ASSETS_CACHE).then((cache) => {
+      return cache.add("/shoelace/assets/icons/system.svg").catch((error) => {
+        console.log("Failed to cache Shoelace icon system:", error);
+      });
     }),
   );
 });
@@ -29,7 +46,7 @@ self.addEventListener("activate", (event) => {
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
+          if (cacheName !== CACHE_NAME && cacheName !== SHOELACE_ASSETS_CACHE) {
             console.log("Service Worker: Clearing old cache:", cacheName);
             return caches.delete(cacheName);
           }
@@ -56,6 +73,34 @@ self.addEventListener("fetch", (event) => {
       url.searchParams.get("file"),
     );
     // Let the main app handle this
+    return;
+  }
+
+  // Special handling for Shoelace assets (icons, etc.)
+  if (event.request.url.includes("/shoelace/assets/")) {
+    event.respondWith(
+      caches.match(event.request).then((response) => {
+        if (response) {
+          return response;
+        }
+        return fetch(event.request).then((response) => {
+          // Only cache valid responses
+          if (
+            !response ||
+            response.status !== 200 ||
+            response.type !== "basic"
+          ) {
+            return response;
+          }
+          // Clone the response
+          const responseToCache = response.clone();
+          caches.open(SHOELACE_ASSETS_CACHE).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+          return response;
+        });
+      }),
+    );
     return;
   }
 

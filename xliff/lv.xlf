@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+<file
+        target-language="lv"
+        source-language="en"
+        original="lit-localize-inputs"
+        datatype="plaintext"
+    >
+<body>
+<trans-unit id="signatures.signedBy">
+  <source>Signed by:</source>
+  <target>Parakstījis:</target>
+</trans-unit>
+<trans-unit id="signatures.signatureStatus">
+  <source>Signature Status:</source>
+  <target>Paraksta statuss:</target>
+</trans-unit>
+<trans-unit id="signatures.valid">
+  <source>Valid</source>
+  <target>Derīgs</target>
+</trans-unit>
+<trans-unit id="signatures.invalid">
+  <source>INVALID</source>
+  <target>NEDERĪGS</target>
+</trans-unit>
+<trans-unit id="signatures.referencedFiles">
+  <source>Referenced files in signature</source>
+  <target>Parakstā iekļautās datnes</target>
+</trans-unit>
+<trans-unit id="signatures.unsignedFiles">
+  <source>Unsigned files</source>
+  <target>Neparakstītās datnes</target>
+</trans-unit>
+<trans-unit id="signatures.title">
+  <source>Signatures</source>
+  <target>Paraksti</target>
+</trans-unit>
+<trans-unit id="signatures.noSignatures">
+  <source>No signatures found</source>
+  <target>Nav atrasti paraksti</target>
+</trans-unit>
+<trans-unit id="sa7c8c31e43a211d5">
+  <source>No files found</source>
+  <target>Nav atrasta neviena datne</target>
+</trans-unit>
+<trans-unit id="file.view">
+  <source>View</source>
+  <target>Skatīt</target>
+</trans-unit>
+<trans-unit id="file.download">
+  <source>Download</source>
+  <target>Lejupielādēt</target>
+</trans-unit>
+<trans-unit id="documents.title">
+  <source>Document Files</source>
+  <target>Dokumentu datnes</target>
+</trans-unit>
+<trans-unit id="documents.noDocuments">
+  <source>No document files found</source>
+  <target>Nav atrasta neviena dokumenta datne</target>
+</trans-unit>
+<trans-unit id="metadata.title">
+  <source>Metadata Files (Advanced)</source>
+  <target>Metadatu datnes (Papildu)</target>
+</trans-unit>
+<trans-unit id="metadata.noMetadata">
+  <source>No metadata files found</source>
+  <target>Nav atrasta neviena metadatu datne</target>
+</trans-unit>
+<trans-unit id="loading">
+  <source>Loading...</source>
+  <target>Ielāde...</target>
+</trans-unit>
+<trans-unit id="error.title">
+  <source>Error</source>
+  <target>Kļūda</target>
+</trans-unit>
+<trans-unit id="language.label">
+  <source>Language:</source>
+  <target>Valoda:</target>
+</trans-unit>
+<trans-unit id="language.auto">
+  <source>Auto (Browser)</source>
+  <target>Automātiski (Pārlūks)</target>
+</trans-unit>
+<trans-unit id="language.en">
+  <source>English</source>
+  <target>Angļu</target>
+</trans-unit>
+<trans-unit id="language.lv">
+  <source>Latvian</source>
+  <target>Latviešu</target>
+</trans-unit>
+<trans-unit id="offline.message">
+  <source>You are currently offline. Some features may be limited.</source>
+  <target
+                >Jūs pašlaik esat bezsaistē. Dažas funkcijas var būt ierobežotas.</target>
+</trans-unit>
+<trans-unit id="app.title">
+  <source>eDoc Viewer</source>
+  <target>eDoc Skatītājs</target>
+</trans-unit>
+<trans-unit id="app.description">
+  <source>View and verify EU standard ASiC-E and Latvian eDoc files</source>
+  <target
+                >Apskatiet un pārbaudiet ES standarta ASiC-E un Latvijas eDoc datnes</target>
+</trans-unit>
+<trans-unit id="buttons.installApp">
+  <source>Install App</source>
+  <target>Instalēt lietotni</target>
+</trans-unit>
+<trans-unit id="buttons.back">
+  <source>Back</source>
+  <target>Atpakaļ</target>
+</trans-unit>
+<trans-unit id="buttons.downloadOriginal">
+  <source>Download Original</source>
+  <target>Lejupielādēt oriģinālu</target>
+</trans-unit>
+<trans-unit id="error.processingError">
+  <source>Error processing file:</source>
+  <target>Kļūda apstrādājot datni:</target>
+</trans-unit>
+<trans-unit id="error.fileNotFound">
+  <source>File not found</source>
+  <target>Datne nav atrasta</target>
+</trans-unit>
+<trans-unit id="error.downloadError">
+  <source>Error downloading file:</source>
+  <target>Kļūda lejupielādējot datni:</target>
+</trans-unit>
+<trans-unit id="dropzone.title">
+  <source>Drop your eDoc file here</source>
+  <target>Ievelciet savu eDoc datni šeit</target>
+</trans-unit>
+<trans-unit id="dropzone.description">
+  <source>or click to browse files</source>
+  <target>vai klikšķiniet, lai pārlūkotu datnes</target>
+</trans-unit>
+<trans-unit id="dropzone.selectFile">
+  <source>Select File</source>
+  <target>Izvēlēties datni</target>
+</trans-unit>
+<trans-unit id="dropzone.suggestedFileLabel">
+  <source>Suggested file:</source>
+  <target>Ieteiktā datne:</target>
+</trans-unit>
+<trans-unit id="sa54d6981feeccbca">
+  <source>Drop your eDoc file here</source>
+  <target>Ievelciet savu eDoc datni šeit</target>
+</trans-unit>
+<trans-unit id="sb2fdd52f5128dab6">
+  <source>or click to browse files</source>
+  <target>vai klikšķiniet, lai pārlūkotu datnes</target>
+</trans-unit>
+<trans-unit id="s46eb6cf13a8022e9">
+  <source>Select File</source>
+  <target>Izvēlēties datni</target>
+</trans-unit>
+<trans-unit id="s7a39c22163f92638">
+  <source>Suggested file:</source>
+  <target>Ieteiktā datne:</target>
+</trans-unit>
+</body>
+</file>
+</xliff>

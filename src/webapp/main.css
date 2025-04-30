@@ -2,52 +2,101 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-    .edoc-container {
-        @apply max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md;
-    }
+/* Import Shoelace styles for the light theme */
+@import "@shoelace-style/shoelace/dist/themes/light.css";
 
-    .signature-section {
-        @apply bg-edoc-100 p-4 rounded mb-6 border border-edoc-200;
-    }
+/* Override Shoelace theme variables with our edoc green theme */
+:root {
+    /* Primary color - using our edoc green */
+    --sl-color-primary-50: theme("colors.edoc.50");
+    --sl-color-primary-100: theme("colors.edoc.100");
+    --sl-color-primary-200: theme("colors.edoc.200");
+    --sl-color-primary-300: theme("colors.edoc.300");
+    --sl-color-primary-400: theme("colors.edoc.400");
+    --sl-color-primary-500: theme("colors.edoc.500");
+    --sl-color-primary-600: theme("colors.edoc.600");
+    --sl-color-primary-700: theme("colors.edoc.700");
+    --sl-color-primary-800: theme("colors.edoc.800");
+    --sl-color-primary-900: theme("colors.edoc.900");
+    --sl-color-primary-950: theme("colors.edoc.950");
 
-    .document-section {
-        @apply bg-edoc-100 p-4 rounded mb-6 border border-edoc-200;
-    }
+    /* Other colors can also be customized if needed */
+    --sl-panel-background-color: theme("colors.white");
+    --sl-input-background-color: theme("colors.white");
 
-    .metadata-section {
-        @apply bg-edoc-100 p-4 rounded mb-6 border border-edoc-200;
-    }
+    /* Focus rings */
+    --sl-focus-ring-color: theme("colors.edoc.600");
+    --sl-focus-ring-width: 3px;
+}
 
-    .section-title {
-        @apply font-semibold mb-3 text-lg text-edoc-800;
-    }
+/* Our custom edoc styles */
+.edoc-container {
+    @apply max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md;
+}
 
-    .file-item {
-        @apply py-3 px-4 border-b border-edoc-200 flex justify-between items-center;
-    }
+.signature-section {
+    @apply bg-edoc-100 p-4 rounded mb-6 border border-edoc-200;
+}
 
-    .file-item:last-child {
-        @apply border-b-0;
-    }
+.document-section {
+    @apply bg-edoc-100 p-4 rounded mb-6 border border-edoc-200;
+}
 
-    .download-btn {
-        @apply bg-edoc-700 text-white py-1.5 px-3 rounded hover:bg-edoc-800 transition-colors;
-    }
+.metadata-section {
+    @apply bg-edoc-100 p-4 rounded mb-6 border border-edoc-200;
+}
 
-    .valid {
-        @apply text-edoc-700 font-semibold;
-    }
+.section-title {
+    @apply font-semibold mb-3 text-lg text-edoc-800;
+}
 
-    .invalid {
-        @apply text-red-600 font-semibold;
-    }
+.file-item {
+    @apply py-3 px-4 border-b border-edoc-200 flex justify-between items-center;
+}
 
-    .dropzone {
-        @apply border-2 border-dashed border-edoc-400 bg-edoc-50 p-6 rounded-lg text-center cursor-pointer transition-colors hover:bg-edoc-100;
-    }
+.file-item:last-child {
+    @apply border-b-0;
+}
 
-    .dropzone-active {
-        @apply bg-edoc-200 border-edoc-600;
-    }
+.valid {
+    @apply text-edoc-700 font-semibold;
+}
+
+.invalid {
+    @apply text-red-600 font-semibold;
+}
+
+/* Enhancement for Shoelace components */
+sl-button::part(base) {
+    @apply rounded transition-all;
+}
+
+sl-button[variant="primary"]::part(base) {
+    @apply bg-edoc-700 text-white hover:bg-edoc-800;
+}
+
+sl-button[variant="text"]::part(base) {
+    @apply text-edoc-700 hover:text-edoc-800 hover:bg-edoc-100;
+}
+
+sl-select::part(base) {
+    min-width: auto;
+}
+
+/* Force visibility of web components */
+edoc-app {
+    display: block !important;
+}
+
+#static-content {
+    display: none !important;
+}
+
+/* For browsers with JS support */
+.js-loaded #static-content {
+    display: none !important;
+}
+
+.js-loaded edoc-app {
+    display: block !important;
 }

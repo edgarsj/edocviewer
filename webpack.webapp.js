@@ -35,6 +35,15 @@ export default merge(commonConfig, {
             ) {
               return false;
             }
+            // Return false for shoelace and lit - we want them in a separate bundle
+            if (
+              module.resource &&
+              (module.resource.includes("node_modules/@shoelace-style") ||
+                module.resource.includes("node_modules/lit") ||
+                module.resource.includes("node_modules/@lit"))
+            ) {
+              return false;
+            }
             // Return true for all other node_modules
             return /[\\/]node_modules[\\/]/.test(module.resource);
           },
@@ -58,6 +67,20 @@ export default merge(commonConfig, {
           chunks: "all",
           priority: 20, // Higher priority than vendors
         },
+        // Create a separate chunk for shoelace and lit
+        webComponentsBundle: {
+          test: (module) => {
+            return (
+              module.resource &&
+              (module.resource.includes("node_modules/@shoelace-style") ||
+                module.resource.includes("node_modules/lit") ||
+                module.resource.includes("node_modules/@lit"))
+            );
+          },
+          name: "web-components",
+          chunks: "all",
+          priority: 25, // Higher priority than edockit
+        },
       },
     },
   },
@@ -78,6 +101,11 @@ export default merge(commonConfig, {
         {
           from: "./src/webapp/manifest.json",
           to: "manifest.json",
+        },
+        // Copy Shoelace assets
+        {
+          from: "./node_modules/@shoelace-style/shoelace/dist/assets",
+          to: "shoelace/assets",
         },
       ],
     }),

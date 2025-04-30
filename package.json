@@ -6,9 +6,11 @@
   "type": "module",
   "scripts": {
     "dev": "webpack serve --config webpack.webapp.js --mode development",
-    "build:webapp": "webpack --config webpack.webapp.js --mode production",
+    "build:webapp": "npm run localize:build && webpack --config webpack.webapp.js --mode production",
     "build:extension": "webpack --config webpack.extension.js --mode production",
     "build": "npm run build:webapp && npm run build:extension",
+    "localize:extract": "lit-localize extract",
+    "localize:build": "lit-localize build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -19,11 +21,15 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@lit/localize": "^0.12.0",
+    "@shoelace-style/shoelace": "^2.12.0",
     "edockit": "latest",
     "i18next": "^22.4.10",
-    "i18next-browser-languagedetector": "^7.0.1"
+    "i18next-browser-languagedetector": "^7.0.1",
+    "lit": "^3.1.0"
   },
   "devDependencies": {
+    "@lit/localize-tools": "^0.7.0",
     "@types/chrome": "^0.0.246",
     "@types/node": "^18.15.0",
     "autoprefixer": "^10.4.21",

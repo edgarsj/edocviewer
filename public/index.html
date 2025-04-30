@@ -7,79 +7,310 @@
             name="description"
             content="View and verify EU standard ASiC-E and Latvian eDoc files"
         />
-        <meta name="theme-color" content="#4A5568" />
-        <title>eDoc Viewer</title>
+        <meta name="theme-color" content="#10b981" />
+        <title>eDoc Viewer - View and verify ASiC-E and eDoc files</title>
         <link rel="icon" href="/icons/edoc-icon.svg" type="image/svg+xml" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+
+        <!-- Preload the Shoelace assets -->
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+
+        <!-- Force hide static content when JS loads -->
+        <style>
+            #static-content {
+                display: block;
+            }
+            edoc-app {
+                display: none;
+            }
+            .js-loaded #static-content {
+                display: none !important;
+            }
+            .js-loaded edoc-app {
+                display: block !important;
+            }
+        </style>
+
+        <!-- Shoelace base styles (optional - for pre-rendering) -->
+        <style>
+            :root {
+                --sl-color-primary-50: #f6fffa;
+                --sl-color-primary-100: #ecfdf5;
+                --sl-color-primary-200: #d1fae5;
+                --sl-color-primary-300: #a7f3d0;
+                --sl-color-primary-400: #6ee7b7;
+                --sl-color-primary-500: #34d399;
+                --sl-color-primary-600: #10b981;
+                --sl-color-primary-700: #059669;
+                --sl-color-primary-800: #065f46;
+                --sl-color-primary-900: #064e3b;
+
+                --sl-color-success-50: #f0fdf4;
+                --sl-color-success-100: #dcfce7;
+                --sl-color-success-200: #bbf7d0;
+                --sl-color-success-300: #86efac;
+                --sl-color-success-400: #4ade80;
+                --sl-color-success-500: #22c55e;
+                --sl-color-success-600: #16a34a;
+                --sl-color-success-700: #15803d;
+                --sl-color-success-800: #166534;
+                --sl-color-success-900: #14532d;
+
+                --sl-color-danger-50: #fef2f2;
+                --sl-color-danger-100: #fee2e2;
+                --sl-color-danger-200: #fecaca;
+                --sl-color-danger-300: #fca5a5;
+                --sl-color-danger-400: #f87171;
+                --sl-color-danger-500: #ef4444;
+                --sl-color-danger-600: #dc2626;
+                --sl-color-danger-700: #b91c1c;
+                --sl-color-danger-800: #991b1b;
+                --sl-color-danger-900: #7f1d1d;
+
+                --sl-color-warning-50: #fffbeb;
+                --sl-color-warning-100: #fef3c7;
+                --sl-color-warning-200: #fde68a;
+                --sl-color-warning-300: #fcd34d;
+                --sl-color-warning-400: #fbbf24;
+                --sl-color-warning-500: #f59e0b;
+                --sl-color-warning-600: #d97706;
+                --sl-color-warning-700: #b45309;
+                --sl-color-warning-800: #92400e;
+                --sl-color-warning-900: #78350f;
+
+                --sl-color-gray-50: #f9fafb;
+                --sl-color-gray-100: #f3f4f6;
+                --sl-color-gray-200: #e5e7eb;
+                --sl-color-gray-300: #d1d5db;
+                --sl-color-gray-400: #9ca3af;
+                --sl-color-gray-500: #6b7280;
+                --sl-color-gray-600: #4b5563;
+                --sl-color-gray-700: #374151;
+                --sl-color-gray-800: #1f2937;
+                --sl-color-gray-900: #111827;
+
+                --sl-shadow-small: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+                --sl-shadow-medium:
+                    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+                --sl-shadow-large:
+                    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+                --sl-font-sans:
+                    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+                    "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
+                    sans-serif;
+                --sl-font-mono:
+                    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+                    "Liberation Mono", "Courier New", monospace;
+            }
+
+            body {
+                font-family: var(--sl-font-sans);
+                color: var(--sl-color-gray-900);
+                background-color: var(--sl-color-gray-100);
+                margin: 0;
+                padding: 2rem 0;
+                line-height: 1.5;
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 1rem;
+            }
+
+            header {
+                margin-bottom: 2rem;
+                text-align: center;
+            }
+
+            .app-header {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 0.75rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .app-logo {
+                height: 3rem;
+                width: 3rem;
+            }
+
+            .app-title {
+                font-size: 1.875rem;
+                font-weight: 700;
+                color: var(--sl-color-primary-800);
+                margin: 0;
+            }
+
+            .app-description {
+                color: var(--sl-color-gray-600);
+                margin: 0.5rem 0 0 0;
+            }
+
+            .header-actions {
+                margin-top: 1rem;
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            main {
+                margin-bottom: 2rem;
+            }
+
+            .edoc-container {
+                max-width: 800px;
+                margin: 0 auto;
+                background-color: white;
+                padding: 1.5rem;
+                border-radius: 0.5rem;
+                box-shadow: var(--sl-shadow-medium);
+            }
+
+            .dropzone {
+                border: 2px dashed var(--sl-color-primary-400);
+                background-color: var(--sl-color-primary-50);
+                padding: 2rem;
+                border-radius: 0.5rem;
+                text-align: center;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            .dropzone:hover {
+                background-color: var(--sl-color-primary-100);
+            }
+
+            .dropzone-icon {
+                color: var(--sl-color-primary-600);
+                width: 3rem;
+                height: 3rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .dropzone-title {
+                font-size: 1.125rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .dropzone-description {
+                color: var(--sl-color-gray-500);
+                margin-bottom: 1rem;
+            }
+
+            .button {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 0.375rem;
+                font-weight: 500;
+                padding: 0.5rem 1rem;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                border: none;
+                background-color: var(
+                    --sl-color-primary-600
+                ); /* Green from our theme */
+                color: white;
+            }
+
+            .button:hover {
+                background-color: var(--sl-color-primary-700);
+            }
+
+            footer {
+                margin-top: 2rem;
+                text-align: center;
+                font-size: 0.875rem;
+                color: var(--sl-color-gray-500);
+            }
+
+            a {
+                color: var(--sl-color-primary-600);
+                text-decoration: none;
+            }
+
+            a:hover {
+                text-decoration: underline;
+            }
+
+            .language-selector {
+                display: inline-flex;
+                align-items: center;
+            }
+
+            .language-label {
+                margin-right: 0.5rem;
+                font-size: 0.875rem;
+                color: var(--sl-color-gray-700);
+            }
+
+            .language-select {
+                background-color: white;
+                border: 1px solid var(--sl-color-gray-300);
+                border-radius: 0.25rem;
+                padding: 0.25rem 0.5rem;
+                font-size: 0.875rem;
+            }
+
+            .noscript-message {
+                background-color: var(--sl-color-warning-100);
+                border: 1px solid var(--sl-color-warning-300);
+                color: var(--sl-color-warning-800);
+                padding: 1rem;
+                border-radius: 0.375rem;
+                margin-bottom: 1rem;
+                text-align: center;
+            }
+        </style>
     </head>
-    <body class="bg-gray-100 min-h-screen py-8">
-        <div class="container mx-auto px-4">
-            <header class="mb-8 text-center">
-                <div class="flex justify-center items-center gap-3 mb-2">
+    <body>
+        <div class="container">
+            <noscript>
+                <div class="noscript-message">
+                    This application requires JavaScript to be enabled for full
+                    functionality.
+                </div>
+            </noscript>
+
+            <header>
+                <div class="app-header">
                     <img
                         src="/icons/edoc-icon.svg"
                         alt="eDoc Viewer Logo"
-                        class="h-12 w-12"
+                        class="app-logo"
                     />
-                    <h1 class="text-3xl font-bold text-edoc-800">
-                        eDoc Viewer
-                        <span
-                            class="inline-block bg-edoc-600 text-white text-xs px-2 py-0.5 rounded-full ml-2 align-middle"
-                        >
-                            BETA
-                        </span>
-                    </h1>
+                    <h1 class="app-title">eDoc Viewer</h1>
                 </div>
-                <p class="text-gray-600" id="app-description">
+                <p class="app-description">
                     View and verify EU standard ASiC-E and Latvian eDoc files
                 </p>
-                <div class="mt-4 flex justify-center flex-wrap gap-2">
-                    <div class="language-selector inline-flex items-center">
-                        <span class="mr-2 text-sm text-gray-700" id="lang-label"
-                            >Language:</span
-                        >
-                        <select
-                            id="language-selector"
-                            class="bg-white border border-gray-300 rounded px-2 py-1 text-sm"
-                        >
+                <div class="header-actions">
+                    <div class="language-selector">
+                        <span class="language-label">Language:</span>
+                        <select class="language-select">
                             <option value="auto">Auto (Browser)</option>
                             <option value="en">English</option>
                             <option value="lv">Latvian</option>
                         </select>
                     </div>
-                    <!-- Install PWA button -->
-                    <button
-                        id="install-pwa-btn"
-                        class="hidden inline-flex items-center bg-edoc-700 text-white px-3 py-1 rounded text-sm hover:bg-edoc-800 transition-colors ml-2"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-4 w-4 mr-1"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                            />
-                        </svg>
-                        <span id="install-btn-text">Install App</span>
-                    </button>
                 </div>
             </header>
 
             <main>
-                <!-- File Upload Section -->
-                <div id="upload-section" class="edoc-container mb-8">
-                    <div id="dropzone" class="dropzone">
-                        <div class="flex flex-col items-center">
+                <!-- Upload Section - displayed for SEO and progressive enhancement -->
+                <div class="edoc-container" id="upload-section">
+                    <div class="dropzone">
+                        <div>
                             <svg
+                                class="dropzone-icon"
                                 xmlns="http://www.w3.org/2000/svg"
-                                class="h-12 w-12 text-edoc-600 mb-2"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="currentColor"
@@ -91,294 +322,99 @@
                                     d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                                 />
                             </svg>
-                            <p class="text-lg mb-2" id="dropzone-title">
+                            <p class="dropzone-title">
                                 Drop your eDoc file here
                             </p>
-                            <p
-                                class="text-gray-500 mb-3"
-                                id="dropzone-description"
-                            >
+                            <p class="dropzone-description">
                                 or click to browse files
                             </p>
-                            <button
-                                id="select-file-btn"
-                                class="bg-edoc-700 text-white px-4 py-2 rounded hover:bg-edoc-800 transition-colors"
-                            >
-                                Select File
-                            </button>
-                            <input
-                                id="file-input"
-                                type="file"
-                                accept=".edoc,.asice"
-                                class="hidden"
-                            />
-                            <div
-                                id="suggested-file-container"
-                                class="mt-3 hidden"
-                            >
-                                <p
-                                    class="text-sm text-gray-600"
-                                    id="suggested-file-label"
-                                >
-                                    Suggested file:
-                                </p>
-                                <p
-                                    id="suggested-file-name"
-                                    class="font-medium text-edoc-800"
-                                ></p>
-                            </div>
+                            <button class="button">Select File</button>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Result Section - Hidden Initially -->
-                <div id="result-section" class="hidden">
-                    <!-- Action Buttons -->
-                    <div class="flex justify-between mb-4">
-                        <button
-                            id="back-btn"
-                            class="flex items-center text-edoc-700 hover:text-edoc-800"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-5 w-5 mr-1"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z"
-                                    clip-rule="evenodd"
-                                />
-                            </svg>
-                            <span id="back-btn-text">Back</span>
-                        </button>
-                        <button
-                            id="download-original-btn"
-                            class="flex items-center text-edoc-700 hover:text-edoc-800"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-5 w-5 mr-1"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
-                                    clip-rule="evenodd"
-                                />
-                            </svg>
-                            <span id="download-original-btn-text"
-                                >Download Original</span
-                            >
-                        </button>
-                    </div>
-
-                    <!-- Content Area -->
-                    <div id="content" class="edoc-container">
-                        <div id="loading" class="py-8 text-center">
-                            <svg
-                                class="animate-spin h-8 w-8 text-edoc-600 mx-auto"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                            >
-                                <circle
-                                    class="opacity-25"
-                                    cx="12"
-                                    cy="12"
-                                    r="10"
-                                    stroke="currentColor"
-                                    stroke-width="4"
-                                ></circle>
-                                <path
-                                    class="opacity-75"
-                                    fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                ></path>
-                            </svg>
-                            <p class="mt-3 text-gray-600" id="loading-text">
-                                Loading...
-                            </p>
-                        </div>
-
-                        <div
-                            id="error-container"
-                            class="hidden bg-red-100 text-red-700 p-4 rounded border border-red-300"
-                        >
-                            <div class="flex items-start">
-                                <svg
-                                    class="h-5 w-5 mr-2 mt-0.5 flex-shrink-0"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 20 20"
-                                    fill="currentColor"
-                                >
-                                    <path
-                                        fill-rule="evenodd"
-                                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                        clip-rule="evenodd"
-                                    />
-                                </svg>
-                                <div>
-                                    <h3 class="font-medium" id="error-title">
-                                        Error
-                                    </h3>
-                                    <p id="error-message"></p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Signature Section (Will be populated by JS) -->
-                        <div id="signatures-container" class="hidden"></div>
-
-                        <!-- Document Files Section (Will be populated by JS) -->
-                        <div id="documents-container" class="hidden"></div>
-
-                        <!-- Metadata Section (Will be populated by JS) -->
-                        <div id="metadata-container" class="hidden"></div>
                     </div>
                 </div>
             </main>
 
-            <footer class="mt-8 text-center text-sm text-gray-500">
+            <footer>
                 <p>
-                    &copy; <span id="current-year"></span>
-                    <a
-                        class="hover:text-edoc-600"
-                        href="https://edgarsjekabsons.lv"
-                        >Edgars Jēkabsons</a
-                    >
-                    /
-                    <a class="hover:text-edoc-600" href="https://zenomy.tech"
-                        >ZenomyTech SIA</a
-                    >
-                </p>
-                <p class="mt-1">
-                    Questions, suggestions, or bug reports:
-                    <a
-                        href="mailto:edocviewer@zenomy.tech"
-                        class="hover:text-edoc-600"
-                    >
-                        edocviewer@zenomy.tech
-                    </a>
+                    &copy; <span id="current-year">2025</span>
+                    <a href="https://edgarsjekabsons.lv">Edgars Jēkabsons</a> /
+                    <a href="https://zenomy.tech">ZenomyTech SIA</a>
                 </p>
             </footer>
         </div>
 
-        <!-- Templates -->
-        <template id="signature-template">
-            <div class="signature-section mb-6">
-                <h3 class="section-title" data-i18n="signatures.title">
-                    Signatures
-                </h3>
-                <div class="signature-items"></div>
-            </div>
-        </template>
+        <!-- This will be replaced by the Lit/Shoelace components -->
+        <edoc-app id="app"></edoc-app>
 
-        <template id="signature-item-template">
-            <div
-                class="signature-info bg-white p-4 rounded border border-edoc-200 mb-4"
-            >
-                <div class="signer-info mb-2"></div>
-                <div class="signature-status mb-2"></div>
-                <div class="file-coverage-details hidden"></div>
-            </div>
-        </template>
-
-        <template id="documents-template">
-            <div class="document-section mb-6">
-                <h3 class="section-title" data-i18n="documents.title">
-                    Document Files
-                </h3>
-                <div
-                    class="files bg-white rounded border border-edoc-200"
-                ></div>
-            </div>
-        </template>
-
-        <template id="metadata-template">
-            <div class="metadata-section">
-                <div
-                    class="metadata-header cursor-pointer p-3 bg-edoc-200 rounded flex items-center"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="expand-icon h-5 w-5 mr-2"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                    >
-                        <path
-                            fill-rule="evenodd"
-                            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                            clip-rule="evenodd"
-                        />
-                    </svg>
-                    <h3 class="font-medium" data-i18n="metadata.title">
-                        Metadata Files (Advanced)
-                    </h3>
-                </div>
-                <div class="metadata-content hidden mt-3">
-                    <div
-                        class="files bg-white rounded border border-edoc-200"
-                    ></div>
-                </div>
-            </div>
-        </template>
-
-        <template id="file-item-template">
-            <div class="file-item">
-                <span class="file-name truncate pr-4"></span>
-                <div class="flex items-center">
-                    <button
-                        class="view-btn mr-2 bg-edoc-600 text-white py-1.5 px-3 rounded hover:bg-edoc-700 transition-colors hidden"
-                    >
-                        <span data-i18n="file.view">View</span>
-                    </button>
-                    <button class="download-btn">
-                        <span data-i18n="file.download">Download</span>
-                    </button>
-                </div>
-            </div>
-        </template>
-
-        <!-- Offline notification -->
-        <div
-            id="offline-message"
-            class="fixed bottom-4 right-4 p-4 bg-yellow-100 border border-yellow-400 rounded shadow-lg hidden"
-        >
-            <div class="flex items-center">
-                <svg
-                    class="w-5 h-5 text-yellow-600 mr-2"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                >
-                    <path
-                        fill-rule="evenodd"
-                        d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                        clip-rule="evenodd"
+        <!-- Pre-rendered content for SEO, will be hidden once components load -->
+        <div id="static-content" class="container">
+            <header>
+                <div class="app-header">
+                    <img
+                        src="/icons/edoc-icon.svg"
+                        alt="eDoc Viewer Logo"
+                        class="app-logo"
                     />
-                </svg>
-                <span id="offline-text"
-                    >You are currently offline. Some features may be
-                    limited.</span
-                >
-            </div>
-            <button id="close-offline-msg" class="absolute top-2 right-2">
-                <svg
-                    class="w-4 h-4 text-yellow-600"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                >
-                    <path
-                        fill-rule="evenodd"
-                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                        clip-rule="evenodd"
-                    />
-                </svg>
-            </button>
+                    <h1 class="app-title">eDoc Viewer</h1>
+                </div>
+                <p class="app-description">
+                    View and verify EU standard ASiC-E and Latvian eDoc files
+                </p>
+                <div class="header-actions">
+                    <div class="language-selector">
+                        <span class="language-label">Language:</span>
+                        <select class="language-select">
+                            <option value="auto">Auto (Browser)</option>
+                            <option value="en">English</option>
+                            <option value="lv">Latvian</option>
+                        </select>
+                    </div>
+                </div>
+            </header>
+
+            <main>
+                <!-- Upload Section - displayed for SEO and progressive enhancement -->
+                <div class="edoc-container" id="upload-section">
+                    <div class="dropzone">
+                        <div>
+                            <svg
+                                class="dropzone-icon"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                                />
+                            </svg>
+                            <p class="dropzone-title">
+                                Drop your eDoc file here
+                            </p>
+                            <p class="dropzone-description">
+                                or click to browse files
+                            </p>
+                            <button class="button">Select File</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <footer>
+                <p>
+                    &copy; <span id="current-year">2025</span>
+                    <a href="https://edgarsjekabsons.lv">Edgars Jēkabsons</a> /
+                    <a href="https://zenomy.tech">ZenomyTech SIA</a>
+                </p>
+            </footer>
         </div>
+        <script>
+            // Set current year for SEO version
+            document.getElementById("current-year").textContent =
+                new Date().getFullYear();
+        </script>
     </body>
 </html>
