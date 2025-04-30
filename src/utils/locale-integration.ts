@@ -104,6 +104,8 @@ export class LocaleIntegrationHelper {
       const customEvent = e as CustomEvent;
       if (customEvent.detail && customEvent.detail.locale) {
         const locale = customEvent.detail.locale as SupportedLocale;
+        console.log(`EVENT: Locale change! to ${locale}`);
+        console.log(`EVENT: detail:${JSON.stringify(customEvent.detail)}`);
         this.handleLocaleChange(locale);
       }
     });
@@ -113,6 +115,8 @@ export class LocaleIntegrationHelper {
       const customEvent = e as CustomEvent;
       if (customEvent.detail && customEvent.detail.locale) {
         const locale = customEvent.detail.locale as SupportedLocale;
+        console.log(`EVENT: Locale changed! to ${locale}`);
+        console.log(`EVENT: detail:${JSON.stringify(customEvent.detail)}`);
         this.handleLocaleChange(locale);
       }
     });

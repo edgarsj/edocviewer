@@ -2,7 +2,7 @@ import { configureLocalization } from "@lit/localize";
 import { sourceLocale, targetLocales } from "../generated/locale-codes";
 
 // Type definition for supported languages
-export type SupportedLocale = "en" | "lv" | "auto";
+export type SupportedLocale = "en" | "lv";
 
 // Simplified configuration without predefined messages
 export const { getLocale, setLocale, msg, str } = configureLocalization({
@@ -25,41 +25,66 @@ export const { getLocale, setLocale, msg, str } = configureLocalization({
   },
 });
 
-// Detect browser language
 export function detectBrowserLocale(): "en" | "lv" {
-  const browserLang = navigator.language.toLowerCase();
-  if (browserLang.startsWith("lv")) {
-    return "lv";
+  console.log("Detecting browser locale...");
+  try {
+    // Check primary language first
+    if (navigator.language.toLowerCase().startsWith("lv")) {
+      return "lv";
+    }
+    // Check navigator.languages array first
+    if (navigator.languages && navigator.languages.length) {
+      for (const lang of navigator.languages) {
+        if (lang.toLowerCase().startsWith("lv")) {
+          return "lv";
+        } else if (lang.toLowerCase().startsWith("en")) {
+          return "en";
+        }
+      }
+    }
+
+    // Default to English
+    return "en";
+  } catch (e) {
+    console.warn("Error detecting browser locale:", e);
+    return "en";
   }
-  return "en";
 }
 
-// Load saved language preference
-export function loadSavedLocale(): SupportedLocale {
+// Load saved language / detect
+export function loadSavedLocale(): "en" | "lv" {
   try {
-    const savedLang = localStorage.getItem(
-      "edoc-viewer-lang",
-    ) as SupportedLocale | null;
-    if (
-      savedLang &&
-      (savedLang === "en" || savedLang === "lv" || savedLang === "auto")
-    ) {
+    // Try to get the saved language from localStorage
+    const savedLang = localStorage.getItem("edoc-viewer-lang");
+
+    // If we have a valid saved language, use it directly
+    if (savedLang === "en" || savedLang === "lv") {
       return savedLang;
     }
+
+    // If null or invalid value, detect from browser and save it
+    const detectedLocale = detectBrowserLocale();
+    localStorage.setItem("edoc-viewer-lang", detectedLocale);
+    console.log("Detected locale:", detectedLocale);
+    console.log("Saved locale:", detectedLocale);
+    return detectedLocale;
   } catch (e) {
-    console.warn("Could not load language preference from localStorage", e);
+    // If any localStorage error occurs, just return the detected locale
+    console.warn("Could not access localStorage:", e);
+    return detectBrowserLocale();
   }
-  return "auto";
 }
 
 // Set locale function
 export async function setAppLocale(locale: SupportedLocale): Promise<void> {
   let effectiveLocale: "en" | "lv";
-
-  if (locale === "auto") {
-    effectiveLocale = detectBrowserLocale();
+  console.log("App locale requested:", locale);
+  if (locale === "lv") {
+    // Latvian - use directly
+    effectiveLocale = "lv";
   } else {
-    effectiveLocale = locale;
+    // Anything else (including "en" and invalid values) - default to English
+    effectiveLocale = "en";
   }
 
   // Update document language for accessibility
@@ -67,7 +92,8 @@ export async function setAppLocale(locale: SupportedLocale): Promise<void> {
 
   // Save user preference in localStorage
   try {
-    localStorage.setItem("edoc-viewer-lang", locale);
+    localStorage.setItem("edoc-viewer-lang", effectiveLocale);
+    console.log("Setting APP locale to:", effectiveLocale);
   } catch (e) {
     console.warn("Could not save language preference to localStorage", e);
   }

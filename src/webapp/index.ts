@@ -3,9 +3,17 @@ import "./main.css";
 import "../utils/shoelace";
 import "../components/EdocApp";
 import { setupFileHandling, isRunningAsPWA } from "./fileHandling";
-import { loadSavedLocale, setAppLocale } from "../localization/localization";
+import {
+  loadSavedLocale,
+  setAppLocale,
+  setLocale,
+  debugLocaleState,
+} from "../localization/localization";
 import { ensureInitialized } from "./uiInitializer";
 import { initializeLocaleIntegration } from "../utils/locale-integration";
+
+// Global flag to prevent double initialization
+let appInitialized = false;
 
 // Register service worker for PWA functionality
 async function registerServiceWorker() {
@@ -51,42 +59,40 @@ function loadPlausibleAnalytics() {
   document.head.appendChild(script);
 }
 
-// Initialize the app when the DOM is loaded
-document.addEventListener("DOMContentLoaded", async () => {
-  try {
-    console.log("App: Initializing...");
-    console.log(`App running as PWA: ${isRunningAsPWA()}`);
+// Main initialization function - only runs once
+async function initializeApp() {
+  // Prevent double initialization
+  if (appInitialized) {
+    console.log("App already initialized, skipping");
+    return;
+  }
 
-    // Load analytics (only if not PWA)
+  appInitialized = true;
+  console.log("App: Initializing...");
+  console.log(`App running as PWA: ${isRunningAsPWA()}`);
+
+  try {
+    // STEP 1: Initial setup
     loadPlausibleAnalytics();
     console.log("App: Analytics setup complete");
 
-    // Initialize the locale integration system
-    initializeLocaleIntegration();
-    console.log("App: Locale integration initialized");
-
-    // Initialize localization
-    const savedLocale = loadSavedLocale();
-    console.log(`App: Loaded saved locale preference: ${savedLocale}`);
-
-    // Apply the saved locale
-    await setAppLocale(savedLocale);
-    console.log(`App: Initial locale set to ${savedLocale}`);
-
-    // Register service worker for PWA support
-    registerServiceWorker();
-    console.log("App: Service worker registration initiated");
-
-    // Initialize UI (hide static content, show web components)
+    // Initialize UI
     ensureInitialized();
     console.log("App: UI initialization complete");
 
-    // Set up file handling right away - it contains internal logic
-    // to handle component availability
+    // STEP 2: Set up file handling
     setupFileHandling();
     console.log("App: File handling set up");
 
-    // Set up debug event logging if in development mode
+    // STEP 3: Register service worker
+    registerServiceWorker();
+    console.log("App: Service worker registration initiated");
+
+    // STEP 4: Initialize localization AFTER UI is ready
+    // This ensures components exist before we try to update them
+    await initializeLocalization();
+
+    // STEP 5: Set up debug event logging if in development mode
     if (process.env.NODE_ENV === "development") {
       setupDebugLogging();
     }
@@ -95,7 +101,52 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (error) {
     console.error("App: Error initializing app:", error);
   }
+}
+
+// Separate function to handle locale initialization
+async function initializeLocalization() {
+  try {
+    // Initialize the locale integration system
+    initializeLocaleIntegration();
+    console.log("App: Locale integration initialized");
+
+    // Get saved language preference
+    const savedLocale = loadSavedLocale();
+    console.log(`App: Loaded saved locale preference: ${savedLocale}`);
+
+    // Set document language for visual consistency
+    document.documentElement.lang = savedLocale;
+
+    // Wait for components to be ready
+    await Promise.all([
+      customElements.whenDefined("edoc-app"),
+      customElements.whenDefined("edoc-language-selector"),
+    ]).catch((err) => {
+      console.warn("Waiting for custom elements failed:", err);
+      console.log("Continuing with locale initialization anyway");
+    });
+
+    // Apply locale through the full system (single time)
+    await setAppLocale(savedLocale);
+    console.log(`App: Locale set to ${savedLocale}`);
+  } catch (error) {
+    console.error("Error initializing localization:", error);
+  }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener("DOMContentLoaded", () => {
+  initializeApp();
 });
+
+// Also run initialization if document is already loaded
+if (
+  document.readyState === "interactive" ||
+  document.readyState === "complete"
+) {
+  console.log("Document already loaded, ensuring initialization");
+  initializeApp();
+}
 
 // Setup debug event logging for development
 function setupDebugLogging() {
@@ -141,22 +192,6 @@ function setupDebugLogging() {
   document.addEventListener("edoc-app-rendered", () => {
     console.log("App Debug: edoc-app-rendered event");
   });
-}
-
-// Ensure the app is properly initialized even if the DOM content loaded event has already fired
-if (
-  document.readyState === "interactive" ||
-  document.readyState === "complete"
-) {
-  console.log("App: Document already loaded, ensuring initialization");
-  // Load analytics
-  loadPlausibleAnalytics();
-  // Initialize the locale integration system
-  initializeLocaleIntegration();
-  // Then continue with the rest of the initialization
-  ensureInitialized();
-  // We handle file handling in the main initialization sequence now
-  setupFileHandling();
 }
 
 // Make debugging functionality available globally
@@ -264,5 +299,31 @@ if (
       hasPlausible,
       correct: (isPWA && !hasPlausible) || (!isPWA && hasPlausible),
     };
+  },
+
+  // Add locale debugging tools
+  localeDebug: {
+    getState: debugLocaleState,
+    toggleLanguage: async () => {
+      const currentLocale = document.documentElement.lang;
+      const newLocale = currentLocale === "en" ? "lv" : "en";
+      await setAppLocale(newLocale);
+      return `Changed language from ${currentLocale} to ${newLocale}`;
+    },
+    forceLocale: async (locale) => {
+      if (locale === "en" || locale === "lv") {
+        await setAppLocale(locale);
+        return `Set locale to ${locale}`;
+      }
+      return `Invalid locale: ${locale}. Use "en" or "lv"`;
+    },
+    reset: () => {
+      try {
+        localStorage.removeItem("edoc-viewer-lang");
+        return "Cleared language preference from localStorage";
+      } catch (e) {
+        return `Error clearing localStorage: ${e}`;
+      }
+    },
   },
 };
