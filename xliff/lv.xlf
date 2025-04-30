@@ -128,6 +128,14 @@
   <source>Download All</source>
   <target>Saglabāt visus</target>
 </trans-unit>
+<trans-unit id="sc9f9c1820109a6ae">
+  <source>Open Source</source>
+  <target>Atvērtais kods</target>
+</trans-unit>
+<trans-unit id="s101b7e681bf7797b">
+  <source>Questions, suggestions, or bug reports</source>
+  <target>Jautājumiem, ieteikumiem un kļūdu ziņojumiem</target>
+</trans-unit>
 </body>
 </file>
 </xliff>
