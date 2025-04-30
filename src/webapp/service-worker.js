@@ -72,7 +72,13 @@ self.addEventListener("fetch", (event) => {
       "Service Worker: Processing file parameter:",
       url.searchParams.get("file"),
     );
-    // Let the main app handle this
+    // Let the main app handle this - don't interfere with the fetch
+    return;
+  }
+
+  // Handle 'file' scheme URLs specially
+  if (event.request.url.startsWith("file:")) {
+    console.log("Service Worker: Detected file:// URL, not intercepting");
     return;
   }
 
@@ -202,5 +208,19 @@ self.addEventListener("fetch", (event) => {
 self.addEventListener("message", (event) => {
   if (event.data && event.data.type === "SKIP_WAITING") {
     self.skipWaiting();
+  }
+
+  // Handle file opening messages if needed
+  if (event.data && event.data.type === "OPEN_FILE") {
+    console.log("Service Worker: Received OPEN_FILE message", event.data.url);
+    // Forward this to all clients
+    self.clients.matchAll().then((clients) => {
+      clients.forEach((client) => {
+        client.postMessage({
+          type: "FILE_OPENED",
+          url: event.data.url,
+        });
+      });
+    });
   }
 });

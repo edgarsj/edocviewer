@@ -132,6 +132,11 @@ export default merge(commonConfig, {
         {
           from: "./src/webapp/manifest.json",
           to: "manifest.json",
+          transform(content) {
+            // This ensures the manifest is valid JSON
+            const manifest = JSON.parse(content.toString());
+            return JSON.stringify(manifest, null, 2);
+          },
         },
         // Copy Shoelace assets
         {
@@ -145,6 +150,13 @@ export default merge(commonConfig, {
       swSrc: "./src/webapp/service-worker.js",
       swDest: "service-worker.js",
       maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB
+      exclude: [
+        /\.map$/,
+        /manifest$/,
+        /\.htaccess$/,
+        /service-worker\.js$/,
+        /sw\.js$/,
+      ],
     }),
   ],
   devServer: {

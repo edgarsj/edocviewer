@@ -30,8 +30,12 @@
       "action": "index.html",
       "accept": {
         "application/vnd.etsi.asic-e+zip": [".asice"],
-        "application/octet-stream": [".edoc"]
+        "application/octet-stream": [".edoc"],
+        "application/zip": [".asice", ".edoc"]
       }
     }
-  ]
+  ],
+  "launch_handler": {
+    "client_mode": ["focus-existing", "auto"]
+  }
 }

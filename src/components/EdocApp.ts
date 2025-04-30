@@ -128,12 +128,13 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
   @state() private signatures: SignatureValidationResult[] = [];
   @state() private loading = false;
   @state() private error = "";
+  @state() private processingCount = 0; // Track active file processing
 
   connectedCallback() {
     super.connectedCallback();
 
     // Signal that the component is connected and ready to render
-    // This helps with the static/dynamic content transition
+    console.log("EdocApp: Component connected");
     this.dispatchEvent(
       new CustomEvent("edoc-app-connected", {
         bubbles: true,
@@ -141,9 +142,40 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
       }),
     );
 
+    // Add explicit listeners for file handling
+    console.log("EdocApp: Adding event listeners for file handling");
+
+    // Direct file-selected event handler
+    this.addEventListener("file-selected", (e: Event) => {
+      console.log(
+        "EdocApp: Received file-selected event directly on component",
+      );
+      this.onFileSelected(e as CustomEvent);
+    });
+
+    // Global event for fallback
+    window.addEventListener("fileHandlingFiles", (e: Event) => {
+      console.log("EdocApp: Received fileHandlingFiles event from window");
+      const customEvent = e as CustomEvent;
+      const files = customEvent.detail?.files;
+
+      if (files && files.length > 0) {
+        const file = files[0]; // Process the first file
+        console.log(
+          `EdocApp: Processing file "${file.name}" from global event`,
+        );
+        this.onFileSelected(
+          new CustomEvent("file-selected", {
+            detail: { file },
+          }),
+        );
+      }
+    });
+
     // Notify when the component has been rendered
     // This is a good signal to hide the static content
     window.requestAnimationFrame(() => {
+      console.log("EdocApp: Component rendered");
       this.dispatchEvent(
         new CustomEvent("edoc-app-rendered", {
           bubbles: true,
@@ -279,30 +311,100 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
   }
 
   private async onFileSelected(e: CustomEvent) {
-    const { file } = e.detail;
-    console.log("File selected:", file.name);
-
-    // Show loading state and result view
-    this.loading = true;
-    this.view = "result";
-    this.error = "";
-    this.container = null;
-    this.signatures = [];
-
     try {
+      const { file } = e.detail;
+
+      if (!file) {
+        console.error("EdocApp: No file in event detail");
+        return;
+      }
+
+      // Avoid processing the same file multiple times
+      this.processingCount++;
+      const currentProcessingId = this.processingCount;
+
+      console.log(
+        `EdocApp: File selected (processing ID ${currentProcessingId}):`,
+        file.name,
+        "Size:",
+        file.size,
+        "Type:",
+        file.type,
+      );
+
+      // Show loading state and result view
+      this.loading = true;
+      this.view = "result";
+      this.error = "";
+      this.container = null;
+      this.signatures = [];
+
+      // Request a re-render to show loading state immediately
+      await this.updateComplete;
+
+      // Check if this processing was superseded
+      if (currentProcessingId !== this.processingCount) {
+        console.log(
+          `EdocApp: Processing ${currentProcessingId} was superseded, aborting`,
+        );
+        return;
+      }
+
       // Read the file as an ArrayBuffer
+      console.log(
+        `EdocApp: Reading file as ArrayBuffer (${currentProcessingId})`,
+      );
       const fileBuffer = await this.readFileAsArrayBuffer(file);
+      console.log(
+        `EdocApp: File read successful, buffer size: ${fileBuffer.byteLength} (${currentProcessingId})`,
+      );
+
+      // Check if this processing was superseded
+      if (currentProcessingId !== this.processingCount) {
+        console.log(
+          `EdocApp: Processing ${currentProcessingId} was superseded, aborting`,
+        );
+        return;
+      }
 
       // Parse the eDoc container
+      console.log(`EdocApp: Parsing eDoc file (${currentProcessingId})`);
       this.container = await parseEdocFile(new Uint8Array(fileBuffer));
+      console.log(
+        `EdocApp: Container parsed successfully (${currentProcessingId})`,
+        this.container
+          ? {
+              documentFiles: this.container.documentFileList?.length || 0,
+              metadataFiles: this.container.metadataFileList?.length || 0,
+              totalFiles: this.container.files?.size || 0,
+            }
+          : "No container",
+      );
+
+      // Check if this processing was superseded
+      if (currentProcessingId !== this.processingCount) {
+        console.log(
+          `EdocApp: Processing ${currentProcessingId} was superseded, aborting`,
+        );
+        return;
+      }
 
       // Process signatures
+      console.log(`EdocApp: Verifying signatures (${currentProcessingId})`);
       this.signatures = await verifyEdocSignatures(this.container);
+      console.log(
+        `EdocApp: Signature verification complete (${currentProcessingId})`,
+        { signatureCount: this.signatures.length },
+      );
     } catch (error) {
+      console.error("EdocApp: File processing error:", error);
       this.error = `Error processing file: ${(error as Error).message}`;
-      console.error("File processing error:", error);
     } finally {
       this.loading = false;
+      console.log("EdocApp: File processing complete");
+
+      // Wait for rendering to complete
+      await this.updateComplete;
     }
   }
 
@@ -319,7 +421,7 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
       };
 
       reader.onerror = () => {
-        reject(reader.error);
+        reject(reader.error || new Error("Unknown error reading file"));
       };
 
       reader.readAsArrayBuffer(file);
