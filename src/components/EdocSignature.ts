@@ -5,6 +5,8 @@ import { SignatureValidationResult } from "../core/parser";
 import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
 import "@shoelace-style/shoelace/dist/components/details/details.js";
 import "@shoelace-style/shoelace/dist/components/badge/badge.js";
+import "@shoelace-style/shoelace/dist/components/icon/icon.js";
+import "@shoelace-style/shoelace/dist/components/tooltip/tooltip.js";
 
 /**
  * Component for displaying eDoc signature information
@@ -22,26 +24,73 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
       padding: 1rem;
       border-radius: 0.375rem;
       border: 1px solid var(--sl-color-primary-200);
+      position: relative; /* Enable absolute positioning for the status icon */
+      min-height: 3.5rem; /* Ensure minimum height for smaller signature infos */
+      margin-right: 2rem;
+    }
+
+    .signature-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      padding-right: 5rem; /* Increased padding to accommodate larger icon */
+    }
+
+    .signature-details {
+      flex-grow: 1;
     }
 
     .signer-info,
-    .signature-status {
+    .signature-date {
       margin-bottom: 0.5rem;
     }
 
-    .valid {
-      color: var(--sl-color-success-700);
-      font-weight: 600;
+    /* Last child in details shouldn't have bottom margin */
+    .signature-details > div:last-child {
+      margin-bottom: 0;
     }
 
-    .invalid {
+    .status-icon-container {
+      position: absolute;
+      top: 1rem;
+      right: 2rem;
+      width: 4rem;
+      height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .valid-icon-container {
+      background-color: var(--sl-color-success-100);
+      border: 1px solid var(--sl-color-success-300);
+    }
+
+    .invalid-icon-container {
+      background-color: var(--sl-color-danger-100);
+      border: 1px solid var(--sl-color-danger-300);
+    }
+
+    .status-icon {
+      font-size: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .valid-icon {
+      color: var(--sl-color-success-600);
+    }
+
+    .invalid-icon {
       color: var(--sl-color-danger-600);
-      font-weight: 600;
     }
 
     .error-message {
       color: var(--sl-color-danger-600);
       margin-top: 0.25rem;
+      font-size: 0.875rem;
     }
 
     .file-list {
@@ -84,9 +133,36 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
       return html``;
     }
 
+    const { valid, error } = this.signature;
+    const statusTitle = valid
+      ? msg("Valid signature", { id: "signatures.valid" })
+      : msg("Invalid signature", { id: "signatures.invalid" }) +
+        (error ? `: ${error}` : "");
+
     return html`
       <div class="signature-info">
-        ${this.renderSignerInfo()} ${this.renderSignatureStatus()}
+        <div class="signature-header">
+          <div class="signature-details">
+            ${this.renderSignerInfo()} ${this.renderSignatureDate()}
+          </div>
+        </div>
+
+        <!-- Status icon as a circular badge in top-right corner -->
+        <sl-tooltip content="${statusTitle}">
+          <div
+            class="status-icon-container ${valid
+              ? "valid-icon-container"
+              : "invalid-icon-container"}"
+            role="img"
+            aria-label="${statusTitle}"
+          >
+            <div class="status-icon ${valid ? "valid-icon" : "invalid-icon"}">
+              <sl-icon name="${valid ? "check-lg" : "x-lg"}"></sl-icon>
+            </div>
+          </div>
+        </sl-tooltip>
+
+        ${error ? html`<div class="error-message">${error}</div>` : ""}
         ${this.renderFileCoverage()}
       </div>
     `;
@@ -108,25 +184,23 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
     `;
   }
 
-  private renderSignatureStatus() {
-    const { valid, error } = this.signature;
+  private renderSignatureDate() {
+    const { signerInfo } = this.signature;
+
+    if (!signerInfo.signatureDate) {
+      return html``;
+    }
 
     return html`
-      <div class="signature-status">
-        <strong
-          >${msg("Signature Status:", {
-            id: "signatures.signatureStatus",
-          })}</strong
-        >
-        <span class="${valid ? "valid" : "invalid"}">
-          ${valid
-            ? msg("Valid", { id: "signatures.valid" })
-            : msg("INVALID", { id: "signatures.invalid" })}
-        </span>
-        ${error ? html`<div class="error-message">${error}</div>` : ""}
+      <div class="signature-date">
+        <strong>${msg("Date:", { id: "signatures.date" })}</strong>
+        ${signerInfo.signatureDate}
       </div>
     `;
   }
+
+  // The renderSignatureStatus method is no longer needed as we've integrated
+  // the status icon directly in the main render method
 
   private renderFileCoverage() {
     const {

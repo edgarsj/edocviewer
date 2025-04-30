@@ -6,16 +6,12 @@
   <source>Signed by:</source>
   <target>Parakstījis:</target>
 </trans-unit>
-<trans-unit id="signatures.signatureStatus">
-  <source>Signature Status:</source>
-  <target>Paraksta statuss:</target>
-</trans-unit>
 <trans-unit id="signatures.valid">
-  <source>Valid</source>
+  <source>Valid signature</source>
   <target>Derīgs</target>
 </trans-unit>
 <trans-unit id="signatures.invalid">
-  <source>INVALID</source>
+  <source>Invalid signature</source>
   <target>NEDERĪGS</target>
 </trans-unit>
 <trans-unit id="signatures.referencedFiles">
@@ -117,6 +113,10 @@
 <trans-unit id="app.questions_support">
   <source>Questions, suggestions, or bug reports</source>
   <target>Jautājumiem, ieteikumiem un kļūdu ziņojumiem</target>
+</trans-unit>
+<trans-unit id="signatures.date">
+  <source>Date:</source>
+  <target>Datums:</target>
 </trans-unit>
 </body>
 </file>

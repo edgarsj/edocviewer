@@ -1,6 +1,7 @@
 export interface SignerInfo {
   signerName: string;
   personalId: string;
+  signatureDate: string; // Add signature date
 }
 
 export interface SignatureValidationResult {
@@ -75,6 +76,7 @@ export async function verifyEdocSignatures(
           // Format signer info
           let signerName = "";
           let personalId = "";
+          let signatureDate = "";
 
           if (signature.signerInfo) {
             const { givenName, surname, commonName, serialNumber } =
@@ -87,6 +89,29 @@ export async function verifyEdocSignatures(
             }
 
             personalId = serialNumber || "";
+          }
+
+          // Extract signature date if available
+          if (signature.signingTime) {
+            // Format the signature date as yyyy-mm-dd HH:mm
+            try {
+              const date = new Date(signature.signingTime);
+
+              // Get date parts
+              const year = date.getFullYear();
+              const month = String(date.getMonth() + 1).padStart(2, "0");
+              const day = String(date.getDate()).padStart(2, "0");
+
+              // Get time parts
+              const hours = String(date.getHours()).padStart(2, "0");
+              const minutes = String(date.getMinutes()).padStart(2, "0");
+
+              // Format as yyyy-mm-dd HH:mm
+              signatureDate = `${year}-${month}-${day} ${hours}:${minutes}`;
+            } catch (e) {
+              console.error("Error formatting signature date:", e);
+              signatureDate = signature.signingTime || "";
+            }
           }
 
           // Check if all document files are signed
@@ -105,6 +130,7 @@ export async function verifyEdocSignatures(
             signerInfo: {
               signerName,
               personalId,
+              signatureDate,
             },
             valid: result.isValid && allDocumentsSigned,
             error: result.isValid
@@ -123,6 +149,7 @@ export async function verifyEdocSignatures(
             signerInfo: {
               signerName: "Unknown",
               personalId: "",
+              signatureDate: "",
             },
             valid: false,
             error: (error as Error).message,
