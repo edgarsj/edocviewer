@@ -291,6 +291,12 @@
                 text-align: center;
             }
 
+            .version-info {
+                font-size: 0.75rem;
+                color: var(--sl-color-gray-400);
+                margin-top: 0.25rem;
+            }
+
             .hidden {
                 display: none !important;
             }
@@ -362,6 +368,10 @@
 
             <footer>
                 <p>
+                    <span class="version-info">
+                        Version:
+                        <span id="static-version">0.1.0 placeholder</span>
+                    </span>
                     &copy; <span id="current-year">2025</span>
                     <a href="https://edgarsjekabsons.lv">Edgars Jēkabsons</a> /
                     <a href="https://zenomy.tech">ZenomyTech SIA</a>
@@ -397,6 +407,8 @@
             // Set current year for SEO version
             document.getElementById("current-year").textContent =
                 new Date().getFullYear();
+            document.getElementById("static-version").textContent =
+                "0.1.0 placeholder";
 
             // Fallback script to hide static content if the main script fails
             window.addEventListener("load", function () {

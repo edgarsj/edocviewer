@@ -1,3 +1,4 @@
+import { VERSION } from "../config/version";
 import { LitElement, html, css } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { msg } from "@lit/localize";
@@ -117,6 +118,12 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
       margin-top: 0.25rem;
     }
 
+    .version-info {
+      font-size: 0.75rem;
+      color: var(--sl-color-gray-400);
+      margin-top: 0.25rem;
+    }
+
     .hidden {
       display: none !important;
     }
@@ -129,6 +136,7 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
   @state() private loading = false;
   @state() private error = "";
   @state() private processingCount = 0; // Track active file processing
+  @state() private version = VERSION;
 
   connectedCallback() {
     super.connectedCallback();
@@ -290,7 +298,13 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
           <p>
             &copy; ${this.currentYear}
             <a href="https://edgarsjekabsons.lv">Edgars Jēkabsons</a> /
-            <a href="https://zenomy.tech">ZenomyTech SIA</a>
+            <a href="https://zenomy.tech">ZenomyTech SIA</a> &nbsp;|&nbsp;
+            <span class="version-info">
+              ${msg("Version")}: ${this.version.number}
+              <span title="${this.version.commit}"
+                >(${this.version.commit.substring(0, 7)})</span
+              >
+            </span>
           </p>
           <p class="footer-links">
             <a href="https://github.com/edgarsj/edocviewer">

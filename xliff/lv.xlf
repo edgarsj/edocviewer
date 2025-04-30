@@ -136,6 +136,10 @@
   <source>Questions, suggestions, or bug reports</source>
   <target>Jautājumiem, ieteikumiem un kļūdu ziņojumiem</target>
 </trans-unit>
+<trans-unit id="sf4122b220926be97">
+  <source>Version</source>
+  <target>Versija</target>
+</trans-unit>
 </body>
 </file>
 </xliff>

@@ -1,13 +1,26 @@
 import { merge } from "webpack-merge";
+import { GitRevisionPlugin } from "git-revision-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import CopyWebpackPlugin from "copy-webpack-plugin";
 import { InjectManifest } from "workbox-webpack-plugin";
+import webpack from "webpack";
 import path from "path";
 import { fileURLToPath } from "url";
 import commonConfig from "./webpack.common.js";
 
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
+const pkg = require("./package.json");
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Create an instance of the plugin
+const gitRevisionPlugin = new GitRevisionPlugin({
+  commithashCommand: "rev-parse HEAD", // Gets full commit hash
+  branch: true,
+});
 
 export default merge(commonConfig, {
   entry: "./src/webapp/index.ts",
@@ -116,6 +129,16 @@ export default merge(commonConfig, {
     ],
   },
   plugins: [
+    gitRevisionPlugin,
+    // Add the DefinePlugin to make variables available
+    new webpack.DefinePlugin({
+      "process.env.VERSION": JSON.stringify(pkg.version),
+      "process.env.COMMITHASH": JSON.stringify(gitRevisionPlugin.commithash()),
+      "process.env.BRANCH": JSON.stringify(gitRevisionPlugin.branch()),
+      "process.env.BUILDDATE": JSON.stringify(
+        new Date().toISOString().split("T")[0],
+      ),
+    }),
     new HtmlWebpackPlugin({
       template: "./public/index.html",
       filename: "index.html",

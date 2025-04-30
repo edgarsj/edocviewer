@@ -33,6 +33,7 @@
 'sc16e00a7a8b2fde2': `Atpakaļ`,
 'sc9f9c1820109a6ae': `Atvērtais kods`,
 'sf145e08da5075640': `eDoc Viewer`,
+'sf4122b220926be97': `Versija`,
 'signatures.invalid': `NEDERĪGS`,
 'signatures.noSignatures': `Nav parakstu`,
 'signatures.referencedFiles': `Parakstā iekļautie faili`,
