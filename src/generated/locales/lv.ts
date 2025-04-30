@@ -21,6 +21,7 @@
 'metadata.noMetadata': `Nav atrasta neviena metadatu datne`,
 'metadata.title': `Metadati`,
 'offline.message': `Nav pieejas internetam. Dažas funkcijas var būt ierobežotas.`,
+'s1d093e853c7fbc9e': `Saglabāt visus`,
 's46eb6cf13a8022e9': `Izvēlēties failu`,
 's7a39c22163f92638': `Ieteiktais fails:`,
 's7ec72053879a63cd': `Skatīt un pārbaudīt EU standarta ASiC-E un Latvijas eDoc failus`,

@@ -220,6 +220,7 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
                           .files=${this.container.documentFileList || []}
                           @file-download=${this.handleFileDownload}
                           @file-view=${this.handleFileView}
+                          @files-download-all=${this.handleFilesDownloadAll}
                         ></edoc-documents>
                         <edoc-metadata
                           .files=${this.container.metadataFileList || []}
@@ -295,7 +296,12 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
 
   private handleFileDownload(e: CustomEvent) {
     const { filename } = e.detail;
-    if (!this.container || !filename) return;
+    console.log(`EdocApp: Handling file download for ${filename}`);
+
+    if (!this.container || !filename) {
+      console.error("Missing container or filename");
+      return;
+    }
 
     const fileData = this.container.files.get(filename);
     if (!fileData) {
@@ -303,12 +309,18 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
       return;
     }
 
-    // Create a download link
+    console.log(
+      `Creating download for ${filename}, size: ${fileData.length} bytes`,
+    );
+
+    // Create a download link for a single file
     const blob = new Blob([fileData]);
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
     a.download = this.getFileNameFromPath(filename);
+
+    // Add to DOM, click, and remove
     document.body.appendChild(a);
     a.click();
 
@@ -316,6 +328,7 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
     setTimeout(() => {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+      console.log(`Download initiated for ${filename}`);
     }, 100);
   }
 
@@ -338,6 +351,38 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
     setTimeout(() => {
       URL.revokeObjectURL(url);
     }, 1000);
+  }
+
+  private handleFilesDownloadAll(e: CustomEvent) {
+    const { files } = e.detail;
+    if (!this.container || !files || !files.length) return;
+
+    // Create a zip file using JSZip (would need to be added as a dependency)
+    // For now, let's use a simpler approach - download files one by one with a slight delay
+    files.forEach((filename: string, index: number) => {
+      setTimeout(() => {
+        const fileData = this.container?.files.get(filename);
+        if (!fileData) {
+          console.error(`File not found: ${filename}`);
+          return;
+        }
+
+        // Create download link
+        const blob = new Blob([fileData]);
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = this.getFileNameFromPath(filename);
+        document.body.appendChild(a);
+        a.click();
+
+        // Clean up
+        setTimeout(() => {
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }, 100);
+      }, index * 500); // 500ms delay between downloads to prevent browser issues
+    });
   }
 
   private getContentType(filename: string): string {

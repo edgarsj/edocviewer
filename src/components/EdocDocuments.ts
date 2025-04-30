@@ -28,6 +28,17 @@ export class EdocDocuments extends LocaleAwareMixin(LitElement) {
       font-size: 1.125rem;
       color: var(--sl-color-primary-800);
     }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .download-all-button {
+      font-size: 0.875rem;
+    }
   `;
 
   /**
@@ -39,9 +50,23 @@ export class EdocDocuments extends LocaleAwareMixin(LitElement) {
   render() {
     return html`
       <div class="document-section">
-        <h3 class="section-title">
-          ${msg("Document Files", { id: "documents.title" })}
-        </h3>
+        <div class="section-header">
+          <h3 class="section-title">
+            ${msg("Document Files", { id: "documents.title" })}
+          </h3>
+          ${this.files.length > 1
+            ? html`
+                <sl-button
+                  size="small"
+                  variant="primary"
+                  class="download-all-button"
+                  @click=${this.handleDownloadAll}
+                >
+                  ${msg("Download All")}
+                </sl-button>
+              `
+            : ""}
+        </div>
 
         <edoc-file-list
           .files=${this.files}
@@ -71,6 +96,17 @@ export class EdocDocuments extends LocaleAwareMixin(LitElement) {
     this.dispatchEvent(
       new CustomEvent("file-view", {
         detail: e.detail,
+        bubbles: true,
+        composed: true,
+      }),
+    );
+  }
+
+  private handleDownloadAll() {
+    // Dispatch a custom event to download all files
+    this.dispatchEvent(
+      new CustomEvent("files-download-all", {
+        detail: { files: this.files },
         bubbles: true,
         composed: true,
       }),

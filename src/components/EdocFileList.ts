@@ -109,6 +109,7 @@ export class EdocFileList extends LocaleAwareMixin(LitElement) {
   }
 
   private handleDownload(filename: string) {
+    console.log(`Requesting download for: ${filename}`);
     this.dispatchEvent(
       new CustomEvent("file-download", {
         detail: { filename },
@@ -119,6 +120,7 @@ export class EdocFileList extends LocaleAwareMixin(LitElement) {
   }
 
   private handleView(filename: string) {
+    console.log(`Requesting view for: ${filename}`);
     this.dispatchEvent(
       new CustomEvent("file-view", {
         detail: { filename },

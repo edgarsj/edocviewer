@@ -124,6 +124,10 @@
   <source>Processing document...</source>
   <target>Dokumenta apstrāde...</target>
 </trans-unit>
+<trans-unit id="s1d093e853c7fbc9e">
+  <source>Download All</source>
+  <target>Saglabāt visus</target>
+</trans-unit>
 </body>
 </file>
 </xliff>
