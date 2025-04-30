@@ -13,3 +13,6 @@ export function configureShoelace() {
     console.error("Error configuring Shoelace base path:", error);
   }
 }
+
+// Execute immediately to ensure it's set before any components are defined
+configureShoelace();

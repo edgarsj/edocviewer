@@ -1,7 +1,7 @@
 import "./main.css";
+import "../utils/shoelace";
 import "../components/EdocApp";
 import { setupFileHandling } from "./fileHandling";
-import { configureShoelace } from "../utils/shoelace";
 import { loadSavedLocale, setAppLocale } from "../localization/localization";
 import { ensureInitialized } from "./uiInitializer";
 import { initializeLocaleIntegration } from "../utils/locale-integration";
@@ -23,10 +23,6 @@ async function registerServiceWorker() {
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     console.log("App: Initializing...");
-
-    // Configure Shoelace assets path - MUST come before any component imports
-    configureShoelace();
-    console.log("App: Shoelace configured");
 
     // Initialize the locale integration system
     initializeLocaleIntegration();
