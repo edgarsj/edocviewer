@@ -81,7 +81,10 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
     }
 
     .app-description {
+      font-size: 1rem;
+      font-weight: normal;
       color: var(--sl-color-gray-600);
+      margin: 0.5rem 0 0 0;
     }
 
     .file-nav-bar {
@@ -232,11 +235,14 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
             </h1>
           </div>
 
-          <p class="app-description">
-            ${msg("View and verify EU standard ASiC-E and Latvian eDoc files", {
-              id: "app.description",
-            })}
-          </p>
+          <h2 class="app-description">
+            ${msg(
+              "View and verify EU standard ASiC-E and Latvian eDoc electronic signature files (.asice, .edoc)",
+              {
+                id: "app.description",
+              },
+            )}
+          </h2>
         </header>
 
         <main>

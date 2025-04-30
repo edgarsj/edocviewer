@@ -10,7 +10,7 @@ export default {
   },
 
   dropzone: {
-    title: "Drop your eDoc file here",
+    title: "Drop your eDoc/Asic-E file here",
     description: "or click to browse files",
     selectFile: "Select File",
     suggestedFileLabel: "Suggested file:",

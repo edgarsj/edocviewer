@@ -121,7 +121,7 @@ export class FileDropzone extends LocaleAwareMixin(LitElement) {
             />
           </svg>
           <p class="dropzone-title">
-            ${msg("Drop your eDoc file here", { id: "dropzone.title" })}
+            ${msg("Drop your eDoc/Asic-E file here", { id: "dropzone.title" })}
           </p>
           <p class="dropzone-description">
             ${msg("or click to browse files", { id: "dropzone.description" })}
