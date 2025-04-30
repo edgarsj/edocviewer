@@ -31,11 +31,35 @@ async function registerServiceWorker() {
   }
 }
 
+// Load Plausible Analytics only when not running as PWA
+function loadPlausibleAnalytics() {
+  // Skip loading analytics if running as PWA
+  if (isRunningAsPWA()) {
+    console.log("Running as PWA - skipping analytics loading");
+    return;
+  }
+
+  console.log("Loading Plausible Analytics for web version");
+
+  // Create and append the Plausible script to the document head
+  const script = document.createElement("script");
+  script.defer = true;
+  script.dataset.domain = "edocviewer.app";
+  script.src = "https://stats.zenomy.tech/js/script.js";
+
+  // Add to document head
+  document.head.appendChild(script);
+}
+
 // Initialize the app when the DOM is loaded
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     console.log("App: Initializing...");
     console.log(`App running as PWA: ${isRunningAsPWA()}`);
+
+    // Load analytics (only if not PWA)
+    loadPlausibleAnalytics();
+    console.log("App: Analytics setup complete");
 
     // Initialize the locale integration system
     initializeLocaleIntegration();
@@ -125,6 +149,8 @@ if (
   document.readyState === "complete"
 ) {
   console.log("App: Document already loaded, ensuring initialization");
+  // Load analytics
+  loadPlausibleAnalytics();
   // Initialize the locale integration system
   initializeLocaleIntegration();
   // Then continue with the rest of the initialization
@@ -189,6 +215,9 @@ if (
     const hasLaunchParams =
       typeof LaunchParams !== "undefined" && "files" in LaunchParams.prototype;
 
+    // Add Plausible status to environment check
+    const hasPlausible = typeof (window as any).plausible === "function";
+
     return {
       isPWA,
       hasLaunchQueue,
@@ -198,6 +227,10 @@ if (
       displayMode: window.matchMedia("(display-mode: standalone)").matches
         ? "standalone"
         : "browser",
+      analytics: {
+        plausibleLoaded: hasPlausible,
+        shouldHaveAnalytics: !isPWA,
+      },
     };
   },
 
@@ -219,5 +252,17 @@ if (
       return "Switched to upload view";
     }
     return "Could not switch view - app not found or initialized";
+  },
+
+  // Check if analytics are loaded
+  checkAnalytics: () => {
+    const isPWA = isRunningAsPWA();
+    const hasPlausible = typeof (window as any).plausible === "function";
+
+    return {
+      isPWA,
+      hasPlausible,
+      correct: (isPWA && !hasPlausible) || (!isPWA && hasPlausible),
+    };
   },
 };
