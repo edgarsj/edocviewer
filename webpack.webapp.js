@@ -81,8 +81,39 @@ export default merge(commonConfig, {
           chunks: "all",
           priority: 25, // Higher priority than edockit
         },
+        // Create a special chunk for localization files
+        localizationBundle: {
+          test: (module) => {
+            return (
+              module.resource &&
+              module.resource.includes("/src/generated/locales/")
+            );
+          },
+          name: "localization",
+          chunks: "all",
+          priority: 30, // Higher priority than other chunks
+        },
       },
     },
+  },
+  module: {
+    rules: [
+      // Make sure TypeScript in the generated locales directory is processed
+      {
+        test: /\.ts$/,
+        include: [path.resolve(__dirname, "src/generated/locales")],
+        use: {
+          loader: "ts-loader",
+          options: {
+            transpileOnly: true,
+            compilerOptions: {
+              noEmit: false,
+              module: "ESNext",
+            },
+          },
+        },
+      },
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -119,6 +150,8 @@ export default merge(commonConfig, {
   devServer: {
     static: {
       directory: path.join(__dirname, "public"),
+      publicPath: "/",
+      watch: true,
     },
     compress: true,
     port: 8080,
@@ -127,5 +160,13 @@ export default merge(commonConfig, {
     headers: {
       "Access-Control-Allow-Origin": "*",
     },
+  },
+  // Add the `src/generated` directory to the resolve.modules to help locate imports
+  resolve: {
+    modules: [
+      "node_modules",
+      path.resolve(__dirname, "src"),
+      path.resolve(__dirname, "src/generated"),
+    ],
   },
 });

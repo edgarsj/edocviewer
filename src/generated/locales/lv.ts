@@ -24,9 +24,12 @@
 'offline.message': `Jūs pašlaik esat bezsaistē. Dažas funkcijas var būt ierobežotas.`,
 's46eb6cf13a8022e9': `Izvēlēties datni`,
 's7a39c22163f92638': `Ieteiktā datne:`,
+'s7ec72053879a63cd': `Skatīt un pārbaudīt EU standarta ASiC-E un Latvijas eDoc datnes`,
 'sa54d6981feeccbca': `Ievelciet savu eDoc datni šeit`,
 'sa7c8c31e43a211d5': `Nav atrasta neviena datne`,
 'sb2fdd52f5128dab6': `vai klikšķiniet, lai pārlūkotu datnes`,
+'sc16e00a7a8b2fde2': `Atpakaļ`,
+'sf145e08da5075640': `eDoc Skatītājs`,
 'signatures.invalid': `NEDERĪGS`,
 'signatures.noSignatures': `Nav atrasti paraksti`,
 'signatures.referencedFiles': `Parakstā iekļautās datnes`,
@@ -35,8 +38,5 @@
 'signatures.title': `Paraksti`,
 'signatures.unsignedFiles': `Neparakstītās datnes`,
 'signatures.valid': `Derīgs`,
-'sf145e08da5075640': `eDoc Viewer`,
-'s7ec72053879a63cd': `View and verify EU standard ASiC-E and Latvian eDoc files`,
-'sc16e00a7a8b2fde2': `Back`,
     };
   

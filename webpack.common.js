@@ -20,7 +20,13 @@ export default {
             },
           },
         },
-        exclude: /node_modules/,
+        exclude: (modulePath) => {
+          // Don't exclude the generated/locales directory
+          if (modulePath.includes("/src/generated/locales/")) {
+            return false;
+          }
+          return /node_modules/.test(modulePath);
+        },
       },
       {
         test: /\.css$/,
@@ -53,6 +59,8 @@ export default {
     extensions: [".ts", ".js"],
     alias: {
       "@": path.resolve(__dirname, "src"),
+      // Add an alias for generated files
+      locales: path.resolve(__dirname, "src/generated/locales"),
     },
     fallback: {
       crypto: false,

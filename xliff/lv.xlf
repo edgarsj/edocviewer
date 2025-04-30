@@ -161,6 +161,19 @@
   <source>Suggested file:</source>
   <target>Ieteiktā datne:</target>
 </trans-unit>
+<trans-unit id="sf145e08da5075640">
+  <source>eDoc Viewer</source>
+  <target>eDoc Skatītājs</target>
+</trans-unit>
+<trans-unit id="s7ec72053879a63cd">
+  <source>View and verify EU standard ASiC-E and Latvian eDoc files</source>
+  <target
+                >Skatīt un pārbaudīt EU standarta ASiC-E un Latvijas eDoc datnes</target>
+</trans-unit>
+<trans-unit id="sc16e00a7a8b2fde2">
+  <source>Back</source>
+  <target>Atpakaļ</target>
+</trans-unit>
 </body>
 </file>
 </xliff>
