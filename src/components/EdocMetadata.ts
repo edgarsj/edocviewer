@@ -73,7 +73,10 @@ export class EdocMetadata extends LocaleAwareMixin(LitElement) {
   }
 
   private handleFileDownload(e: CustomEvent) {
-    // Re-dispatch the event up to parent components
+    // Stop the original event from propagating further
+    e.stopPropagation();
+
+    // Re-dispatch the event with the same data
     this.dispatchEvent(
       new CustomEvent("file-download", {
         detail: e.detail,
@@ -81,11 +84,5 @@ export class EdocMetadata extends LocaleAwareMixin(LitElement) {
         composed: true,
       }),
     );
-  }
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    "edoc-metadata": EdocMetadata;
   }
 }

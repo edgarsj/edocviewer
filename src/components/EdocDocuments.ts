@@ -22,18 +22,18 @@ export class EdocDocuments extends LocaleAwareMixin(LitElement) {
       border: 1px solid var(--sl-color-primary-200);
     }
 
-    .section-title {
-      font-weight: 600;
-      margin-bottom: 0.75rem;
-      font-size: 1.125rem;
-      color: var(--sl-color-primary-800);
-    }
-
     .section-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-weight: 600;
+      font-size: 1.125rem;
+      color: var(--sl-color-primary-800);
+      margin: 0;
     }
 
     .download-all-button {
@@ -81,7 +81,10 @@ export class EdocDocuments extends LocaleAwareMixin(LitElement) {
   }
 
   private handleFileDownload(e: CustomEvent) {
-    // Re-dispatch the event up to parent components
+    // Stop the original event from propagating further
+    e.stopPropagation();
+
+    // Re-dispatch the event with the same data
     this.dispatchEvent(
       new CustomEvent("file-download", {
         detail: e.detail,
@@ -92,7 +95,10 @@ export class EdocDocuments extends LocaleAwareMixin(LitElement) {
   }
 
   private handleFileView(e: CustomEvent) {
-    // Re-dispatch the event up to parent components
+    // Stop the original event from propagating further
+    e.stopPropagation();
+
+    // Re-dispatch the event with the same data
     this.dispatchEvent(
       new CustomEvent("file-view", {
         detail: e.detail,
