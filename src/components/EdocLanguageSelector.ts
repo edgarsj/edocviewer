@@ -11,11 +11,10 @@ import {
 } from "../utils/locale-integration";
 
 // Import Shoelace components
-import "@shoelace-style/shoelace/dist/components/select/select.js";
-import "@shoelace-style/shoelace/dist/components/option/option.js";
+import "@shoelace-style/shoelace/dist/components/button/button.js";
 
 /**
- * Component for language selection
+ * Component for language selection - simplified toggle button
  * @fires locale-changed - Fired when the language is changed
  */
 @customElement("edoc-language-selector")
@@ -26,17 +25,10 @@ export class EdocLanguageSelector extends LocaleAwareMixin(LitElement) {
       align-items: center;
     }
 
-    .label {
-      margin-right: 0.5rem;
-      font-size: 0.875rem;
-      color: var(--sl-color-gray-700);
+    .language-button {
+      min-width: 80px;
     }
 
-    sl-select::part(form-control) {
-      margin-bottom: 0;
-    }
-
-    /* For debugging - add a border when locale changes occur */
     @keyframes highlight {
       0% {
         outline: 2px solid transparent;
@@ -83,8 +75,6 @@ export class EdocLanguageSelector extends LocaleAwareMixin(LitElement) {
 
     // Register with the integration helper
     registerSelector(this);
-
-    console.log(`EdocLanguageSelector: Connected with locale ${this.locale}`);
   }
 
   /**
@@ -106,14 +96,10 @@ export class EdocLanguageSelector extends LocaleAwareMixin(LitElement) {
     // If this is the first update, mark as initialized
     if (!this.isInitialized) {
       this.isInitialized = true;
-      console.log("EdocLanguageSelector: Component initialized");
     }
 
     // If the locale property changed and it wasn't from an external update
     if (changedProperties.has("locale") && !this.localeUpdatedExternally) {
-      console.log(
-        `EdocLanguageSelector: Locale changed internally to ${this.locale}`,
-      );
       this.handleLocaleChangeInternal();
     }
 
@@ -126,8 +112,6 @@ export class EdocLanguageSelector extends LocaleAwareMixin(LitElement) {
    * @param newLocale The new locale value
    */
   public updateLocaleValue(newLocale: SupportedLocale) {
-    console.log(`EdocLanguageSelector: External locale update to ${newLocale}`);
-
     if (newLocale !== this.locale) {
       // Set flag to prevent feedback loop
       this.localeUpdatedExternally = true;
@@ -141,70 +125,43 @@ export class EdocLanguageSelector extends LocaleAwareMixin(LitElement) {
   }
 
   render() {
+    const currentLocale = getLocale();
+    const buttonText = currentLocale === "en" ? "Latviski" : "English";
+    const targetLocale = currentLocale === "en" ? "lv" : "en";
+
     return html`
       <div class="language-selector-container">
-        <span class="label">${msg("Language:", { id: "language.label" })}</span>
-        <sl-select
+        <sl-button
           size="small"
-          value=${this.locale}
-          @sl-change=${this.handleLocaleSelectChange}
+          @click=${() => this.toggleLanguage(targetLocale)}
+          class="language-button"
         >
-          <sl-option value="auto"
-            >${msg("Auto (Browser)", { id: "language.auto" })}</sl-option
-          >
-          <sl-option value="en"
-            >${msg("English", { id: "language.en" })}</sl-option
-          >
-          <sl-option value="lv"
-            >${msg("Latvian", { id: "language.lv" })}</sl-option
-          >
-        </sl-select>
+          ${buttonText}
+        </sl-button>
       </div>
     `;
   }
 
   /**
-   * Handle select dropdown change
+   * Toggle between languages
    */
-  private handleLocaleSelectChange(e: Event) {
-    console.log("EdocLanguageSelector: Select dropdown change detected");
-
-    // Get the new locale from the select element
-    const select = e.target as any;
-    if (!select || !select.value) {
-      console.error("EdocLanguageSelector: Invalid select event", e);
-      return;
-    }
-
-    const newLocale = select.value as SupportedLocale;
-    console.log(`EdocLanguageSelector: Dropdown value changed to ${newLocale}`);
-
-    if (newLocale !== this.locale) {
-      // Update the property, which will trigger updated() lifecycle method
-      this.locale = newLocale;
-    }
+  private toggleLanguage(targetLocale: "en" | "lv") {
+    // Set the new locale and trigger the update
+    this.locale = targetLocale;
   }
 
   /**
    * Handle internal locale change (when this.locale changes)
    */
   private async handleLocaleChangeInternal() {
-    console.log(
-      `EdocLanguageSelector: Processing internal locale change to ${this.locale}`,
-    );
-
     try {
       // Use the integration helper to change the locale
       await changeLocale(this.locale);
 
       // Add highlight effect to show the change
       this.addHighlightEffect();
-
-      console.log(
-        `EdocLanguageSelector: Locale change to ${this.locale} complete`,
-      );
     } catch (error) {
-      console.error("EdocLanguageSelector: Error changing locale", error);
+      console.error("Error changing locale", error);
     }
   }
 
