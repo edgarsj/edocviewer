@@ -1,6 +1,7 @@
 import { LitElement, html, css } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { msg } from "@lit/localize";
+import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
 import "@shoelace-style/shoelace/dist/components/alert/alert.js";
 import "@shoelace-style/shoelace/dist/components/icon/icon.js";
 
@@ -8,7 +9,7 @@ import "@shoelace-style/shoelace/dist/components/icon/icon.js";
  * Component for displaying offline notification
  */
 @customElement("edoc-offline-notice")
-export class EdocOfflineNotice extends LitElement {
+export class EdocOfflineNotice extends LocaleAwareMixin(LitElement) {
   static styles = css`
     :host {
       display: block;

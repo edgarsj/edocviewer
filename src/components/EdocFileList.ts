@@ -1,6 +1,7 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { msg } from "@lit/localize";
+import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
 import "@shoelace-style/shoelace/dist/components/button/button.js";
 
 /**
@@ -9,7 +10,7 @@ import "@shoelace-style/shoelace/dist/components/button/button.js";
  * @fires file-view - Custom event when a file is requested for viewing
  */
 @customElement("edoc-file-list")
-export class EdocFileList extends LitElement {
+export class EdocFileList extends LocaleAwareMixin(LitElement) {
   static styles = css`
     :host {
       display: block;

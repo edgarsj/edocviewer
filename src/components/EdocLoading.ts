@@ -1,13 +1,14 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { msg } from "@lit/localize";
+import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
 import "@shoelace-style/shoelace/dist/components/spinner/spinner.js";
 
 /**
  * Component for displaying a loading indicator
  */
 @customElement("edoc-loading")
-export class EdocLoading extends LitElement {
+export class EdocLoading extends LocaleAwareMixin(LitElement) {
   static styles = css`
     :host {
       display: block;

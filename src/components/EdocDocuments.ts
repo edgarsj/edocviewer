@@ -1,13 +1,16 @@
+// src/components/EdocDocuments.ts - Updated to use LocaleAwareMixin
+
 import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { msg } from "@lit/localize";
+import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
 import "./EdocFileList";
 
 /**
  * Component for displaying document files section
  */
 @customElement("edoc-documents")
-export class EdocDocuments extends LitElement {
+export class EdocDocuments extends LocaleAwareMixin(LitElement) {
   static styles = css`
     :host {
       display: block;
@@ -74,11 +77,5 @@ export class EdocDocuments extends LitElement {
         composed: true,
       }),
     );
-  }
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    "edoc-documents": EdocDocuments;
   }
 }

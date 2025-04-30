@@ -21,7 +21,7 @@
 'loading': `Ielāde...`,
 'metadata.noMetadata': `Nav atrasta neviena metadatu datne`,
 'metadata.title': `Metadatu datnes (Papildu)`,
-'offline.message': `Jūs pašlaik esat bezsaistē. Dažas funkcijas var būt ierobežotas.`,
+'offline.message': `Nav pieejas internetam. Dažas funkcijas var būt ierobežotas.`,
 's46eb6cf13a8022e9': `Izvēlēties datni`,
 's7a39c22163f92638': `Ieteiktā datne:`,
 's7ec72053879a63cd': `Skatīt un pārbaudīt EU standarta ASiC-E un Latvijas eDoc datnes`,

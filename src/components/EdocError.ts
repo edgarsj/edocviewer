@@ -1,13 +1,14 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { msg } from "@lit/localize";
+import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
 import "@shoelace-style/shoelace/dist/components/alert/alert.js";
 
 /**
  * Component for displaying error messages
  */
 @customElement("edoc-error")
-export class EdocError extends LitElement {
+export class EdocError extends LocaleAwareMixin(LitElement) {
   static styles = css`
     :host {
       display: block;

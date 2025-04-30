@@ -2,6 +2,7 @@ import { LitElement, html, css } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { msg } from "@lit/localize";
 import "@shoelace-style/shoelace/dist/components/button/button.js";
+import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
 
 export interface FileDropzoneOptions {
   acceptedFileTypes?: string[];
@@ -13,7 +14,7 @@ export interface FileDropzoneOptions {
  * @fires file-selected - Emitted when a file is selected, with the file in the event detail
  */
 @customElement("edoc-file-dropzone")
-export class FileDropzone extends LitElement {
+export class FileDropzone extends LocaleAwareMixin(LitElement) {
   static styles = css`
     :host {
       display: block;

@@ -228,12 +228,20 @@ export async function setAppLocale(locale: SupportedLocale): Promise<void> {
     }
   }
 
-  // Dispatch custom event for components to update
-  window.dispatchEvent(
-    new CustomEvent("localeChanged", {
-      detail: { locale: effectiveLocale, preference: locale },
-    }),
-  );
+  // Dispatch custom event for components to update - make sure this happens
+  // even if the locale didn't change (as the preference might have changed)
+  const event = new CustomEvent("localeChanged", {
+    detail: { locale: effectiveLocale, preference: locale },
+    bubbles: true,
+    composed: true,
+  });
+
+  // Dispatch the event both to window and document for maximum compatibility
+  window.dispatchEvent(event);
+  document.dispatchEvent(event);
+
+  // For debugging purposes, log the event dispatch
+  console.log(`Dispatched localeChanged event: ${effectiveLocale}`);
 }
 
 // Extra fallback for extreme cases - directly sets text content via data-i18n attributes

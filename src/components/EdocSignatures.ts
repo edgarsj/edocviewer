@@ -1,6 +1,7 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { msg } from "@lit/localize";
+import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
 import { SignatureValidationResult } from "../core/parser";
 import "./EdocSignature";
 
@@ -8,7 +9,7 @@ import "./EdocSignature";
  * Component for displaying all signatures section
  */
 @customElement("edoc-signatures")
-export class EdocSignatures extends LitElement {
+export class EdocSignatures extends LocaleAwareMixin(LitElement) {
   static styles = css`
     :host {
       display: block;

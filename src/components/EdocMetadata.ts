@@ -1,6 +1,7 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { msg } from "@lit/localize";
+import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
 import "@shoelace-style/shoelace/dist/components/details/details.js";
 import "./EdocFileList";
 
@@ -8,7 +9,7 @@ import "./EdocFileList";
  * Component for displaying metadata files in an expandable section
  */
 @customElement("edoc-metadata")
-export class EdocMetadata extends LitElement {
+export class EdocMetadata extends LocaleAwareMixin(LitElement) {
   static styles = css`
     :host {
       display: block;

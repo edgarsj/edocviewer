@@ -2,6 +2,7 @@ import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { msg } from "@lit/localize";
 import { SignatureValidationResult } from "../core/parser";
+import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
 import "@shoelace-style/shoelace/dist/components/details/details.js";
 import "@shoelace-style/shoelace/dist/components/badge/badge.js";
 
@@ -9,7 +10,7 @@ import "@shoelace-style/shoelace/dist/components/badge/badge.js";
  * Component for displaying eDoc signature information
  */
 @customElement("edoc-signature")
-export class EdocSignature extends LitElement {
+export class EdocSignature extends LocaleAwareMixin(LitElement) {
   static styles = css`
     :host {
       display: block;

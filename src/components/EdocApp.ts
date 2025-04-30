@@ -1,6 +1,7 @@
 import { LitElement, html, css } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { msg } from "@lit/localize";
+import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
 
 // Import Shoelace components
 import "@shoelace-style/shoelace/dist/components/button/button.js";
@@ -20,7 +21,7 @@ import "./EdocOfflineNotice";
  * Main application component for eDoc Viewer
  */
 @customElement("edoc-app")
-export class EdocApp extends LitElement {
+export class EdocApp extends LocaleAwareMixin(LitElement) {
   static styles = css`
     :host {
       display: block;
