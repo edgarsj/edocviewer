@@ -120,9 +120,15 @@ export class FileDropzone extends LocaleAwareMixin(LitElement) {
               d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
             />
           </svg>
-          <p class="dropzone-title">${msg("Drop your eDoc file here")}</p>
-          <p class="dropzone-description">${msg("or click to browse files")}</p>
-          <sl-button variant="primary">${msg("Select File")}</sl-button>
+          <p class="dropzone-title">
+            ${msg("Drop your eDoc file here", { id: "dropzone.title" })}
+          </p>
+          <p class="dropzone-description">
+            ${msg("or click to browse files", { id: "dropzone.description" })}
+          </p>
+          <sl-button variant="primary">
+            ${msg("Select File", { id: "dropzone.selectFile" })}
+          </sl-button>
           <input
             type="file"
             @change=${this.handleFileSelection}
@@ -132,7 +138,11 @@ export class FileDropzone extends LocaleAwareMixin(LitElement) {
           ${this.suggestedFileName
             ? html`
                 <div class="suggested-file">
-                  <p class="suggested-file-label">${msg("Suggested file:")}</p>
+                  <p class="suggested-file-label">
+                    ${msg("Suggested file:", {
+                      id: "dropzone.suggestedFileLabel",
+                    })}
+                  </p>
                   <p class="suggested-file-name">${this.suggestedFileName}</p>
                 </div>
               `

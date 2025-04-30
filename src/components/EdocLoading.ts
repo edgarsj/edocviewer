@@ -58,7 +58,9 @@ export class EdocLoading extends LocaleAwareMixin(LitElement) {
           <sl-spinner></sl-spinner>
         </div>
 
-        <div class="loading-message">${msg("Processing document...")}</div>
+        <div class="loading-message">
+          ${msg("Processing document...", { id: "app.processing_document" })}
+        </div>
       </div>
     `;
   }

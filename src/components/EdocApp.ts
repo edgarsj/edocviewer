@@ -210,13 +210,15 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
               class="app-logo"
             />
             <h1 class="app-title">
-              ${msg("eDoc Viewer")}
+              ${msg("eDoc Viewer", { id: "app.title" })}
               <span class="beta-tag">BETA</span>
             </h1>
           </div>
 
           <p class="app-description">
-            ${msg("View and verify EU standard ASiC-E and Latvian eDoc files")}
+            ${msg("View and verify EU standard ASiC-E and Latvian eDoc files", {
+              id: "app.description",
+            })}
           </p>
 
           <div>
@@ -249,7 +251,7 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
                   name="arrow-left"
                   style="font-size: 16px;"
                 ></sl-icon>
-                ${msg("Back")}
+                ${msg("Back", { id: "app.backButtonLabel" })}
               </sl-button>
             </div>
 
@@ -297,10 +299,10 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
         <footer>
           <p>
             &copy; ${this.currentYear}
-            <a href="https://edgarsjekabsons.lv">Edgars Jēkabsons</a> /
+            <a href="https://edgarsjekabsons.lv">Edgars Jēkabsons</a>,
             <a href="https://zenomy.tech">ZenomyTech SIA</a> &nbsp;|&nbsp;
             <span class="version-info">
-              ${msg("Version")}: ${this.version.number}
+              ${msg("Version", { id: "app.version" })}: ${this.version.number}
               <span title="${this.version.commit}"
                 >(${this.version.commit.substring(0, 7)})</span
               >
@@ -312,9 +314,12 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
                 name="github"
                 style="vertical-align: -0.125em; margin-right: 4px;"
               ></sl-icon>
-              ${msg("Open Source")}
+              ${msg("Open Source", { id: "app.open_source" })}
             </a>
-            &nbsp;|&nbsp; ${msg("Questions, suggestions, or bug reports")}:
+            &nbsp;|&nbsp;
+            ${msg("Questions, suggestions, or bug reports", {
+              id: "app.questions_support",
+            })}:
             <a href="mailto:edocviewer@zenomy.tech"> edocviewer@zenomy.tech </a>
           </p>
         </footer>

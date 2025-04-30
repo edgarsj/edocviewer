@@ -91,54 +91,54 @@
   <source>You are currently offline. Some features may be limited.</source>
   <target>Nav pieejas internetam. Dažas funkcijas var būt ierobežotas.</target>
 </trans-unit>
-<trans-unit id="sa54d6981feeccbca">
-  <source>Drop your eDoc file here</source>
-  <target>Ievelciet savu eDoc/Asic-E failu šeit</target>
-</trans-unit>
-<trans-unit id="sb2fdd52f5128dab6">
-  <source>or click to browse files</source>
-  <target>vai klikšķiniet, lai pārlūkotu failus</target>
-</trans-unit>
-<trans-unit id="s46eb6cf13a8022e9">
-  <source>Select File</source>
-  <target>Izvēlēties failu</target>
-</trans-unit>
-<trans-unit id="s7a39c22163f92638">
-  <source>Suggested file:</source>
-  <target>Ieteiktais fails:</target>
-</trans-unit>
-<trans-unit id="sf145e08da5075640">
-  <source>eDoc Viewer</source>
-  <target>eDoc Viewer</target>
-</trans-unit>
-<trans-unit id="s7ec72053879a63cd">
-  <source>View and verify EU standard ASiC-E and Latvian eDoc files</source>
-  <target
-                >Skatīt un pārbaudīt EU standarta ASiC-E un Latvijas eDoc failus</target>
-</trans-unit>
-<trans-unit id="sc16e00a7a8b2fde2">
-  <source>Back</source>
-  <target>Atpakaļ</target>
-</trans-unit>
-<trans-unit id="s9848d6bfff409eab">
-  <source>Processing document...</source>
-  <target>Dokumenta apstrāde...</target>
-</trans-unit>
 <trans-unit id="s1d093e853c7fbc9e">
   <source>Download All</source>
   <target>Saglabāt visus</target>
 </trans-unit>
-<trans-unit id="sc9f9c1820109a6ae">
+<trans-unit id="dropzone.title">
+  <source>Drop your eDoc file here</source>
+  <target>Ievelciet savu eDoc/Asic-E failu šeit</target>
+</trans-unit>
+<trans-unit id="dropzone.description">
+  <source>or click to browse files</source>
+  <target>vai klikšķiniet, lai pārlūkotu failus</target>
+</trans-unit>
+<trans-unit id="dropzone.selectFile">
+  <source>Select File</source>
+  <target>Izvēlēties failu</target>
+</trans-unit>
+<trans-unit id="dropzone.suggestedFileLabel">
+  <source>Suggested file:</source>
+  <target>Ieteiktais fails:</target>
+</trans-unit>
+<trans-unit id="app.processing_document">
+  <source>Processing document...</source>
+  <target>Dokumenta apstrāde...</target>
+</trans-unit>
+<trans-unit id="app.title">
+  <source>eDoc Viewer</source>
+  <target>eDoc Viewer</target>
+</trans-unit>
+<trans-unit id="app.description">
+  <source>View and verify EU standard ASiC-E and Latvian eDoc files</source>
+  <target
+                >Skatīt un pārbaudīt EU standarta ASiC-E un Latvijas eDoc failus</target>
+</trans-unit>
+<trans-unit id="app.backButtonLabel">
+  <source>Back</source>
+  <target>Atpakaļ</target>
+</trans-unit>
+<trans-unit id="app.version">
+  <source>Version</source>
+  <target>Versija</target>
+</trans-unit>
+<trans-unit id="app.open_source">
   <source>Open Source</source>
   <target>Atvērtais kods</target>
 </trans-unit>
-<trans-unit id="s101b7e681bf7797b">
+<trans-unit id="app.questions_support">
   <source>Questions, suggestions, or bug reports</source>
   <target>Jautājumiem, ieteikumiem un kļūdu ziņojumiem</target>
-</trans-unit>
-<trans-unit id="sf4122b220926be97">
-  <source>Version</source>
-  <target>Versija</target>
 </trans-unit>
 </body>
 </file>
