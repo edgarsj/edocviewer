@@ -16,18 +16,23 @@
         <!-- Preload the Shoelace assets -->
         <link rel="preconnect" href="https://cdn.jsdelivr.net" />
 
-        <!-- Force hide static content when JS loads -->
+        <!-- Critical inline styles for visibility control -->
         <style>
+            /* Initial state - show static, hide components */
             #static-content {
                 display: block;
             }
+
             edoc-app {
                 display: none;
             }
-            .js-loaded #static-content {
+
+            /* JS-loaded state - hide static, show components */
+            html.js-loaded #static-content {
                 display: none !important;
             }
-            .js-loaded edoc-app {
+
+            html.js-loaded edoc-app {
                 display: block !important;
             }
         </style>
@@ -268,81 +273,13 @@
                 margin-bottom: 1rem;
                 text-align: center;
             }
+
+            .hidden {
+                display: none !important;
+            }
         </style>
     </head>
     <body>
-        <div class="container">
-            <noscript>
-                <div class="noscript-message">
-                    This application requires JavaScript to be enabled for full
-                    functionality.
-                </div>
-            </noscript>
-
-            <header>
-                <div class="app-header">
-                    <img
-                        src="/icons/edoc-icon.svg"
-                        alt="eDoc Viewer Logo"
-                        class="app-logo"
-                    />
-                    <h1 class="app-title">eDoc Viewer</h1>
-                </div>
-                <p class="app-description">
-                    View and verify EU standard ASiC-E and Latvian eDoc files
-                </p>
-                <div class="header-actions">
-                    <div class="language-selector">
-                        <span class="language-label">Language:</span>
-                        <select class="language-select">
-                            <option value="auto">Auto (Browser)</option>
-                            <option value="en">English</option>
-                            <option value="lv">Latvian</option>
-                        </select>
-                    </div>
-                </div>
-            </header>
-
-            <main>
-                <!-- Upload Section - displayed for SEO and progressive enhancement -->
-                <div class="edoc-container" id="upload-section">
-                    <div class="dropzone">
-                        <div>
-                            <svg
-                                class="dropzone-icon"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                                />
-                            </svg>
-                            <p class="dropzone-title">
-                                Drop your eDoc file here
-                            </p>
-                            <p class="dropzone-description">
-                                or click to browse files
-                            </p>
-                            <button class="button">Select File</button>
-                        </div>
-                    </div>
-                </div>
-            </main>
-
-            <footer>
-                <p>
-                    &copy; <span id="current-year">2025</span>
-                    <a href="https://edgarsjekabsons.lv">Edgars Jēkabsons</a> /
-                    <a href="https://zenomy.tech">ZenomyTech SIA</a>
-                </p>
-            </footer>
-        </div>
-
         <!-- This will be replaced by the Lit/Shoelace components -->
         <edoc-app id="app"></edoc-app>
 
@@ -415,6 +352,28 @@
             // Set current year for SEO version
             document.getElementById("current-year").textContent =
                 new Date().getFullYear();
+
+            // Fallback script to hide static content if the main script fails
+            window.addEventListener("load", function () {
+                setTimeout(function () {
+                    // Check if the js-loaded class hasn't been added yet
+                    if (
+                        !document.documentElement.classList.contains(
+                            "js-loaded",
+                        )
+                    ) {
+                        console.log("Fallback script: Hiding static content");
+                        var staticContent =
+                            document.getElementById("static-content");
+                        var appElement = document.getElementById("app");
+
+                        if (staticContent) staticContent.style.display = "none";
+                        if (appElement) appElement.style.display = "block";
+
+                        document.documentElement.classList.add("js-loaded");
+                    }
+                }, 1000); // Wait 1 second after load
+            });
         </script>
     </body>
 </html>

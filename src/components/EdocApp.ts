@@ -17,7 +17,7 @@ import "./EdocLanguageSelector";
 import "./EdocOfflineNotice";
 
 /**
- * Main application component for eDoc Viewer (stub version)
+ * Main application component for eDoc Viewer
  */
 @customElement("edoc-app")
 export class EdocApp extends LitElement {
@@ -81,6 +81,10 @@ export class EdocApp extends LitElement {
       font-size: 0.875rem;
       color: var(--sl-color-gray-500);
     }
+
+    .hidden {
+      display: none !important;
+    }
   `;
 
   @state() private view: "upload" | "result" = "upload";
@@ -89,6 +93,36 @@ export class EdocApp extends LitElement {
   @state() private signatures: any[] = [];
   @state() private loading = false;
   @state() private error = "";
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    // Signal that the component is connected and ready to render
+    // This helps with the static/dynamic content transition
+    this.dispatchEvent(
+      new CustomEvent("edoc-app-connected", {
+        bubbles: true,
+        composed: true,
+      }),
+    );
+
+    // Notify when the component has been rendered
+    // This is a good signal to hide the static content
+    window.requestAnimationFrame(() => {
+      this.dispatchEvent(
+        new CustomEvent("edoc-app-rendered", {
+          bubbles: true,
+          composed: true,
+        }),
+      );
+
+      // Also signal the initialization system
+      if (document.documentElement.classList.contains("js-loaded") === false) {
+        console.log("EdocApp: Manually adding js-loaded class");
+        document.documentElement.classList.add("js-loaded");
+      }
+    });
+  }
 
   render() {
     return html`

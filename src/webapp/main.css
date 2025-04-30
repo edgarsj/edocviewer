@@ -83,20 +83,25 @@ sl-select::part(base) {
     min-width: auto;
 }
 
-/* Force visibility of web components */
+/* Force visibility settings for custom elements */
 edoc-app {
+    display: none;
+}
+
+html.js-loaded edoc-app {
     display: block !important;
 }
 
+/* Static content visibility */
 #static-content {
+    display: block;
+}
+
+html.js-loaded #static-content {
     display: none !important;
 }
 
-/* For browsers with JS support */
-.js-loaded #static-content {
+/* Hide the app when JS is disabled (for graceful degradation) */
+noscript ~ #app {
     display: none !important;
-}
-
-.js-loaded edoc-app {
-    display: block !important;
 }
