@@ -26,7 +26,6 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
       border: 1px solid var(--sl-color-primary-200);
       position: relative; /* Enable absolute positioning for the status icon */
       min-height: 3.5rem; /* Ensure minimum height for smaller signature infos */
-      margin-right: 2rem;
     }
 
     .signature-header {
@@ -53,7 +52,7 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
     .status-icon-container {
       position: absolute;
       top: 1rem;
-      right: 2rem;
+      right: 1rem;
       width: 4rem;
       height: 4rem;
       display: flex;
@@ -120,6 +119,49 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
     .unsigned-files {
       color: var(--sl-color-danger-600);
     }
+
+    .signer-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+      font-weight: 500; /* Semi-bold for the main signer name */
+    }
+
+    /* Style for the ID - now inline with name */
+    .signer-id {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem; /* Smaller gap between icon and text for ID */
+      color: var(--sl-color-neutral-600); /* Lighter text color */
+      font-size: 0.875rem; /* Slightly smaller font */
+      font-weight: normal; /* Reset font weight */
+      margin-left: 0.5rem; /* Space between name and ID */
+    }
+
+    .signature-date {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+      color: var(--sl-color-neutral-600); /* Lighter text color */
+      font-size: 0.875rem; /* Slightly smaller font */
+    }
+
+    /* Make icons for ID and date more subtle */
+    .signer-id sl-icon,
+    .signature-date sl-icon {
+      font-size: 0.875rem; /* Smaller icons */
+      color: var(--sl-color-neutral-500); /* Lighter icon color */
+    }
+
+    sl-icon {
+      font-size: 1rem;
+    }
+
+    .status-icon sl-icon {
+      font-size: 3rem;
+    }
   `;
 
   /**
@@ -174,12 +216,20 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
     if (!signerInfo.signerName && !signerInfo.personalId) {
       return html``;
     }
+    //         <strong>${msg("Signed by:", { id: "signatures.signedBy" })}</strong>
 
     return html`
       <div class="signer-info">
-        <strong>${msg("Signed by:", { id: "signatures.signedBy" })}</strong>
-        ${signerInfo.signerName}
-        ${signerInfo.personalId ? html`, ID: ${signerInfo.personalId}` : ""}
+        <sl-icon name="person" aria-hidden="true"></sl-icon>
+        <span aria-label="${msg("Signed by:", { id: "signatures.signedBy" })}"
+          >${signerInfo.signerName}</span
+        >
+        ${signerInfo.personalId
+          ? html` <span class="signer-id">
+              <sl-icon name="key" aria-hidden="true"></sl-icon>
+              <span aria-label="ID">${signerInfo.personalId}</span>
+            </span>`
+          : ""}
       </div>
     `;
   }
@@ -193,8 +243,10 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
 
     return html`
       <div class="signature-date">
-        <strong>${msg("Date:", { id: "signatures.date" })}</strong>
-        ${signerInfo.signatureDate}
+        <sl-icon name="calendar" aria-hidden="true"></sl-icon>
+        <span aria-label="${msg("Date", { id: "signatures.date" })}">
+          ${signerInfo.signatureDate}
+        </span>
       </div>
     `;
   }
