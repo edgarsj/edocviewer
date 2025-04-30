@@ -17,6 +17,14 @@ import "./EdocError";
 import "./EdocLanguageSelector";
 import "./EdocOfflineNotice";
 
+// Import parser
+import {
+  EdocContainer,
+  SignatureValidationResult,
+  parseEdocFile,
+  verifyEdocSignatures,
+} from "../core/parser";
+
 /**
  * Main application component for eDoc Viewer
  */
@@ -90,8 +98,8 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
 
   @state() private view: "upload" | "result" = "upload";
   @state() private currentYear = new Date().getFullYear();
-  @state() private container: any = null;
-  @state() private signatures: any[] = [];
+  @state() private container: EdocContainer | null = null;
+  @state() private signatures: SignatureValidationResult[] = [];
   @state() private loading = false;
   @state() private error = "";
 
@@ -210,9 +218,12 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
                     ? html`
                         <edoc-documents
                           .files=${this.container.documentFileList || []}
+                          @file-download=${this.handleFileDownload}
+                          @file-view=${this.handleFileView}
                         ></edoc-documents>
                         <edoc-metadata
                           .files=${this.container.metadataFileList || []}
+                          @file-download=${this.handleFileDownload}
                         ></edoc-metadata>
                       `
                     : ""}
@@ -242,38 +253,116 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
     this.loading = true;
     this.view = "result";
     this.error = "";
+    this.container = null;
+    this.signatures = [];
 
     try {
-      // This is where you would normally process the file
-      // For the stub, we'll just simulate loading
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Read the file as an ArrayBuffer
+      const fileBuffer = await this.readFileAsArrayBuffer(file);
 
-      // Simulate container and signatures (only in stub version)
-      this.container = {
-        documentFileList: ["document.pdf"],
-        metadataFileList: ["metadata.xml"],
-      };
+      // Parse the eDoc container
+      this.container = await parseEdocFile(new Uint8Array(fileBuffer));
 
-      this.signatures = [
-        {
-          signerInfo: {
-            signerName: "Test User",
-            personalId: "000000-00000",
-          },
-          valid: true,
-          error: null,
-          allDocumentsSigned: true,
-          signedFiles: ["document.pdf"],
-          unsignedFiles: [],
-          originalVerificationValid: true,
-        },
-      ];
+      // Process signatures
+      this.signatures = await verifyEdocSignatures(this.container);
     } catch (error) {
       this.error = `Error processing file: ${(error as Error).message}`;
       console.error("File processing error:", error);
     } finally {
       this.loading = false;
     }
+  }
+
+  private readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        if (reader.result instanceof ArrayBuffer) {
+          resolve(reader.result);
+        } else {
+          reject(new Error("Failed to read file as ArrayBuffer"));
+        }
+      };
+
+      reader.onerror = () => {
+        reject(reader.error);
+      };
+
+      reader.readAsArrayBuffer(file);
+    });
+  }
+
+  private handleFileDownload(e: CustomEvent) {
+    const { filename } = e.detail;
+    if (!this.container || !filename) return;
+
+    const fileData = this.container.files.get(filename);
+    if (!fileData) {
+      console.error(`File not found: ${filename}`);
+      return;
+    }
+
+    // Create a download link
+    const blob = new Blob([fileData]);
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = this.getFileNameFromPath(filename);
+    document.body.appendChild(a);
+    a.click();
+
+    // Clean up
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 100);
+  }
+
+  private handleFileView(e: CustomEvent) {
+    const { filename } = e.detail;
+    if (!this.container || !filename) return;
+
+    const fileData = this.container.files.get(filename);
+    if (!fileData) {
+      console.error(`File not found: ${filename}`);
+      return;
+    }
+
+    // Create a blob URL and open in new tab
+    const blob = new Blob([fileData], { type: this.getContentType(filename) });
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+
+    // Clean up URL after some time
+    setTimeout(() => {
+      URL.revokeObjectURL(url);
+    }, 1000);
+  }
+
+  private getContentType(filename: string): string {
+    const extension = this.getFileExtension(filename).toLowerCase();
+    const contentTypes: Record<string, string> = {
+      pdf: "application/pdf",
+      docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      doc: "application/msword",
+      xml: "application/xml",
+      txt: "text/plain",
+      csv: "text/csv",
+      jpg: "image/jpeg",
+      jpeg: "image/jpeg",
+      png: "image/png",
+    };
+
+    return contentTypes[extension] || "application/octet-stream";
+  }
+
+  private getFileExtension(filename: string): string {
+    return filename.split(".").pop() || "";
+  }
+
+  private getFileNameFromPath(path: string): string {
+    return path.split("/").pop() || path;
   }
 
   private goBack() {

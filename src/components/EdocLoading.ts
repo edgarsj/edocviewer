@@ -5,32 +5,35 @@ import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
 import "@shoelace-style/shoelace/dist/components/spinner/spinner.js";
 
 /**
- * Component for displaying a loading indicator
+ * Component for displaying loading state
  */
 @customElement("edoc-loading")
 export class EdocLoading extends LocaleAwareMixin(LitElement) {
   static styles = css`
     :host {
       display: block;
-      padding: 2rem 0;
+      margin: 2rem 0;
+    }
+
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       text-align: center;
     }
 
     .spinner-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      margin-bottom: 1rem;
     }
 
     sl-spinner {
       font-size: 2rem;
-      --indicator-color: var(--sl-color-primary-600);
     }
 
-    .loading-text {
-      margin-top: 0.75rem;
-      color: var(--sl-color-gray-600);
+    .loading-message {
+      margin-bottom: 1rem;
+      font-weight: 500;
+      color: var(--sl-color-primary-700);
     }
 
     .hidden {
@@ -39,13 +42,7 @@ export class EdocLoading extends LocaleAwareMixin(LitElement) {
   `;
 
   /**
-   * Custom loading message
-   */
-  @property({ type: String })
-  message = "";
-
-  /**
-   * Controls whether the loader is visible
+   * Controls whether the loading indicator is visible
    */
   @property({ type: Boolean })
   visible = false;
@@ -56,11 +53,12 @@ export class EdocLoading extends LocaleAwareMixin(LitElement) {
     }
 
     return html`
-      <div class="spinner-container">
-        <sl-spinner></sl-spinner>
-        <p class="loading-text">
-          ${this.message || msg("Loading...", { id: "loading" })}
-        </p>
+      <div class="loading-container">
+        <div class="spinner-container">
+          <sl-spinner></sl-spinner>
+        </div>
+
+        <div class="loading-message">${msg("Processing document...")}</div>
       </div>
     `;
   }

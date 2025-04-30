@@ -25,11 +25,11 @@
 </trans-unit>
 <trans-unit id="signatures.referencedFiles">
   <source>Referenced files in signature</source>
-  <target>Parakstā iekļautās datnes</target>
+  <target>Parakstā iekļautie faili</target>
 </trans-unit>
 <trans-unit id="signatures.unsignedFiles">
   <source>Unsigned files</source>
-  <target>Neparakstītās datnes</target>
+  <target>Neparakstītie faili</target>
 </trans-unit>
 <trans-unit id="signatures.title">
   <source>Signatures</source>
@@ -37,11 +37,11 @@
 </trans-unit>
 <trans-unit id="signatures.noSignatures">
   <source>No signatures found</source>
-  <target>Nav atrasti paraksti</target>
+  <target>Nav parakstu</target>
 </trans-unit>
 <trans-unit id="sa7c8c31e43a211d5">
   <source>No files found</source>
-  <target>Nav atrasta neviena datne</target>
+  <target>Nav failu</target>
 </trans-unit>
 <trans-unit id="file.view">
   <source>View</source>
@@ -49,27 +49,23 @@
 </trans-unit>
 <trans-unit id="file.download">
   <source>Download</source>
-  <target>Lejupielādēt</target>
+  <target>Saglabāt</target>
 </trans-unit>
 <trans-unit id="documents.title">
   <source>Document Files</source>
-  <target>Dokumentu datnes</target>
+  <target>Dokumenti</target>
 </trans-unit>
 <trans-unit id="documents.noDocuments">
   <source>No document files found</source>
-  <target>Nav atrasta neviena dokumenta datne</target>
+  <target>Nav dokumentu</target>
 </trans-unit>
 <trans-unit id="metadata.title">
   <source>Metadata Files (Advanced)</source>
-  <target>Metadatu datnes (Papildu)</target>
+  <target>Metadati</target>
 </trans-unit>
 <trans-unit id="metadata.noMetadata">
   <source>No metadata files found</source>
   <target>Nav atrasta neviena metadatu datne</target>
-</trans-unit>
-<trans-unit id="loading">
-  <source>Loading...</source>
-  <target>Ielāde...</target>
 </trans-unit>
 <trans-unit id="error.title">
   <source>Error</source>
@@ -97,32 +93,36 @@
 </trans-unit>
 <trans-unit id="sa54d6981feeccbca">
   <source>Drop your eDoc file here</source>
-  <target>Ievelciet savu eDoc datni šeit</target>
+  <target>Ievelciet savu eDoc/Asic-E failu šeit</target>
 </trans-unit>
 <trans-unit id="sb2fdd52f5128dab6">
   <source>or click to browse files</source>
-  <target>vai klikšķiniet, lai pārlūkotu datnes</target>
+  <target>vai klikšķiniet, lai pārlūkotu failus</target>
 </trans-unit>
 <trans-unit id="s46eb6cf13a8022e9">
   <source>Select File</source>
-  <target>Izvēlēties datni</target>
+  <target>Izvēlēties failu</target>
 </trans-unit>
 <trans-unit id="s7a39c22163f92638">
   <source>Suggested file:</source>
-  <target>Ieteiktā datne:</target>
+  <target>Ieteiktais fails:</target>
 </trans-unit>
 <trans-unit id="sf145e08da5075640">
   <source>eDoc Viewer</source>
-  <target>eDoc Skatītājs</target>
+  <target>eDoc Viewer</target>
 </trans-unit>
 <trans-unit id="s7ec72053879a63cd">
   <source>View and verify EU standard ASiC-E and Latvian eDoc files</source>
   <target
-                >Skatīt un pārbaudīt EU standarta ASiC-E un Latvijas eDoc datnes</target>
+                >Skatīt un pārbaudīt EU standarta ASiC-E un Latvijas eDoc failus</target>
 </trans-unit>
 <trans-unit id="sc16e00a7a8b2fde2">
   <source>Back</source>
   <target>Atpakaļ</target>
+</trans-unit>
+<trans-unit id="s9848d6bfff409eab">
+  <source>Processing document...</source>
+  <target>Dokumenta apstrāde...</target>
 </trans-unit>
 </body>
 </file>
