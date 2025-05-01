@@ -7,7 +7,6 @@ import {
   loadSavedLocale,
   setAppLocale,
   setLocale,
-  debugLocaleState,
 } from "../localization/localization";
 import { ensureInitialized } from "./uiInitializer";
 import { initializeLocaleIntegration } from "../utils/locale-integration";
@@ -106,16 +105,16 @@ async function initializeApp() {
 // Separate function to handle locale initialization
 async function initializeLocalization() {
   try {
-    // Initialize the locale integration system
-    initializeLocaleIntegration();
-    console.log("App: Locale integration initialized");
-
     // Get saved language preference
     const savedLocale = loadSavedLocale();
     console.log(`App: Loaded saved locale preference: ${savedLocale}`);
 
     // Set document language for visual consistency
     document.documentElement.lang = savedLocale;
+
+    // Initialize the locale integration system
+    initializeLocaleIntegration();
+    console.log("App: Locale integration initialized");
 
     // Wait for components to be ready
     await Promise.all([
@@ -303,7 +302,6 @@ function setupDebugLogging() {
 
   // Add locale debugging tools
   localeDebug: {
-    getState: debugLocaleState,
     toggleLanguage: async () => {
       const currentLocale = document.documentElement.lang;
       const newLocale = currentLocale === "en" ? "lv" : "en";

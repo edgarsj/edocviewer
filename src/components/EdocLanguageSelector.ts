@@ -1,6 +1,5 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { msg } from "@lit/localize";
 import { getLocale } from "../localization/localization";
 import { SupportedLocale } from "../localization/localization";
 import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
@@ -50,7 +49,7 @@ export class EdocLanguageSelector extends LocaleAwareMixin(LitElement) {
    * Current locale value
    */
   @property({ type: String })
-  locale: SupportedLocale = "auto";
+  locale: SupportedLocale = "en";
 
   /**
    * Internal flag for initialization
@@ -70,8 +69,8 @@ export class EdocLanguageSelector extends LocaleAwareMixin(LitElement) {
 
     // Initialize the locale property to the current value
     const currentLocale = getLocale();
-    this.locale =
-      currentLocale === "en" || currentLocale === "lv" ? currentLocale : "auto";
+    console.log("EdocLanguageSelector: Initialized with locale", currentLocale);
+    this.locale = currentLocale as SupportedLocale;
 
     // Register with the integration helper
     registerSelector(this);
@@ -92,7 +91,8 @@ export class EdocLanguageSelector extends LocaleAwareMixin(LitElement) {
    */
   updated(changedProperties: Map<string, any>) {
     super.updated(changedProperties);
-
+    // console.log("EdocLanguageSelector: Updated");
+    // console.log(JSON.stringify(changedProperties));
     // If this is the first update, mark as initialized
     if (!this.isInitialized) {
       this.isInitialized = true;
@@ -112,6 +112,10 @@ export class EdocLanguageSelector extends LocaleAwareMixin(LitElement) {
    * @param newLocale The new locale value
    */
   public updateLocaleValue(newLocale: SupportedLocale) {
+    // console.log(
+    //   "EdocLanguageSelector: External update locale value",
+    //   newLocale,
+    // );
     if (newLocale !== this.locale) {
       // Set flag to prevent feedback loop
       this.localeUpdatedExternally = true;
@@ -145,7 +149,13 @@ export class EdocLanguageSelector extends LocaleAwareMixin(LitElement) {
   /**
    * Toggle between languages
    */
-  private toggleLanguage(targetLocale: "en" | "lv") {
+  private toggleLanguage(targetLocale: SupportedLocale) {
+    console.log(
+      "EdocLanguageSelector: Toggling language from",
+      this.locale,
+      "to",
+      targetLocale,
+    );
     // Set the new locale and trigger the update
     this.locale = targetLocale;
   }
@@ -154,6 +164,10 @@ export class EdocLanguageSelector extends LocaleAwareMixin(LitElement) {
    * Handle internal locale change (when this.locale changes)
    */
   private async handleLocaleChangeInternal() {
+    // console.log(
+    //   "EdocLanguageSelector: Internal update locale value",
+    //   this.locale,
+    // );
     try {
       // Use the integration helper to change the locale
       await changeLocale(this.locale);

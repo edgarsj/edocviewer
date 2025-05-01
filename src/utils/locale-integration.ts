@@ -70,6 +70,7 @@ export class LocaleIntegrationHelper {
    * @param locale The new locale
    */
   public async handleLocaleChange(locale: SupportedLocale): Promise<void> {
+    console.log("LocaleIntegration: Handling locale change", locale);
     try {
       // Apply the locale
       await setAppLocale(locale);

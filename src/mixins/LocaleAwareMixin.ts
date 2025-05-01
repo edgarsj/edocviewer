@@ -20,6 +20,13 @@ export const LocaleAwareMixin = <T extends new (...args: any[]) => LitElement>(
     @property({ type: String })
     private effectiveLocale = getLocale();
 
+    /**
+     * Public getter for the current locale
+     */
+    get currentLocale(): string {
+      return this.effectiveLocale;
+    }
+
     connectedCallback() {
       super.connectedCallback();
 

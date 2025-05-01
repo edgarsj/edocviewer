@@ -219,7 +219,9 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
     return html`
       <div class="container">
         <div class="header-language-selector">
-          <edoc-language-selector></edoc-language-selector>
+          <edoc-language-selector
+            locale="${this.currentLocale}"
+          ></edoc-language-selector>
         </div>
 
         <header>

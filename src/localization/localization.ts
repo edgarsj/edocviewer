@@ -4,6 +4,8 @@ import { sourceLocale, targetLocales } from "../generated/locale-codes";
 // Type definition for supported languages
 export type SupportedLocale = "en" | "lv";
 
+let isInitializing = false;
+
 // Simplified configuration without predefined messages
 export const { getLocale, setLocale, msg, str } = configureLocalization({
   sourceLocale,
@@ -77,44 +79,55 @@ export function loadSavedLocale(): "en" | "lv" {
 
 // Set locale function
 export async function setAppLocale(locale: SupportedLocale): Promise<void> {
-  let effectiveLocale: "en" | "lv";
+  // Track and log calls during initialization
   console.log("App locale requested:", locale);
-  if (locale === "lv") {
-    // Latvian - use directly
-    effectiveLocale = "lv";
-  } else {
-    // Anything else (including "en" and invalid values) - default to English
-    effectiveLocale = "en";
+
+  // Skip redundant calls during initialization phase
+  if (isInitializing) {
+    console.log(`Skipping redundant locale change during initialization`);
+    return;
   }
 
-  // Update document language for accessibility
-  document.documentElement.lang = effectiveLocale;
+  // Set flag to prevent reentrant calls
+  const wasInitializing = isInitializing;
+  if (!wasInitializing) isInitializing = true;
 
-  // Save user preference in localStorage
   try {
-    localStorage.setItem("edoc-viewer-lang", effectiveLocale);
-    console.log("Setting APP locale to:", effectiveLocale);
-  } catch (e) {
-    console.warn("Could not save language preference to localStorage", e);
-  }
-
-  // Only change if locale is different from current
-  if (effectiveLocale !== getLocale()) {
-    try {
-      await setLocale(effectiveLocale);
-    } catch (error) {
-      console.error(`Error setting locale to ${effectiveLocale}:`, error);
-      // If setting locale fails, we'll just stay with the current locale
+    let effectiveLocale: "en" | "lv";
+    if (locale === "lv") {
+      effectiveLocale = "lv";
+    } else {
+      effectiveLocale = "en";
     }
+
+    // Rest of your function...
+
+    // Update document language
+    document.documentElement.lang = effectiveLocale;
+
+    // Save to localStorage
+    try {
+      localStorage.setItem("edoc-viewer-lang", effectiveLocale);
+    } catch (e) {
+      console.warn("Could not save language preference");
+    }
+
+    // Update lit-localize
+    if (effectiveLocale !== getLocale()) {
+      await setLocale(effectiveLocale);
+    }
+
+    // Dispatch events
+    const event = new CustomEvent("localeChanged", {
+      detail: { locale: effectiveLocale },
+      bubbles: true,
+      composed: true,
+    });
+
+    window.dispatchEvent(event);
+    document.dispatchEvent(event);
+  } finally {
+    // Reset flag when done
+    if (!wasInitializing) isInitializing = false;
   }
-
-  // Dispatch custom event for components to update
-  const event = new CustomEvent("localeChanged", {
-    detail: { locale: effectiveLocale, preference: locale },
-    bubbles: true,
-    composed: true,
-  });
-
-  window.dispatchEvent(event);
-  document.dispatchEvent(event);
 }
