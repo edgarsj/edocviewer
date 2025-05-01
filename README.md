@@ -1,6 +1,6 @@
 # eDoc Viewer
 
-A modern viewer for EU standard ASiC-E containers and Latvian eDoc files. Works as both a web application and a Chrome extension.
+A modern viewer for EU standard ASiC-E containers and Latvian eDoc files. Works as a progressive web application.
 
 ![eDoc Viewer Logo](public/icons/edoc-icon.svg)
 
@@ -11,9 +11,9 @@ A modern viewer for EU standard ASiC-E containers and Latvian eDoc files. Works 
 - View supported document types directly in the browser
 - Multilingual support (English, Latvian)
 - Drag and drop file upload
-- Chrome extension with automatic file handling for .edoc and .asice files
+- File handling for .edoc and .asice files through Progressive Web App functionality
 
-## Web Application
+## Application
 
 The web application allows users to:
 
@@ -22,21 +22,20 @@ The web application allows users to:
 3. Access document files contained in the container
 4. Download the original container or its contents
 
-## Chrome Extension
+## PWA capabilities
 
-The Chrome extension provides:
+The Progressive Web Application (PWA) capabilities provide:
 
-1. Automatic handling of .edoc and .asice files
-2. Integration with Chrome's download manager
-3. Quick access through toolbar popup
-4. Same viewing capabilities as the web application
+1. Offline access to the viewer
+2. File handling for .edoc and .asice files directly in your operating system
+3. Same viewing capabilities as the web application
 
 ## Development
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
-- npm (v7 or higher)
+- Node.js (v22 recommended)
+- npm (v10 or higher)
 
 ### Installation
 
@@ -49,11 +48,6 @@ The Chrome extension provides:
 2. Install dependencies
    ```
    npm install
-   ```
-
-3. Generate icons (for extension)
-   ```
-   node scripts/generate-icons.js
    ```
 
 ### Development Server
@@ -71,35 +65,34 @@ The application will be available at http://localhost:8080.
 Build the web application:
 
 ```
-npm run build:webapp
-```
-
-Build the Chrome extension:
-
-```
-npm run build:extension
-```
-
-Build both:
-
-```
 npm run build
 ```
 
-### Installing the Chrome Extension (Development)
+### Localization
 
-1. Build the extension using `npm run build:extension`
-2. Open Chrome and navigate to `chrome://extensions/`
-3. Enable "Developer mode" in the top right corner
-4. Click "Load unpacked" and select the `dist/extension` directory
+Extract messages for localization:
+```
+npm run localize:extract
+```
+
+Build localized versions:
+```
+npm run localize:build
+```
 
 ## Technology Stack
 
 - TypeScript
-- Tailwind CSS
+- Lit 3.x for web components
+- @lit/localize for internationalization
+- Tailwind CSS for styling
+- @shoelace-style/shoelace for UI components
 - edockit library for ASiC-E/eDoc parsing
-- i18next for internationalization
-- Webpack for bundling
+- Webpack 5 for bundling with optimization for:
+  - Separate bundle for edockit and dependencies
+  - Separate bundle for web components
+  - Optimized localization bundle
+- Workbox for PWA service worker
 
 ## License
 

@@ -1,5 +1,5 @@
 // Service Worker for eDoc Viewer PWA
-const CACHE_NAME = "edoc-viewer-cache-v1";
+const CACHE_NAME = "edoc-viewer-cache-v2";
 const SHOELACE_ASSETS_CACHE = "shoelace-assets-cache-v1";
 
 // This line will be replaced by the Workbox plugin with the list of assets
