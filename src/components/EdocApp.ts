@@ -17,6 +17,7 @@ import "./EdocLoading";
 import "./EdocError";
 import "./EdocLanguageSelector";
 import "./EdocOfflineNotice";
+import "./EdocInstallButton";
 
 // Import parser
 import {
@@ -219,6 +220,7 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
     return html`
       <div class="container">
         <div class="header-language-selector">
+          <edoc-install-button></edoc-install-button>
           <edoc-language-selector
             locale="${this.currentLocale}"
           ></edoc-language-selector>

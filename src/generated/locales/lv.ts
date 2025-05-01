@@ -11,6 +11,7 @@
     export const templates = {
       'app.backButtonLabel': `Atpakaļ`,
 'app.description': `Skatīt un pārbaudīt EU standarta ASiC-E un Latvijas eDoc elektroniskā paraksta failus (.asice, .edoc)`,
+'app.installButton': `Instalēt jūsu ierīcē`,
 'app.open_source': `Atvērtais kods`,
 'app.processing_document': `Dokumenta apstrāde...`,
 'app.questions_support': `Jautājumiem, ieteikumiem un kļūdu ziņojumiem`,
@@ -30,7 +31,7 @@
 'offline.message': `Nav pieejas internetam. Dažas funkcijas var būt ierobežotas.`,
 's1d093e853c7fbc9e': `Saglabāt visus`,
 'sa7c8c31e43a211d5': `Nav failu`,
-'signatures.date': `Datums:`,
+'signatures.date': `Datums`,
 'signatures.invalid': `NEDERĪGS`,
 'signatures.noSignatures': `Nav parakstu`,
 'signatures.referencedFiles': `Parakstā iekļautie faili`,

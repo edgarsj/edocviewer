@@ -1,6 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-<file target-language="lv" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+<file
+        target-language="lv"
+        source-language="en"
+        original="lit-localize-inputs"
+        datatype="plaintext"
+    >
 <body>
 <trans-unit id="signatures.signedBy">
   <source>Signed by:</source>
@@ -95,8 +100,10 @@
   <target>eDoc Viewer</target>
 </trans-unit>
 <trans-unit id="app.description">
-  <source>View and verify EU standard ASiC-E and Latvian eDoc electronic signature files (.asice, .edoc)</source>
-  <target>Skatīt un pārbaudīt EU standarta ASiC-E un Latvijas eDoc elektroniskā paraksta failus (.asice, .edoc)</target>
+  <source
+                >View and verify EU standard ASiC-E and Latvian eDoc electronic signature files (.asice, .edoc)</source>
+  <target
+                >Skatīt un pārbaudīt EU standarta ASiC-E un Latvijas eDoc elektroniskā paraksta failus (.asice, .edoc)</target>
 </trans-unit>
 <trans-unit id="app.backButtonLabel">
   <source>Back</source>
@@ -115,8 +122,12 @@
   <target>Jautājumiem, ieteikumiem un kļūdu ziņojumiem</target>
 </trans-unit>
 <trans-unit id="signatures.date">
-  <source>Date:</source>
-  <target>Datums:</target>
+  <source>Date</source>
+  <target>Datums</target>
+</trans-unit>
+<trans-unit id="app.installButton">
+  <source>Install to your device</source>
+  <target>Instalēt jūsu ierīcē</target>
 </trans-unit>
 </body>
 </file>
