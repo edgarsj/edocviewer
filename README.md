@@ -2,7 +2,7 @@
 
 A modern viewer for EU standard ASiC-E containers and Latvian eDoc files. Works as a progressive web application.
 
-![eDoc Viewer Logo](public/icons/edoc-icon.svg)
+![eDoc Viewer Screenshot](public/screenshots/mobile_doc.png)
 
 ## Features
 

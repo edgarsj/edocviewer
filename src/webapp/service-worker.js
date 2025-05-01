@@ -6,37 +6,70 @@ const SHOELACE_ASSETS_CACHE = "shoelace-assets-cache-v1";
 // DO NOT modify this line or define self.__WB_MANIFEST anywhere else
 const precacheManifest = self.__WB_MANIFEST || [];
 
+// Update the install event to proactively cache essential Shoelace assets
+
 // Install event - cache the initial assets
 self.addEventListener("install", (event) => {
   console.log("Service Worker: Installing...");
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log("Service Worker: Caching app shell");
 
-      // Get URLs from the precache manifest
-      const urlsToCache = precacheManifest
-        ? precacheManifest.map((entry) => entry.url || entry)
-        : ["/", "/index.html"];
+  // Cache main app shell and assets
+  const cacheAppShell = caches.open(CACHE_NAME).then((cache) => {
+    console.log("Service Worker: Caching app shell");
 
-      // Use Promise.all to catch and handle individual cache failures
+    // Get URLs from the precache manifest
+    const urlsToCache = precacheManifest
+      ? precacheManifest.map((entry) => entry.url || entry)
+      : [];
+
+    // Ensure both root and index.html are cached (for start_url handling)
+    if (!urlsToCache.includes("/")) {
+      urlsToCache.push("/");
+    }
+    if (!urlsToCache.includes("/index.html")) {
+      urlsToCache.push("/index.html");
+    }
+
+    // Use Promise.all to catch and handle individual cache failures
+    return Promise.all(
+      urlsToCache.map((url) =>
+        cache.add(url).catch((error) => {
+          console.log(`Failed to cache ${url}:`, error);
+        }),
+      ),
+    );
+  });
+
+  // Cache essential Shoelace assets (most commonly used)
+  const cacheShoelaceAssets = caches
+    .open(SHOELACE_ASSETS_CACHE)
+    .then((cache) => {
+      console.log("Service Worker: Caching essential Shoelace assets");
+
+      // List of important Shoelace assets to precache
+      const shoelaceAssets = [
+        "/shoelace/assets/icons/chevron-down.svg",
+        "/shoelace/assets/icons/x.svg",
+        "/shoelace/assets/icons/check.svg",
+        "/shoelace/assets/icons/arrow-left.svg",
+        "/shoelace/assets/icons/github.svg",
+      ];
+
+      // Cache all the listed assets
       return Promise.all(
-        urlsToCache.map((url) =>
-          cache.add(url).catch((error) => {
-            console.log(`Failed to cache ${url}:`, error);
+        shoelaceAssets.map((assetUrl) =>
+          cache.add(assetUrl).catch((error) => {
+            console.log(
+              `Failed to precache Shoelace asset ${assetUrl}:`,
+              error,
+            );
+            // Non-critical error - the dynamic caching will handle it if needed
           }),
         ),
       );
-    }),
-  );
+    });
 
-  // Cache essential Shoelace assets
-  event.waitUntil(
-    caches.open(SHOELACE_ASSETS_CACHE).then((cache) => {
-      return cache.add("/shoelace/assets/icons/system.svg").catch((error) => {
-        console.log("Failed to cache Shoelace icon system:", error);
-      });
-    }),
-  );
+  // Wait for both caching operations
+  event.waitUntil(Promise.all([cacheAppShell, cacheShoelaceAssets]));
 });
 
 // Activate event - clean up old caches

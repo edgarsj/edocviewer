@@ -8,12 +8,26 @@
             content="View and verify EU standard ASiC-E and Latvian eDoc electronic signature files (.edoc, .asice)"
         />
         <meta name="theme-color" content="#10b981" />
+        <meta name="msapplication-navbutton-color" content="#10b981" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="#10b981" />
         <title>
             eDoc Viewer - View and verify ASiC-E and eDoc electronic signature
             files
         </title>
         <link rel="icon" href="/icons/edoc-icon.svg" type="image/svg+xml" />
         <link rel="manifest" href="/manifest.json" />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/icons/icon-32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/icons/icon-16.png"
+        />
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
 
         <!-- Preload the Shoelace assets -->
@@ -330,8 +344,10 @@
                 <div class="header-actions">
                     <div class="language-selector">
                         <span class="language-label">Language:</span>
-                        <select class="language-select">
-                            <option value="auto">Auto (Browser)</option>
+                        <select
+                            class="language-select"
+                            id="static-language-selector"
+                        >
                             <option value="en">English</option>
                             <option value="lv">Latvian</option>
                         </select>
