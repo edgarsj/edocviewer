@@ -122,10 +122,6 @@
   <source>Install to device</source>
   <target>Instalēt jūsu ierīcē</target>
 </trans-unit>
-<trans-unit id="legal.title">
-  <source>Legal Information</source>
-  <target>Juridiskā informācija</target>
-</trans-unit>
 <trans-unit id="legal.terms_tab">
   <source>Terms of Service</source>
   <target>Pakalpojumu noteikumi</target>
@@ -293,6 +289,42 @@
 <trans-unit id="app.legal_info">
   <source>Legal Info</source>
   <target>Juridiskā informācija</target>
+</trans-unit>
+<trans-unit id="legal.about_tab">
+  <source>About</source>
+  <target>Par</target>
+</trans-unit>
+<trans-unit id="legal.about_title">
+  <source>About eDoc Viewer</source>
+  <target>Par eDoc Viewer</target>
+</trans-unit>
+<trans-unit id="legal.about_intro">
+  <source>eDoc Viewer is a simple tool for viewing and verifying electronic signature files. Here's what you need to know:</source>
+  <target>eDoc Viewer ir vienkāršs rīks elektronisko parakstu failu apskatei un pārbaudei. Lūk, kas jums jāzina:</target>
+</trans-unit>
+<trans-unit id="legal.about_feature1">
+  <source>Fast viewing of ASiC-E and eDoc content - easily see what documents are inside your electronic signature containers without installing special software.</source>
+  <target>Ātra ASiC-E un eDoc satura apskate - viegli redzēt, kādi dokumenti atrodas jūsu elektronisko parakstu konteineros, neinstalējot papildu programmatūru.</target>
+</trans-unit>
+<trans-unit id="legal.about_feature2">
+  <source>Signature verification is included, but please note that verification can be unreliable. For legally binding verification, use official tools from your government.</source>
+  <target>Parakstu pārbaude ir iekļauta, taču ņemiet vērā, ka tā var būt neprecīza. Juridiski saistošai pārbaudei izmantojiet oficiālus valdības rīkus.</target>
+</trans-unit>
+<trans-unit id="legal.about_feature3">
+  <source>For optimal usage, open in Chrome on your desktop and install it as an app. This allows you to quickly view eDoc/ASiC-E files directly from your computer by simply clicking on them.</source>
+  <target>Optimālai lietošanai atveriet eDoc Viewer Chrome pārlūkprogrammā datorā un instalējiet to kā lietotni. Tas ļaus jums ātri apskatīt eDoc/ASiC-E failus tieši no sava datora, vienkārši uz tiem noklikšķinot.</target>
+</trans-unit>
+<trans-unit id="legal.about_feature4">
+  <source>Mobile use is supported, but limited. On mobile devices, you'll need to manually open the app first, then click the browse button to select eDoc/ASiC-E files from your device.</source>
+  <target>Mobilā lietošana ir atbalstīta, bet ar ierobežojumiem. Mobilajās ierīcēs vispirms būs manuāli jāatver lietotne un pēc tam jānoklikšķina uz pārlūkošanas pogas, lai atlasītu eDoc/ASiC-E failus no sava ierīces.</target>
+</trans-unit>
+<trans-unit id="legal.about_feature5">
+  <source>All processing happens locally in your browser - your documents are never uploaded to any server, providing maximum privacy.</source>
+  <target>Visa apstrāde notiek lokāli jūsu pārlūkprogrammā - jūsu dokumenti nekad netiek augšupielādēti uz serveriem, nodrošinot maksimālu privātumu.</target>
+</trans-unit>
+<trans-unit id="legal.about_opensource">
+  <source>eDoc Viewer is an open-source project. Feel free to contribute or report issues on our GitHub repository.</source>
+  <target>eDoc Viewer ir atvērtā koda projekts. Jūs varat dot savu ieguldījumu vai ziņot par problēmām mūsu GitHub repozitorijā.</target>
 </trans-unit>
 </body>
 </file>

@@ -218,13 +218,31 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
     this.handleUrlHash();
     // Also listen for hash changes
     window.addEventListener("hashchange", () => this.handleUrlHash());
+
+    // Listen for the modal closing to ensure URL is clean
+    this.addEventListener("edoc-legal-modal-closed", () => {
+      // Clear URL hash
+      console.log(
+        `edoc-legal-modal-closed event, window.location.hash: ${window.location.hash}`,
+      );
+      if (window.location.hash) {
+        history.replaceState(
+          "",
+          document.title,
+          window.location.pathname + window.location.search,
+        );
+      }
+    });
   }
 
   private handleUrlHash() {
     const hash = window.location.hash.slice(1); // Remove the # character
 
+    // Don't process empty hashes
+    if (!hash) return;
+
     // Check if the hash matches any of our legal sections
-    if (["terms", "privacy", "disclaimer"].includes(hash)) {
+    if (["about", "terms", "privacy", "disclaimer"].includes(hash)) {
       // Wait for components to be ready
       setTimeout(() => {
         const legalModal = this.shadowRoot?.querySelector(
@@ -233,15 +251,17 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
         if (legalModal) {
           // Set the active tab
           legalModal.activeTab = hash;
+          console.log("EdocApp, set legalModal.activeTab to: ", hash);
           // Open the modal
           legalModal.open();
         }
       }, 100);
+      return; // Return to prevent further processing
     }
 
-    // You can also handle specific section anchors
+    // Handle specific section anchors
     // Format: #section-anchor (e.g., #privacy-data)
-    const sectionMatch = hash.match(/^(terms|privacy|disclaimer)-(.+)$/);
+    const sectionMatch = hash.match(/^(about|terms|privacy|disclaimer)-(.+)$/);
     if (sectionMatch) {
       const section = sectionMatch[1];
       const anchor = sectionMatch[2];
@@ -251,12 +271,13 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
           "edoc-legal-modal",
         ) as any;
         if (legalModal) {
-          // Set the active tab
+          // Set the active tab and anchor before opening to ensure proper rendering
           legalModal.activeTab = section;
-          // Set the anchor
           legalModal.anchor = `${section}-${anchor}`;
-          // Open the modal
-          legalModal.open();
+          // Open the modal with a small delay to ensure properties are set
+          setTimeout(() => {
+            legalModal.open();
+          }, 50);
         }
       }, 100);
     }
@@ -264,13 +285,13 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
 
   private openLegalModal(
     e: Event,
-    section?: "terms" | "privacy" | "disclaimer",
+    section?: "about" | "terms" | "privacy" | "disclaimer",
     anchor?: string,
   ) {
     e.preventDefault();
 
-    // Default to terms if no section provided
-    const activeSection = section || "terms";
+    // Default to about if no section provided
+    const activeSection = section || "about";
 
     // Get the modal component
     const legalModal = this.shadowRoot?.querySelector(
@@ -278,31 +299,27 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
     ) as any;
 
     if (legalModal) {
-      // Set active tab
+      // Set active tab and anchor first
       legalModal.activeTab = activeSection;
 
-      // Set anchor if provided
+      // Set anchor if provided (note we're not adding the section prefix here)
       if (anchor) {
         legalModal.anchor = anchor;
+      } else {
+        // Make sure to clear any previous anchor
+        legalModal.anchor = undefined;
       }
 
-      // Open the modal
-      legalModal.open();
+      // Open the modal after a small delay to ensure properties are properly set
+      setTimeout(() => {
+        legalModal.open();
+      }, 50);
 
-      // Update URL without full page reload
-      // Only update if the hash doesn't already match
-      if (
-        window.location.hash !==
-        `#${activeSection}${anchor ? `-${anchor}` : ""}`
-      ) {
-        history.pushState(
-          null,
-          "",
-          `#${activeSection}${anchor ? `-${anchor}` : ""}`,
-        );
-      }
+      // Let the modal component handle URL updates instead of doing it here
+      // This avoids collisions between the two components trying to update the URL
     }
   }
+
   render() {
     return html`
       <div class="container">

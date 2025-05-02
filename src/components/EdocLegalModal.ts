@@ -9,6 +9,8 @@ import "@shoelace-style/shoelace/dist/components/button/button.js";
 import "@shoelace-style/shoelace/dist/components/tab/tab.js";
 import "@shoelace-style/shoelace/dist/components/tab-group/tab-group.js";
 import "@shoelace-style/shoelace/dist/components/tab-panel/tab-panel.js";
+import "@shoelace-style/shoelace/dist/components/icon/icon.js";
+import "@shoelace-style/shoelace/dist/components/icon-button/icon-button.js";
 import { SlDialog } from "@shoelace-style/shoelace";
 
 /**
@@ -48,6 +50,10 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
       padding-left: 1.5rem;
     }
 
+    li {
+      margin-bottom: 0.5rem;
+    }
+
     a {
       color: var(--sl-color-primary-600);
       text-decoration: none;
@@ -63,8 +69,62 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
       visibility: hidden;
     }
 
+    /* Make dialog wider to match main content width */
+    sl-dialog::part(panel) {
+      width: 100%;
+      max-width: 800px; /* Match the max-width of edoc-container */
+      position: relative;
+    }
+
+    /* Hide the header completely */
+    sl-dialog::part(header) {
+      display: none;
+    }
+
+    /* Custom close button styling */
+    .custom-close-button {
+      position: absolute;
+      top: 0.75rem;
+      right: 1rem;
+      z-index: 100;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    /* Make sure the tab group fills the available space */
+    sl-tab-group {
+      width: 100%;
+      margin-top: 0;
+      padding-top: 0.5rem;
+    }
+
+    /* Remove any extra space at the top */
+    sl-dialog::part(body) {
+      padding-top: 0;
+    }
+
+    /* Ensure the dialog panel has correct spacing */
+    sl-dialog::part(panel) {
+      padding-top: 0.5rem;
+    }
+
+    /* Special icons for about section */
+    .feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .feature-list sl-icon {
+      flex-shrink: 0;
+      font-size: 1.25rem;
+      margin-top: 0.15rem;
+      color: var(--sl-color-primary-600);
+    }
+
     /* For small screens adjust dialog width */
-    @media (max-width: 640px) {
+    @media (max-width: 850px) {
       sl-dialog::part(panel) {
         width: 100%;
         max-width: calc(100% - 2rem);
@@ -76,8 +136,11 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
   @state() private dialog?: SlDialog;
 
   // The active tab, which can be set from the outside
-  @property({ type: String }) activeTab: "terms" | "privacy" | "disclaimer" =
-    "terms";
+  @property({ type: String }) activeTab:
+    | "about"
+    | "terms"
+    | "privacy"
+    | "disclaimer" = "about";
 
   // The anchor to scroll to after opening
   @property({ type: String }) anchor?: string;
@@ -90,21 +153,25 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
     if (this.dialog) {
       this.dialog.show();
 
-      // Set active tab based on property
+      // Set active tab based on property - FIXED: Use the proper way to activate a tab
       const tabGroup = this.shadowRoot?.querySelector("sl-tab-group");
       if (tabGroup) {
-        tabGroup.setAttribute("active", this.activeTab);
+        console.log("SlDialog open, set active tab to: ", this.activeTab);
+
+        // This is the key fix - using the show() method instead of setAttribute
+        tabGroup.show(this.activeTab);
       }
 
       // If an anchor is provided, scroll to it after dialog is shown
       if (this.anchor) {
-        // Need to wait for dialog to be fully rendered
+        console.log("SlDialog open, anchor:", this.anchor);
+        // Need to wait for dialog to be fully rendered and tab to be active
         setTimeout(() => {
           const element = this.shadowRoot?.querySelector(`#${this.anchor}`);
           if (element) {
             element.scrollIntoView({ behavior: "smooth" });
           }
-        }, 100);
+        }, 300); // Longer timeout to ensure tabs have activated
       }
     }
   }
@@ -112,15 +179,15 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
   close() {
     if (this.dialog) {
       this.dialog.hide();
-      // Check if the URL has a hash for a legal section
-      const hash = window.location.hash.slice(1);
-      if (
-        ["terms", "privacy", "disclaimer"].includes(hash) ||
-        hash.match(/^(terms|privacy|disclaimer)-(.+)$/)
-      ) {
-        // Remove the hash without page reload
-        history.pushState(null, "", window.location.pathname);
-      }
+      this.anchor = undefined;
+
+      // Dispatch a custom event that the app can listen for
+      this.dispatchEvent(
+        new CustomEvent("edoc-legal-modal-closed", {
+          bubbles: true,
+          composed: true,
+        }),
+      );
     }
   }
 
@@ -134,7 +201,6 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
         const element = this.shadowRoot?.querySelector(`#${this.anchor}`);
         if (element) {
           element.scrollIntoView({ behavior: "smooth" });
-          this.anchor = undefined; // Clear anchor after using it
         }
       }, 100);
     }
@@ -142,11 +208,19 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
 
   render() {
     return html`
-      <sl-dialog
-        label="${msg("Legal Information", { id: "legal.title" })}"
-        @sl-after-hide=${() => this.close()}
-      >
+      <sl-dialog @sl-after-hide=${() => this.close()}>
+        <!-- Add a custom close button that's positioned absolutely -->
+        <sl-icon-button
+          class="custom-close-button"
+          name="x-lg"
+          label=${msg("Close", { id: "legal.close_button" })}
+          @click=${() => this.close()}
+        ></sl-icon-button>
+
         <sl-tab-group @sl-tab-show=${this.handleTabChange}>
+          <sl-tab slot="nav" panel="about" name="about">
+            ${msg("About", { id: "legal.about_tab" })}
+          </sl-tab>
           <sl-tab slot="nav" panel="terms" name="terms">
             ${msg("Terms of Service", { id: "legal.terms_tab" })}
           </sl-tab>
@@ -156,6 +230,74 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
           <sl-tab slot="nav" panel="disclaimer" name="disclaimer">
             ${msg("Disclaimers", { id: "legal.disclaimer_tab" })}
           </sl-tab>
+
+          <sl-tab-panel name="about">
+            <div class="legal-content">
+              <h2>${msg("About eDoc Viewer", { id: "legal.about_title" })}</h2>
+
+              <p>
+                ${msg(
+                  "eDoc Viewer is a simple tool for viewing and verifying electronic signature files. Here's what you need to know:",
+                  { id: "legal.about_intro" },
+                )}
+              </p>
+
+              <ul class="feature-list">
+                <li>
+                  <sl-icon name="lightning"></sl-icon>
+                  <span
+                    >${msg(
+                      "Fast viewing of ASiC-E and eDoc content - easily see what documents are inside your electronic signature containers without installing special software.",
+                      { id: "legal.about_feature1" },
+                    )}</span
+                  >
+                </li>
+                <li>
+                  <sl-icon name="shield-check"></sl-icon>
+                  <span
+                    >${msg(
+                      "Signature verification is included, but please note that verification can be unreliable. For legally binding verification, use official tools from your government.",
+                      { id: "legal.about_feature2" },
+                    )}</span
+                  >
+                </li>
+                <li>
+                  <sl-icon name="laptop"></sl-icon>
+                  <span
+                    >${msg(
+                      "For optimal usage, open in Chrome on your desktop and install it as an app. This allows you to quickly view eDoc/ASiC-E files directly from your computer by simply clicking on them.",
+                      { id: "legal.about_feature3" },
+                    )}</span
+                  >
+                </li>
+                <li>
+                  <sl-icon name="phone"></sl-icon>
+                  <span
+                    >${msg(
+                      "Mobile use is supported, but limited. On mobile devices, you'll need to manually open the app first, then click the browse button to select eDoc/ASiC-E files from your device.",
+                      { id: "legal.about_feature4" },
+                    )}</span
+                  >
+                </li>
+                <li>
+                  <sl-icon name="lock"></sl-icon>
+                  <span
+                    >${msg(
+                      "All processing happens locally in your browser - your documents are never uploaded to any server, providing maximum privacy.",
+                      { id: "legal.about_feature5" },
+                    )}</span
+                  >
+                </li>
+              </ul>
+
+              <p>
+                ${msg(
+                  "eDoc Viewer is an open-source project. Feel free to contribute or report issues on our GitHub repository.",
+                  { id: "legal.about_opensource" },
+                )}
+              </p>
+            </div>
+          </sl-tab-panel>
 
           <sl-tab-panel name="terms">
             <div class="legal-content">
