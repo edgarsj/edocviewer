@@ -1,11 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-<file
-        target-language="lv"
-        source-language="en"
-        original="lit-localize-inputs"
-        datatype="plaintext"
-    >
+<file target-language="lv" source-language="en" original="lit-localize-inputs" datatype="plaintext">
 <body>
 <trans-unit id="signatures.signedBy">
   <source>Signed by:</source>
@@ -100,10 +95,8 @@
   <target>eDoc Viewer</target>
 </trans-unit>
 <trans-unit id="app.description">
-  <source
-                >View and verify EU standard ASiC-E and Latvian eDoc electronic signature files (.asice, .edoc)</source>
-  <target
-                >Skatīt un pārbaudīt EU standarta ASiC-E un Latvijas eDoc elektroniskā paraksta failus (.asice, .edoc)</target>
+  <source>View and verify EU standard ASiC-E and Latvian eDoc electronic signature files (.asice, .edoc)</source>
+  <target>Skatīt un pārbaudīt EU standarta ASiC-E un Latvijas eDoc elektroniskā paraksta failus (.asice, .edoc)</target>
 </trans-unit>
 <trans-unit id="app.backButtonLabel">
   <source>Back</source>
@@ -126,8 +119,180 @@
   <target>Datums</target>
 </trans-unit>
 <trans-unit id="app.installButton">
-  <source>Install to your device</source>
+  <source>Install to device</source>
   <target>Instalēt jūsu ierīcē</target>
+</trans-unit>
+<trans-unit id="legal.title">
+  <source>Legal Information</source>
+  <target>Juridiskā informācija</target>
+</trans-unit>
+<trans-unit id="legal.terms_tab">
+  <source>Terms of Service</source>
+  <target>Pakalpojumu noteikumi</target>
+</trans-unit>
+<trans-unit id="legal.privacy_tab">
+  <source>Privacy Policy</source>
+  <target>Privātuma politika</target>
+</trans-unit>
+<trans-unit id="legal.disclaimer_tab">
+  <source>Disclaimers</source>
+  <target>Atruna</target>
+</trans-unit>
+<trans-unit id="legal.terms_title">
+  <source>Terms of Service</source>
+  <target>Pakalpojumu noteikumi</target>
+</trans-unit>
+<trans-unit id="legal.terms_effective_title">
+  <source>1. Effective Date</source>
+  <target>1. Stāšanās spēkā</target>
+</trans-unit>
+<trans-unit id="legal.terms_effective_content">
+  <source>These Terms of Service are effective as of May 1, 2025.</source>
+  <target>Šie Pakalpojumu noteikumi stājas spēkā no 2025. gada 1. maija.</target>
+</trans-unit>
+<trans-unit id="legal.terms_acceptance_title">
+  <source>2. Acceptance of Terms</source>
+  <target>2. Noteikumu pieņemšana</target>
+</trans-unit>
+<trans-unit id="legal.terms_acceptance_content">
+  <source>By using the eDoc Viewer application, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the application.</source>
+  <target>Izmantojot eDoc Viewer lietotni, jūs piekrītat ievērot šos Pakalpojumu noteikumus. Ja jūs nepiekrītat šiem noteikumiem, lūdzu, nelietojiet šo lietotni.</target>
+</trans-unit>
+<trans-unit id="legal.terms_description_title">
+  <source>3. Service Description</source>
+  <target>3. Pakalpojuma apraksts</target>
+</trans-unit>
+<trans-unit id="legal.terms_description_content">
+  <source>eDoc Viewer is a web application that allows users to view and verify EU standard ASiC-E and Latvian eDoc electronic signature files (.asice, .edoc). The application processes files locally in your browser and does not upload your documents to any server.</source>
+  <target>eDoc Viewer ir tīmekļa lietotne, kas ļauj lietotājiem skatīt un pārbaudīt ES standarta ASiC-E un Latvijas eDoc elektroniskās paraksta failus (.asice, .edoc). Lietotne apstrādā failus lokāli jūsu pārlūkprogrammā un neaugšupielādē jūsu dokumentus uz nekādiem serveriem.</target>
+</trans-unit>
+<trans-unit id="legal.terms_usage_title">
+  <source>4. Acceptable Use</source>
+  <target>4. Pieļaujamā lietošana</target>
+</trans-unit>
+<trans-unit id="legal.terms_usage_content">
+  <source>You agree to use eDoc Viewer only for lawful purposes and in accordance with these Terms. You may not use the application in any way that violates applicable laws or regulations.</source>
+  <target>Jūs piekrītat izmantot eDoc Viewer tikai likumīgiem mērķiem un saskaņā ar šiem Noteikumiem. Jums nav tiesību izmantot lietotni kādā veidā, kas pārkāpj spēkā esošos likumus vai noteikumus.</target>
+</trans-unit>
+<trans-unit id="legal.terms_modifications_title">
+  <source>5. Modifications to Service</source>
+  <target>5. Pakalpojuma izmaiņas</target>
+</trans-unit>
+<trans-unit id="legal.terms_modifications_content">
+  <source>We reserve the right to modify or discontinue the eDoc Viewer service at any time without notice. We shall not be liable to you or any third party for any modification, suspension, or discontinuance of the service.</source>
+  <target>Mēs paturam tiesības jebkurā laikā bez iepriekšēja brīdinājuma mainīt vai pārtraukt eDoc Viewer pakalpojumu. Mēs neesam atbildīgi pret jums vai jebkuru trešo personu par jebkādām pakalpojuma izmaiņām, apturēšanu vai pārtraukšanu.</target>
+</trans-unit>
+<trans-unit id="legal.terms_opensource_title">
+  <source>6. Open Source Software</source>
+  <target>6. Atvērtā koda programmatūra</target>
+</trans-unit>
+<trans-unit id="legal.terms_opensource_content">
+  <source>eDoc Viewer is open source software licensed under the MIT License. You are free to use, modify, and distribute the software in accordance with the terms of the MIT License.</source>
+  <target>eDoc Viewer ir atvērtā koda programmatūra, kas licencēta saskaņā ar MIT licenci. Jums ir brīvība izmantot, modificēt un izplatīt šo programmatūru saskaņā ar MIT licences noteikumiem.</target>
+</trans-unit>
+<trans-unit id="legal.terms_source_code">
+  <source>The source code is available at: </source>
+  <target>Pirmkods ir pieejams šeit: </target>
+</trans-unit>
+<trans-unit id="legal.privacy_title">
+  <source>Privacy Policy</source>
+  <target>Privātuma politika</target>
+</trans-unit>
+<trans-unit id="legal.privacy_data_title">
+  <source>1. Data Processing</source>
+  <target>1. Datu apstrāde</target>
+</trans-unit>
+<trans-unit id="legal.privacy_data_content">
+  <source>eDoc Viewer processes all files locally in your browser. Your documents are never uploaded to our servers or stored anywhere outside of your device.</source>
+  <target>eDoc Viewer apstrādā visus failus lokāli jūsu pārlūkprogrammā. Jūsu dokumenti nekad netiek augšupielādēti uz mūsu serveriem vai glabāti ārpus jūsu ierīces.</target>
+</trans-unit>
+<trans-unit id="legal.privacy_analytics_title">
+  <source>2. Analytics</source>
+  <target>2. Analītika</target>
+</trans-unit>
+<trans-unit id="legal.privacy_analytics_content">
+  <source>We use Plausible Analytics, a privacy-friendly analytics service, to collect anonymous usage data. This data helps us improve the application but cannot be used to identify individual users. No personal information is collected, and no cookies are used for tracking purposes.</source>
+  <target>Mēs izmantojam Plausible Analytics, privātumam draudzīgu analītikas pakalpojumu, lai apkopotu anonīmus lietošanas datus. Šie dati palīdz uzlabot lietotni, bet tos nevar izmantot atsevišķu lietotāju identificēšanai. Netiek vākta nekāda personiskā informācija, un netiek izmantotas sīkdatnes izsekošanas nolūkos.</target>
+</trans-unit>
+<trans-unit id="legal.privacy_analytics_pwa">
+  <source>Analytics are only enabled in the web version. The Progressive Web App (PWA) version does not include any analytics.</source>
+  <target>Analītika ir iespējota tikai tīmekļa versijā. Progresīvās tīmekļa lietotnes (PWA) versijā nav iekļauta nekāda analītika.</target>
+</trans-unit>
+<trans-unit id="legal.privacy_cookies_title">
+  <source>3. Local Storage</source>
+  <target>3. Lokālā krātuve</target>
+</trans-unit>
+<trans-unit id="legal.privacy_cookies_content">
+  <source>eDoc Viewer uses your browser's localStorage feature only to save your language preferences and application settings. No third-party cookies are used.</source>
+  <target>eDoc Viewer izmanto jūsu pārlūkprogrammas localStorage funkciju tikai jūsu valodas iestatījumu un lietotnes iestatījumu saglabāšanai. Netiek izmantotas trešo pušu sīkdatnes.</target>
+</trans-unit>
+<trans-unit id="legal.privacy_pwa_title">
+  <source>4. PWA Installation</source>
+  <target>4. PWA instalēšana</target>
+</trans-unit>
+<trans-unit id="legal.privacy_pwa_content">
+  <source>When installed as a Progressive Web App (PWA), eDoc Viewer stores the application files on your device for offline use. You can uninstall the PWA at any time through your browser or operating system settings.</source>
+  <target>Kad eDoc Viewer ir instalēts kā Progresīvā tīmekļa lietotne (PWA), lietotnes faili tiek glabāti jūsu ierīcē lietošanai bezsaistē. Jūs varat dzēst PWA jebkurā laikā, izmantojot pārlūkprogrammas vai operētājsistēmas iestatījumus.</target>
+</trans-unit>
+<trans-unit id="legal.privacy_thirdparty_title">
+  <source>5. Third-Party Services</source>
+  <target>5. Trešo pušu pakalpojumi</target>
+</trans-unit>
+<trans-unit id="legal.privacy_thirdparty_content">
+  <source>The application may contain links to third-party websites or services. We are not responsible for the privacy practices of these external sites.</source>
+  <target>Lietotnē var būt saites uz trešo pušu tīmekļa vietnēm vai pakalpojumiem. Mēs neesam atbildīgi par šo ārējo vietņu privātuma praksi.</target>
+</trans-unit>
+<trans-unit id="legal.disclaimer_title">
+  <source>Disclaimers</source>
+  <target>Atteikumi</target>
+</trans-unit>
+<trans-unit id="legal.disclaimer_warranty_title">
+  <source>1. No Warranty</source>
+  <target>1. Bez garantijas</target>
+</trans-unit>
+<trans-unit id="legal.disclaimer_warranty_content">
+  <source>eDoc Viewer is provided "as is" and "as available" without any warranty of any kind. We do not guarantee that the application will be error-free or uninterrupted.</source>
+  <target>eDoc Viewer tiek nodrošināts "kāds ir" un "kāds pieejams" bez jebkāda veida garantijām. Mēs negarantējam, ka lietotne būs bez kļūdām vai nepārtraukta.</target>
+</trans-unit>
+<trans-unit id="legal.disclaimer_liability_title">
+  <source>2. Limitation of Liability</source>
+  <target>2. Atbildības ierobežojumi</target>
+</trans-unit>
+<trans-unit id="legal.disclaimer_liability_content">
+  <source>In no event shall the eDoc Viewer team be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of or inability to use the application.</source>
+  <target>Nevienā gadījumā eDoc Viewer komanda nav atbildīga par jebkādiem netiešiem, nejaušiem, īpašiem, sekas vai soda zaudējumiem, kas izriet no jūsu lietotnes izmantošanas vai nespējas to izmantot.</target>
+</trans-unit>
+<trans-unit id="legal.disclaimer_verification_title">
+  <source>3. Signature Verification</source>
+  <target>3. Parakstu pārbaude</target>
+</trans-unit>
+<trans-unit id="legal.disclaimer_verification_content">
+  <source>While eDoc Viewer attempts to accurately verify electronic signatures, we recommend using official tools provided by governmental agencies for legally binding verification. eDoc Viewer should be considered a convenience tool rather than an authoritative verification source.</source>
+  <target>Lai gan eDoc Viewer cenšas precīzi pārbaudīt elektroniskos parakstus, mēs iesakām izmantot valsts iestāžu sniegtus oficiālos rīkus juridiskai pārbaudei. eDoc Viewer vajadzētu uzskatīt par ērtības rīku, nevis oficiālu pārbaudes avotu.</target>
+</trans-unit>
+<trans-unit id="legal.disclaimer_security_title">
+  <source>4. Security Considerations</source>
+  <target>4. Drošības apsvērumi</target>
+</trans-unit>
+<trans-unit id="legal.disclaimer_security_content">
+  <source>Although we process files locally in your browser for privacy reasons, this may not provide the same level of security as server-side processing in all cases. Please ensure your device and browser are up-to-date and secure when handling sensitive documents.</source>
+  <target>Lai gan mēs apstrādājam failus lokāli jūsu pārlūkprogrammā privātuma aizsardzības nolūkos, tas var nenodrošināt tādu pašu drošības līmeni kā servera puses apstrāde visos gadījumos. Lūdzu, pārliecinieties, ka jūsu ierīce un pārlūkprogramma ir atjauninātas un drošas, apstrādājot jutīgus dokumentus.</target>
+</trans-unit>
+<trans-unit id="legal.disclaimer_opensource_title">
+  <source>5. Open Source Software</source>
+  <target>5. Atvērtā koda programmatūra</target>
+</trans-unit>
+<trans-unit id="legal.disclaimer_opensource_content">
+  <source>eDoc Viewer uses various open source software components, each with its own license. These components are provided "as is" by their respective authors.</source>
+  <target>eDoc Viewer izmanto dažādus atvērtā koda programmatūras komponentus, kuriem katrai ir sava licence. Šie komponenti tiek nodrošināti "kādi ir" no attiecīgo autoru puses.</target>
+</trans-unit>
+<trans-unit id="legal.close_button">
+  <source>Close</source>
+  <target>Aizvērt</target>
+</trans-unit>
+<trans-unit id="app.legal_info">
+  <source>Legal Info</source>
+  <target>Juridiskā informācija</target>
 </trans-unit>
 </body>
 </file>

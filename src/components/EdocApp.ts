@@ -18,6 +18,7 @@ import "./EdocError";
 import "./EdocLanguageSelector";
 import "./EdocOfflineNotice";
 import "./EdocInstallButton";
+import "./EdocLegalModal";
 
 // Import parser
 import {
@@ -214,8 +215,94 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
         document.documentElement.classList.add("js-loaded");
       }
     });
+    this.handleUrlHash();
+    // Also listen for hash changes
+    window.addEventListener("hashchange", () => this.handleUrlHash());
   }
 
+  private handleUrlHash() {
+    const hash = window.location.hash.slice(1); // Remove the # character
+
+    // Check if the hash matches any of our legal sections
+    if (["terms", "privacy", "disclaimer"].includes(hash)) {
+      // Wait for components to be ready
+      setTimeout(() => {
+        const legalModal = this.shadowRoot?.querySelector(
+          "edoc-legal-modal",
+        ) as any;
+        if (legalModal) {
+          // Set the active tab
+          legalModal.activeTab = hash;
+          // Open the modal
+          legalModal.open();
+        }
+      }, 100);
+    }
+
+    // You can also handle specific section anchors
+    // Format: #section-anchor (e.g., #privacy-data)
+    const sectionMatch = hash.match(/^(terms|privacy|disclaimer)-(.+)$/);
+    if (sectionMatch) {
+      const section = sectionMatch[1];
+      const anchor = sectionMatch[2];
+
+      setTimeout(() => {
+        const legalModal = this.shadowRoot?.querySelector(
+          "edoc-legal-modal",
+        ) as any;
+        if (legalModal) {
+          // Set the active tab
+          legalModal.activeTab = section;
+          // Set the anchor
+          legalModal.anchor = `${section}-${anchor}`;
+          // Open the modal
+          legalModal.open();
+        }
+      }, 100);
+    }
+  }
+
+  private openLegalModal(
+    e: Event,
+    section?: "terms" | "privacy" | "disclaimer",
+    anchor?: string,
+  ) {
+    e.preventDefault();
+
+    // Default to terms if no section provided
+    const activeSection = section || "terms";
+
+    // Get the modal component
+    const legalModal = this.shadowRoot?.querySelector(
+      "edoc-legal-modal",
+    ) as any;
+
+    if (legalModal) {
+      // Set active tab
+      legalModal.activeTab = activeSection;
+
+      // Set anchor if provided
+      if (anchor) {
+        legalModal.anchor = anchor;
+      }
+
+      // Open the modal
+      legalModal.open();
+
+      // Update URL without full page reload
+      // Only update if the hash doesn't already match
+      if (
+        window.location.hash !==
+        `#${activeSection}${anchor ? `-${anchor}` : ""}`
+      ) {
+        history.pushState(
+          null,
+          "",
+          `#${activeSection}${anchor ? `-${anchor}` : ""}`,
+        );
+      }
+    }
+  }
   render() {
     return html`
       <div class="container">
@@ -343,6 +430,14 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
               ${msg("Open Source", { id: "app.open_source" })}
             </a>
             &nbsp;|&nbsp;
+            <a href="#" @click=${this.openLegalModal}>
+              <sl-icon
+                name="shield"
+                style="vertical-align: -0.125em; margin-right: 4px;"
+              ></sl-icon>
+              ${msg("Legal Info", { id: "app.legal_info" })}
+            </a>
+            &nbsp;|&nbsp;
             ${msg("Questions, suggestions, or bug reports", {
               id: "app.questions_support",
             })}:
@@ -351,6 +446,7 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
         </footer>
 
         <edoc-offline-notice></edoc-offline-notice>
+        <edoc-legal-modal></edoc-legal-modal>
       </div>
     `;
   }
