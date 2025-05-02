@@ -283,30 +283,31 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
     }
   }
 
-  private openLegalModal(
-    e: Event,
-    section?: "about" | "terms" | "privacy" | "disclaimer",
+  /**
+   * Helper function to open the legal modal with a specific section and anchor
+   * This can be called from external components or internally
+   * @param section The tab section to open
+   * @param anchor Optional anchor within the section
+   * @param needsPrefix Whether to prefix the anchor with the section name
+   */
+  public openLegalModalWithSection(
+    section: "about" | "terms" | "privacy" | "disclaimer" = "about",
     anchor?: string,
+    needsPrefix: boolean = true,
   ) {
-    e.preventDefault();
-
-    // Default to about if no section provided
-    const activeSection = section || "about";
-
-    // Get the modal component
     const legalModal = this.shadowRoot?.querySelector(
       "edoc-legal-modal",
     ) as any;
 
     if (legalModal) {
-      // Set active tab and anchor first
-      legalModal.activeTab = activeSection;
+      // Set active tab
+      legalModal.activeTab = section;
 
-      // Set anchor if provided (note we're not adding the section prefix here)
+      // Set anchor if provided
       if (anchor) {
-        legalModal.anchor = anchor;
+        // Add section prefix if needed (for direct links to anchor IDs)
+        legalModal.anchor = needsPrefix ? `${section}-${anchor}` : anchor;
       } else {
-        // Make sure to clear any previous anchor
         legalModal.anchor = undefined;
       }
 
@@ -314,10 +315,24 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
       setTimeout(() => {
         legalModal.open();
       }, 50);
-
-      // Let the modal component handle URL updates instead of doing it here
-      // This avoids collisions between the two components trying to update the URL
     }
+  }
+
+  /**
+   * Event handler for opening the legal modal from UI elements
+   * @param e The click event
+   * @param section The tab section to open
+   * @param anchor Optional anchor within the section
+   */
+  private openLegalModal(
+    e: Event,
+    section?: "about" | "terms" | "privacy" | "disclaimer",
+    anchor?: string,
+  ) {
+    e.preventDefault();
+    // Call the shared implementation but don't prefix the anchor
+    // since it's already prefixed in the UI
+    this.openLegalModalWithSection(section, anchor, false);
   }
 
   render() {
@@ -447,12 +462,36 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
               ${msg("Open Source", { id: "app.open_source" })}
             </a>
             &nbsp;|&nbsp;
-            <a href="#" @click=${this.openLegalModal}>
+            <a
+              href="#about"
+              @click=${(e: Event) => this.openLegalModal(e, "about")}
+            >
               <sl-icon
-                name="shield"
+                name="info-circle"
                 style="vertical-align: -0.125em; margin-right: 4px;"
               ></sl-icon>
-              ${msg("Legal Info", { id: "app.legal_info" })}
+              ${msg("About", { id: "legal.about_tab" })}
+            </a>
+            &nbsp;|&nbsp;
+            <a
+              href="#terms"
+              @click=${(e: Event) => this.openLegalModal(e, "terms")}
+            >
+              ${msg("Terms", { id: "legal.terms_tab" })}
+            </a>
+            &nbsp;|&nbsp;
+            <a
+              href="#privacy"
+              @click=${(e: Event) => this.openLegalModal(e, "privacy")}
+            >
+              ${msg("Privacy", { id: "legal.privacy_tab" })}
+            </a>
+            &nbsp;|&nbsp;
+            <a
+              href="#disclaimer"
+              @click=${(e: Event) => this.openLegalModal(e, "disclaimer")}
+            >
+              ${msg("Disclaimers", { id: "legal.disclaimer_tab" })}
             </a>
             &nbsp;|&nbsp;
             ${msg("Questions, suggestions, or bug reports", {

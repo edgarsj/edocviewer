@@ -123,12 +123,12 @@
   <target>Instalēt jūsu ierīcē</target>
 </trans-unit>
 <trans-unit id="legal.terms_tab">
-  <source>Terms of Service</source>
-  <target>Pakalpojumu noteikumi</target>
+  <source>Terms</source>
+  <target>Noteikumi</target>
 </trans-unit>
 <trans-unit id="legal.privacy_tab">
-  <source>Privacy Policy</source>
-  <target>Privātuma politika</target>
+  <source>Privacy</source>
+  <target>Privātums</target>
 </trans-unit>
 <trans-unit id="legal.disclaimer_tab">
   <source>Disclaimers</source>
@@ -285,10 +285,6 @@
 <trans-unit id="legal.close_button">
   <source>Close</source>
   <target>Aizvērt</target>
-</trans-unit>
-<trans-unit id="app.legal_info">
-  <source>Legal Info</source>
-  <target>Juridiskā informācija</target>
 </trans-unit>
 <trans-unit id="legal.about_tab">
   <source>About</source>

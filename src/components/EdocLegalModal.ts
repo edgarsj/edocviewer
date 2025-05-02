@@ -222,10 +222,10 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
             ${msg("About", { id: "legal.about_tab" })}
           </sl-tab>
           <sl-tab slot="nav" panel="terms" name="terms">
-            ${msg("Terms of Service", { id: "legal.terms_tab" })}
+            ${msg("Terms", { id: "legal.terms_tab" })}
           </sl-tab>
           <sl-tab slot="nav" panel="privacy" name="privacy">
-            ${msg("Privacy Policy", { id: "legal.privacy_tab" })}
+            ${msg("Privacy", { id: "legal.privacy_tab" })}
           </sl-tab>
           <sl-tab slot="nav" panel="disclaimer" name="disclaimer">
             ${msg("Disclaimers", { id: "legal.disclaimer_tab" })}
