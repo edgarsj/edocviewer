@@ -27,22 +27,6 @@ export class EdocLanguageSelector extends LocaleAwareMixin(LitElement) {
     .language-button {
       min-width: 80px;
     }
-
-    @keyframes highlight {
-      0% {
-        outline: 2px solid transparent;
-      }
-      50% {
-        outline: 2px solid var(--sl-color-primary-500);
-      }
-      100% {
-        outline: 2px solid transparent;
-      }
-    }
-
-    .highlight {
-      animation: highlight 1s ease-in-out;
-    }
   `;
 
   /**
@@ -140,7 +124,12 @@ export class EdocLanguageSelector extends LocaleAwareMixin(LitElement) {
           @click=${() => this.toggleLanguage(targetLocale)}
           class="language-button"
         >
-          ${buttonText}
+          <sl-icon
+            slot="prefix"
+            name="translate"
+            style="font-size: 16px;"
+          ></sl-icon
+          >${buttonText}
         </sl-button>
       </div>
     `;

@@ -1,8 +1,9 @@
 import { VERSION } from "../config/version";
-import { LitElement, html, css } from "lit";
+import { LitElement, html, css, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { msg } from "@lit/localize";
 import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
+import { isRunningAsPWA } from "../webapp/fileHandling";
 
 // Import Shoelace components
 import "@shoelace-style/shoelace/dist/components/button/button.js";
@@ -82,11 +83,52 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
       font-weight: 600;
     }
 
+    .app-description-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0.5rem 0 0 0;
+      flex-wrap: wrap;
+    }
+
     .app-description {
       font-size: 1rem;
       font-weight: normal;
       color: var(--sl-color-gray-600);
-      margin: 0.5rem 0 0 0;
+      margin: 0;
+    }
+
+    .learn-more-link {
+      display: inline-flex;
+      align-items: center;
+      color: var(--sl-color-primary-600);
+      text-decoration: none;
+      margin-left: 0.75rem;
+      font-size: 0.875rem;
+      white-space: nowrap;
+      transition: color 0.2s ease;
+    }
+
+    .learn-more-link:hover {
+      color: var(--sl-color-primary-800);
+      text-decoration: underline;
+    }
+
+    .learn-more-link sl-icon {
+      margin-right: 0.25rem;
+      font-size: 0.875rem;
+    }
+
+    /* Make it responsive for smaller screens */
+    @media (max-width: 600px) {
+      .app-description-wrapper {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .learn-more-link {
+        margin-left: 0;
+      }
     }
 
     .file-nav-bar {
@@ -157,6 +199,9 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
       position: absolute;
       top: 1rem;
       right: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
   `;
 
@@ -336,10 +381,26 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
   }
 
   render() {
+    const isStandalone = isRunningAsPWA();
+
     return html`
       <div class="container">
         <div class="header-language-selector">
-          <edoc-install-button></edoc-install-button>
+          ${isStandalone
+            ? html`
+                <sl-button
+                  size="small"
+                  @click=${() => this.openLegalModalWithSection("about")}
+                >
+                  <sl-icon
+                    slot="prefix"
+                    name="question-square-fill"
+                    style="font-size: 16px;"
+                  ></sl-icon>
+                  ${msg("About", { id: "legal.about_tab" })}
+                </sl-button>
+              `
+            : html`<edoc-install-button></edoc-install-button>`}
           <edoc-language-selector
             locale="${this.currentLocale}"
           ></edoc-language-selector>
@@ -358,14 +419,29 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
             </h1>
           </div>
 
-          <h2 class="app-description">
-            ${msg(
-              "View and verify EU standard ASiC-E and Latvian eDoc electronic signature files (.asice, .edoc)",
-              {
-                id: "app.description",
-              },
-            )}
-          </h2>
+          ${!isStandalone
+            ? html`
+                <div class="app-description-wrapper">
+                  <h2 class="app-description">
+                    ${msg(
+                      "View and verify EU standard ASiC-E and Latvian eDoc electronic signature files (.asice, .edoc)",
+                      {
+                        id: "app.description",
+                      },
+                    )}
+                  </h2>
+
+                  <a
+                    href="#about"
+                    class="learn-more-link"
+                    @click=${(e: Event) => this.openLegalModal(e, "about")}
+                  >
+                    <sl-icon name="question-square-fill"></sl-icon>
+                    ${msg("Learn more", { id: "app.learn_more" })}
+                  </a>
+                </div>
+              `
+            : nothing}
         </header>
 
         <main>
@@ -444,8 +520,11 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
         <footer>
           <p>
             &copy; ${this.currentYear}
-            <a href="https://edgarsjekabsons.lv">Edgars Jēkabsons</a>,
-            <a href="https://zenomy.tech">ZenomyTech SIA</a> &nbsp;|&nbsp;
+            <a target="_blank" href="https://edgarsjekabsons.lv"
+              >Edgars Jēkabsons</a
+            >,
+            <a target="_blank" href="https://zenomy.tech">ZenomyTech SIA</a>
+            &nbsp;|&nbsp;
             <span class="version-info">
               ${msg("Version", { id: "app.version" })}: ${this.version.number}
               <span title="${this.version.commit}"
@@ -454,7 +533,7 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
             </span>
           </p>
           <p class="footer-links">
-            <a href="https://github.com/edgarsj/edocviewer">
+            <a target="_blank" href="https://github.com/edgarsj/edocviewer">
               <sl-icon
                 name="github"
                 style="vertical-align: -0.125em; margin-right: 4px;"
@@ -467,7 +546,7 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
               @click=${(e: Event) => this.openLegalModal(e, "about")}
             >
               <sl-icon
-                name="info-circle"
+                name="question-square-fill"
                 style="vertical-align: -0.125em; margin-right: 4px;"
               ></sl-icon>
               ${msg("About", { id: "legal.about_tab" })}

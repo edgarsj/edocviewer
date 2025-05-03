@@ -322,6 +322,10 @@
   <source>eDoc Viewer is an open-source project. Feel free to contribute or report issues on our GitHub repository.</source>
   <target>eDoc Viewer ir atvērtā koda projekts. Jūs varat dot savu ieguldījumu vai ziņot par problēmām mūsu GitHub repozitorijā.</target>
 </trans-unit>
+<trans-unit id="app.learn_more">
+  <source>Learn more</source>
+  <target>Vairāk</target>
+</trans-unit>
 </body>
 </file>
 </xliff>

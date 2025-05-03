@@ -12,6 +12,7 @@
       'app.backButtonLabel': `Atpakaļ`,
 'app.description': `Skatīt un pārbaudīt EU standarta ASiC-E un Latvijas eDoc elektroniskā paraksta failus (.asice, .edoc)`,
 'app.installButton': `Instalēt jūsu ierīcē`,
+'app.learn_more': `Vairāk`,
 'app.open_source': `Atvērtais kods`,
 'app.processing_document': `Dokumenta apstrāde...`,
 'app.questions_support': `Jautājumiem, ieteikumiem un kļūdu ziņojumiem`,
