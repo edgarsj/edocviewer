@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { msg } from "@lit/localize";
 import { SignatureValidationResult } from "../core/parser";
 import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
+import { openLegalModal } from "../utils/legalNavigation";
 import "@shoelace-style/shoelace/dist/components/details/details.js";
 import "@shoelace-style/shoelace/dist/components/badge/badge.js";
 import "@shoelace-style/shoelace/dist/components/icon/icon.js";
@@ -90,6 +91,15 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
       color: var(--sl-color-danger-600);
       margin-top: 0.25rem;
       font-size: 0.875rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.375rem;
+    }
+
+    .error-message-icon {
+      color: var(--sl-color-danger-600);
+      cursor: pointer;
+      font-size: 1rem;
     }
 
     .file-list {
@@ -170,6 +180,14 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
   @property({ type: Object })
   signature!: SignatureValidationResult;
 
+  /**
+   * Handle click on the info icon to open legal modal
+   */
+  private handleLegalModalClick(e: Event) {
+    e.preventDefault();
+    openLegalModal("about", "feature2_verification");
+  }
+
   render() {
     if (!this.signature) {
       return html``;
@@ -204,7 +222,25 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
           </div>
         </sl-tooltip>
 
-        ${error ? html`<div class="error-message">${error}</div>` : ""}
+        ${error
+          ? html`<div class="error-message">
+              <sl-tooltip
+                content="${msg(
+                  "Signature verification might be unreliable, more »",
+                  {
+                    id: "signatures.betaTagTooltip",
+                  },
+                )}"
+              >
+                <sl-icon
+                  name="exclamation-square"
+                  class="error-message-icon"
+                  @click=${this.handleLegalModalClick}
+                ></sl-icon>
+              </sl-tooltip>
+              ${error}
+            </div>`
+          : ""}
         ${this.renderFileCoverage()}
       </div>
     `;
@@ -216,7 +252,6 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
     if (!signerInfo.signerName && !signerInfo.personalId) {
       return html``;
     }
-    //         <strong>${msg("Signed by:", { id: "signatures.signedBy" })}</strong>
 
     return html`
       <div class="signer-info">

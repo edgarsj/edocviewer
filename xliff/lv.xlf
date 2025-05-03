@@ -346,6 +346,10 @@
                         documents, not an official verification tool.</source>
   <target>Juridiski saistošai pārbaudei jāizmanto oficiālie rīki  no  <x id="0" equiv-text="&lt;a href=&quot;https://eidas.ec.europa.eu/efda/trust-services/browse/eidas/tls/search/type?step=1&quot; target=&quot;_blank&quot;&gt;"/>ES uzticamu sertifikācijas pakalpojumu sniedzēju saraksta<x id="1" equiv-text="&lt;/a&gt;"/> vai <x id="2" equiv-text="&lt;a href=&quot;https://www.eparaksts.lv/&quot; target=&quot;_blank&quot;&gt;"/>Latvijas eParaksts validatoru<x id="3" equiv-text="&lt;/a&gt;"/>. Uztveriet eDoc Viewer kā ērtu veidu ātrai dokumentu pārbaudei, nevis kā oficiālu verifikācijas rīku.</target>
 </trans-unit>
+<trans-unit id="signatures.betaTagTooltip">
+  <source>Signature verification might be unreliable, more »</source>
+  <target>Parakstu pārbaude var būt neprecīza, vairāk »</target>
+</trans-unit>
 </body>
 </file>
 </xliff>

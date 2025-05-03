@@ -252,7 +252,7 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
                     )}</span
                   >
                 </li>
-                <li>
+                <li id="about-feature2_verification">
                   <sl-icon name="shield-check"></sl-icon>
                   <span
                     >${msg(
