@@ -24,7 +24,7 @@
 </trans-unit>
 <trans-unit id="signatures.invalid">
   <source>Invalid signature</source>
-  <target>NEDERĪGS</target>
+  <target>Nederīgs paraksts</target>
 </trans-unit>
 <trans-unit id="signatures.signedBy">
   <source>Signed by:</source>

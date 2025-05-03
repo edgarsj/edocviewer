@@ -85,7 +85,7 @@
 'sa7c8c31e43a211d5': `Nav failu`,
 'signatures.betaTagTooltip': `Parakstu pārbaude var būt neprecīza, vairāk »`,
 'signatures.date': `Datums`,
-'signatures.invalid': `NEDERĪGS`,
+'signatures.invalid': `Nederīgs paraksts`,
 'signatures.noSignatures': `Nav parakstu`,
 'signatures.referencedFiles': `Parakstā iekļautie faili`,
 'signatures.signedBy': `Parakstījis:`,
