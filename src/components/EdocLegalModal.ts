@@ -247,7 +247,7 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
                   <sl-icon name="lightning"></sl-icon>
                   <span
                     >${msg(
-                      "Fast viewing of ASiC-E and eDoc content - easily see what documents are inside your electronic signature containers without installing special software.",
+                      "Fast viewing of ASiC-E and eDoc content - easily see and access the documents inside your electronically signed containers without installing special software.",
                       { id: "legal.about_feature1" },
                     )}</span
                   >
@@ -256,8 +256,23 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
                   <sl-icon name="shield-check"></sl-icon>
                   <span
                     >${msg(
-                      "Signature verification is included, but please note that verification can be unreliable. For legally binding verification, use official tools from your government.",
+                      "Signature verification is included, but please note that verification can be unreliable.",
                       { id: "legal.about_feature2" },
+                    )}
+                    ${msg(
+                      html`For legally binding verification please use official
+                        qualified validation services from
+                        <a
+                          href="https://eidas.ec.europa.eu/efda/trust-services/browse/eidas/tls/search/type?step=1"
+                          target="_blank"
+                          >EU Trusted service providers list</a
+                        >
+                        or
+                        <a href="https://www.eparaksts.lv/" target="_blank"
+                          >Latvian eParaksts validator</a
+                        >. Think of eDoc Viewer as a convenient way to check
+                        documents, not an official verification tool.`,
+                      { id: "legal.about_feature2_verification_tools" },
                     )}</span
                   >
                 </li>
@@ -292,7 +307,13 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
 
               <p>
                 ${msg(
-                  "eDoc Viewer is an open-source project. Feel free to contribute or report issues on our GitHub repository.",
+                  html`eDoc Viewer is an open-source project. Feel free to
+                    contribute or report issues on our
+                    <a
+                      href="https://github.com/edgarsj/edocviewer"
+                      target="_blank"
+                      >GitHub repository</a
+                    >.`,
                   { id: "legal.about_opensource" },
                 )}
               </p>
@@ -344,24 +365,24 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
 
               <span id="terms-usage" class="anchor-link"></span>
               <h3>
-                ${msg("4. Acceptable Use", { id: "legal.terms_usage_title" })}
+                ${msg("4. Intended Use", { id: "legal.terms_usage_title" })}
               </h3>
               <p>
                 ${msg(
-                  "You agree to use eDoc Viewer only for lawful purposes and in accordance with these Terms. You may not use the application in any way that violates applicable laws or regulations.",
+                  "eDoc Viewer is designed specifically for viewing and accessing documents inside electronically signed container files. That's all it does, and that's what it's meant for.",
                   { id: "legal.terms_usage_content" },
                 )}
               </p>
 
               <span id="terms-modifications" class="anchor-link"></span>
               <h3>
-                ${msg("5. Modifications to Service", {
+                ${msg("5. Updates to the App", {
                   id: "legal.terms_modifications_title",
                 })}
               </h3>
               <p>
                 ${msg(
-                  "We reserve the right to modify or discontinue the eDoc Viewer service at any time without notice. We shall not be liable to you or any third party for any modification, suspension, or discontinuance of the service.",
+                  "We may update or change eDoc Viewer from time to time to improve it. While we'll try to make sure it keeps working well, we can't promise that it will always be available or function exactly the same way.",
                   { id: "legal.terms_modifications_content" },
                 )}
               </p>
@@ -472,7 +493,7 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
               </h3>
               <p>
                 ${msg(
-                  'eDoc Viewer is provided "as is" and "as available" without any warranty of any kind. We do not guarantee that the application will be error-free or uninterrupted.',
+                  "eDoc Viewer is provided \"as is\" and we can't guarantee it will always work perfectly. We've built it to be helpful, but sometimes things might not work as expected.",
                   { id: "legal.disclaimer_warranty_content" },
                 )}
               </p>
@@ -485,7 +506,7 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
               </h3>
               <p>
                 ${msg(
-                  "In no event shall the eDoc Viewer team be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of or inability to use the application.",
+                  "The eDoc Viewer team isn't responsible for any problems that might arise from using this app. We've created it to help you, but you use it at your own risk.",
                   { id: "legal.disclaimer_liability_content" },
                 )}
               </p>
@@ -498,7 +519,19 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
               </h3>
               <p>
                 ${msg(
-                  "While eDoc Viewer attempts to accurately verify electronic signatures, we recommend using official tools provided by governmental agencies for legally binding verification. eDoc Viewer should be considered a convenience tool rather than an authoritative verification source.",
+                  html`While eDoc Viewer tries to verify electronic signatures,
+                    for legally binding verification please use official
+                    qualified validation services from
+                    <a
+                      href="https://eidas.ec.europa.eu/efda/trust-services/browse/eidas/tls/search/type?step=1"
+                      target="_blank"
+                      >EU Trusted service providers list</a
+                    >
+                    or
+                    <a href="https://www.eparaksts.lv/" target="_blank"
+                      >Latvian eParaksts validator</a
+                    >. Think of eDoc Viewer as a convenient way to check
+                    documents, not an official verification tool.`,
                   { id: "legal.disclaimer_verification_content" },
                 )}
               </p>
@@ -511,14 +544,14 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
               </h3>
               <p>
                 ${msg(
-                  "Although we process files locally in your browser for privacy reasons, this may not provide the same level of security as server-side processing in all cases. Please ensure your device and browser are up-to-date and secure when handling sensitive documents.",
+                  "While processing files locally in your browser helps protect your privacy, be aware that browser extensions or other software might potentially access your data. Please make sure your device and browser are up-to-date and secure when handling important documents.",
                   { id: "legal.disclaimer_security_content" },
                 )}
               </p>
 
               <span id="disclaimer-opensource" class="anchor-link"></span>
               <h3>
-                ${msg("5. Open Source Software", {
+                ${msg("5. Open Source Components", {
                   id: "legal.disclaimer_opensource_title",
                 })}
               </h3>

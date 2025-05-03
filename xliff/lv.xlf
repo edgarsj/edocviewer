@@ -2,9 +2,21 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
 <file target-language="lv" source-language="en" original="lit-localize-inputs" datatype="plaintext">
 <body>
-<trans-unit id="signatures.signedBy">
-  <source>Signed by:</source>
-  <target>Parakstījis:</target>
+<trans-unit id="dropzone.title">
+  <source>Drop your eDoc/Asic-E file here</source>
+  <target>Ievelc eDoc/Asic-E failu šeit</target>
+</trans-unit>
+<trans-unit id="dropzone.description">
+  <source>or click to browse files</source>
+  <target>vai klikšķini, lai pārlūkotu failus</target>
+</trans-unit>
+<trans-unit id="dropzone.selectFile">
+  <source>Select File</source>
+  <target>Izvēlēties failu</target>
+</trans-unit>
+<trans-unit id="dropzone.suggestedFileLabel">
+  <source>Suggested file:</source>
+  <target>Ieteiktais fails:</target>
 </trans-unit>
 <trans-unit id="signatures.valid">
   <source>Valid signature</source>
@@ -13,6 +25,14 @@
 <trans-unit id="signatures.invalid">
   <source>Invalid signature</source>
   <target>NEDERĪGS</target>
+</trans-unit>
+<trans-unit id="signatures.signedBy">
+  <source>Signed by:</source>
+  <target>Parakstījis:</target>
+</trans-unit>
+<trans-unit id="signatures.date">
+  <source>Date</source>
+  <target>Datums</target>
 </trans-unit>
 <trans-unit id="signatures.referencedFiles">
   <source>Referenced files in signature</source>
@@ -46,6 +66,10 @@
   <source>Document Files</source>
   <target>Dokumenti</target>
 </trans-unit>
+<trans-unit id="s1d093e853c7fbc9e">
+  <source>Download All</source>
+  <target>Saglabāt visus</target>
+</trans-unit>
 <trans-unit id="documents.noDocuments">
   <source>No document files found</source>
   <target>Nav dokumentu</target>
@@ -58,6 +82,10 @@
   <source>No metadata files found</source>
   <target>Nav metadatu failu</target>
 </trans-unit>
+<trans-unit id="app.processing_document">
+  <source>Processing document...</source>
+  <target>Dokumenta apstrāde...</target>
+</trans-unit>
 <trans-unit id="error.title">
   <source>Error</source>
   <target>Kļūda</target>
@@ -66,61 +94,17 @@
   <source>You are currently offline. Some features may be limited.</source>
   <target>Nav pieejas internetam. Dažas funkcijas var būt ierobežotas.</target>
 </trans-unit>
-<trans-unit id="s1d093e853c7fbc9e">
-  <source>Download All</source>
-  <target>Saglabāt visus</target>
-</trans-unit>
-<trans-unit id="dropzone.title">
-  <source>Drop your eDoc/Asic-E file here</source>
-  <target>Ievelc eDoc/Asic-E failu šeit</target>
-</trans-unit>
-<trans-unit id="dropzone.description">
-  <source>or click to browse files</source>
-  <target>vai klikšķini, lai pārlūkotu failus</target>
-</trans-unit>
-<trans-unit id="dropzone.selectFile">
-  <source>Select File</source>
-  <target>Izvēlēties failu</target>
-</trans-unit>
-<trans-unit id="dropzone.suggestedFileLabel">
-  <source>Suggested file:</source>
-  <target>Ieteiktais fails:</target>
-</trans-unit>
-<trans-unit id="app.processing_document">
-  <source>Processing document...</source>
-  <target>Dokumenta apstrāde...</target>
-</trans-unit>
-<trans-unit id="app.title">
-  <source>eDoc Viewer</source>
-  <target>eDoc Viewer</target>
-</trans-unit>
-<trans-unit id="app.description">
-  <source>View and verify EU standard ASiC-E and Latvian eDoc electronic signature files (.asice, .edoc)</source>
-  <target>Skatīt un pārbaudīt EU standarta ASiC-E un Latvijas eDoc elektroniskā paraksta failus (.asice, .edoc)</target>
-</trans-unit>
-<trans-unit id="app.backButtonLabel">
-  <source>Back</source>
-  <target>Atpakaļ</target>
-</trans-unit>
-<trans-unit id="app.version">
-  <source>Version</source>
-  <target>Versija</target>
-</trans-unit>
-<trans-unit id="app.open_source">
-  <source>Open Source</source>
-  <target>Atvērtais kods</target>
-</trans-unit>
-<trans-unit id="app.questions_support">
-  <source>Questions, suggestions, or bug reports</source>
-  <target>Jautājumiem, ieteikumiem un kļūdu ziņojumiem</target>
-</trans-unit>
-<trans-unit id="signatures.date">
-  <source>Date</source>
-  <target>Datums</target>
-</trans-unit>
 <trans-unit id="app.installButton">
   <source>Install to device</source>
   <target>Instalēt jūsu ierīcē</target>
+</trans-unit>
+<trans-unit id="legal.close_button">
+  <source>Close</source>
+  <target>Aizvērt</target>
+</trans-unit>
+<trans-unit id="legal.about_tab">
+  <source>About</source>
+  <target>Par</target>
 </trans-unit>
 <trans-unit id="legal.terms_tab">
   <source>Terms</source>
@@ -134,6 +118,40 @@
   <source>Disclaimers</source>
   <target>Atruna</target>
 </trans-unit>
+<trans-unit id="legal.about_title">
+  <source>About eDoc Viewer</source>
+  <target>Par eDoc Viewer</target>
+</trans-unit>
+<trans-unit id="legal.about_intro">
+  <source>eDoc Viewer is a simple tool for viewing and verifying electronic signature files. Here's what you need to know:</source>
+  <target>eDoc Viewer ir vienkāršs rīks elektronisko parakstu failu apskatei un pārbaudei. Īsumā:</target>
+</trans-unit>
+<trans-unit id="legal.about_feature1">
+  <source>Fast viewing of ASiC-E and eDoc content - easily see and access the documents inside your electronically signed containers without installing special software.</source>
+  <target>Ātra ASiC-E un eDoc satura apskate - viegli redzēt un piekļūt dokumentiem jūsu elektroniski parakstītajos konteineros, neinstalējot papildu programmatūru.</target>
+</trans-unit>
+<trans-unit id="legal.about_feature2">
+  <source>Signature verification is included, but please note that verification can be unreliable.</source>
+  <target>Parakstu pārbaude ir iekļauta, taču ņemiet vērā, ka tā var būt neprecīza.</target>
+</trans-unit>
+<trans-unit id="legal.about_feature3">
+  <source>For optimal usage, open in Chrome on your desktop and install it as an app. This allows you to quickly view eDoc/ASiC-E files directly from your computer by simply clicking on them.</source>
+  <target>Optimālai lietošanai atveriet eDoc Viewer Chrome pārlūkprogrammā datorā un instalējiet to kā lietotni. Tas ļaus jums ātri apskatīt eDoc/ASiC-E failus tieši no sava datora, vienkārši uz tiem noklikšķinot.</target>
+</trans-unit>
+<trans-unit id="legal.about_feature4">
+  <source>Mobile use is supported, but limited. On mobile devices, you'll need to manually open the app first, then click the browse button to select eDoc/ASiC-E files from your device.</source>
+  <target>Mobilā lietošana ir atbalstīta, bet ar ierobežojumiem. Mobilajās ierīcēs vispirms būs manuāli jāatver lietotne un pēc tam jānoklikšķina uz pārlūkošanas pogas, lai atlasītu eDoc/ASiC-E failus no sava ierīces.</target>
+</trans-unit>
+<trans-unit id="legal.about_feature5">
+  <source>All processing happens locally in your browser - your documents are never uploaded to any server, providing maximum privacy.</source>
+  <target>Visa apstrāde notiek lokāli jūsu pārlūkprogrammā - jūsu dokumenti nekad netiek augšupielādēti uz serveriem, nodrošinot maksimālu privātumu.</target>
+</trans-unit>
+<trans-unit id="legal.about_opensource">
+  <source>eDoc Viewer is an open-source project. Feel free to
+                    contribute or report issues on our
+                    <x id="0" equiv-text="&lt;a href=&quot;https://github.com/edgarsj/edocviewer&quot; target=&quot;_blank&quot;&gt;"/>GitHub repository<x id="1" equiv-text="&lt;/a&gt;"/>.</source>
+  <target>eDoc Viewer ir atvērtā koda projekts. Jūs varat piedāvāt uzlabojumus vai ziņot par problēmām <x id="0" equiv-text="&lt;a href=&quot;https://github.com/edgarsj/edocviewer&quot; target=&quot;_blank&quot;&gt;"/>GitHub projektā<x id="1" equiv-text="&lt;/a&gt;"/>.</target>
+</trans-unit>
 <trans-unit id="legal.terms_title">
   <source>Terms of Service</source>
   <target>Pakalpojumu noteikumi</target>
@@ -144,7 +162,7 @@
 </trans-unit>
 <trans-unit id="legal.terms_effective_content">
   <source>These Terms of Service are effective as of May 1, 2025.</source>
-  <target>Šie Pakalpojumu noteikumi stājas spēkā no 2025. gada 1. maija.</target>
+  <target>Šie Pakalpojumu noteikumi ir spēkā no 2025. gada 1. maija.</target>
 </trans-unit>
 <trans-unit id="legal.terms_acceptance_title">
   <source>2. Acceptance of Terms</source>
@@ -163,20 +181,20 @@
   <target>eDoc Viewer ir tīmekļa lietotne, kas ļauj lietotājiem skatīt un pārbaudīt ES standarta ASiC-E un Latvijas eDoc elektroniskās paraksta failus (.asice, .edoc). Lietotne apstrādā failus lokāli jūsu pārlūkprogrammā un neaugšupielādē jūsu dokumentus uz nekādiem serveriem.</target>
 </trans-unit>
 <trans-unit id="legal.terms_usage_title">
-  <source>4. Acceptable Use</source>
+  <source>4. Intended Use</source>
   <target>4. Pieļaujamā lietošana</target>
 </trans-unit>
 <trans-unit id="legal.terms_usage_content">
-  <source>You agree to use eDoc Viewer only for lawful purposes and in accordance with these Terms. You may not use the application in any way that violates applicable laws or regulations.</source>
-  <target>Jūs piekrītat izmantot eDoc Viewer tikai likumīgiem mērķiem un saskaņā ar šiem Noteikumiem. Jums nav tiesību izmantot lietotni kādā veidā, kas pārkāpj spēkā esošos likumus vai noteikumus.</target>
+  <source>eDoc Viewer is designed specifically for viewing and accessing documents inside electronically signed container files. That's all it does, and that's what it's meant for.</source>
+  <target>eDoc Viewer ir izstrādāts elektroniski parakstītu dokumentu apskatei un piekļuvei. Tas ir vienīgais, ko tas dara, un kam tas ir paredzēts.</target>
 </trans-unit>
 <trans-unit id="legal.terms_modifications_title">
-  <source>5. Modifications to Service</source>
+  <source>5. Updates to the App</source>
   <target>5. Pakalpojuma izmaiņas</target>
 </trans-unit>
 <trans-unit id="legal.terms_modifications_content">
-  <source>We reserve the right to modify or discontinue the eDoc Viewer service at any time without notice. We shall not be liable to you or any third party for any modification, suspension, or discontinuance of the service.</source>
-  <target>Mēs paturam tiesības jebkurā laikā bez iepriekšēja brīdinājuma mainīt vai pārtraukt eDoc Viewer pakalpojumu. Mēs neesam atbildīgi pret jums vai jebkuru trešo personu par jebkādām pakalpojuma izmaiņām, apturēšanu vai pārtraukšanu.</target>
+  <source>We may update or change eDoc Viewer from time to time to improve it. While we'll try to make sure it keeps working well, we can't promise that it will always be available or function exactly the same way.</source>
+  <target>Mēs laiku pa laikam varam atjaunināt vai mainīt eDoc Viewer, lai to uzlabotu. Lai gan mēs centīsimies nodrošināt, ka tas turpina darboties labi, mēs nevaram apsolīt, ka tas vienmēr būs pieejams vai darbosies tieši tādā pašā veidā.</target>
 </trans-unit>
 <trans-unit id="legal.terms_opensource_title">
   <source>6. Open Source Software</source>
@@ -212,7 +230,7 @@
 </trans-unit>
 <trans-unit id="legal.privacy_analytics_pwa">
   <source>Analytics are only enabled in the web version. The Progressive Web App (PWA) version does not include any analytics.</source>
-  <target>Analītika ir iespējota tikai tīmekļa versijā. Progresīvās tīmekļa lietotnes (PWA) versijā nav iekļauta nekāda analītika.</target>
+  <target>Analītika darbojas tikai tīmekļa versijā. Progresīvās tīmekļa lietotnes (PWA) versijā tā netiek veikta.</target>
 </trans-unit>
 <trans-unit id="legal.privacy_cookies_title">
   <source>3. Local Storage</source>
@@ -240,91 +258,90 @@
 </trans-unit>
 <trans-unit id="legal.disclaimer_title">
   <source>Disclaimers</source>
-  <target>Atteikumi</target>
+  <target>Atruna</target>
 </trans-unit>
 <trans-unit id="legal.disclaimer_warranty_title">
   <source>1. No Warranty</source>
   <target>1. Bez garantijas</target>
 </trans-unit>
 <trans-unit id="legal.disclaimer_warranty_content">
-  <source>eDoc Viewer is provided "as is" and "as available" without any warranty of any kind. We do not guarantee that the application will be error-free or uninterrupted.</source>
-  <target>eDoc Viewer tiek nodrošināts "kāds ir" un "kāds pieejams" bez jebkāda veida garantijām. Mēs negarantējam, ka lietotne būs bez kļūdām vai nepārtraukta.</target>
+  <source>eDoc Viewer is provided "as is" and we can't guarantee it will always work perfectly. We've built it to be helpful, but sometimes things might not work as expected.</source>
+  <target>eDoc Viewer tiek piedāvāts "kāds tas ir", un mēs nevaram garantēt, ka tas vienmēr darbosies perfekti. Mēs to izveidojām, lai tas būtu noderīgs, taču dažreiz tas var nedarboties, kā gaidīts.</target>
 </trans-unit>
 <trans-unit id="legal.disclaimer_liability_title">
   <source>2. Limitation of Liability</source>
   <target>2. Atbildības ierobežojumi</target>
 </trans-unit>
 <trans-unit id="legal.disclaimer_liability_content">
-  <source>In no event shall the eDoc Viewer team be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of or inability to use the application.</source>
-  <target>Nevienā gadījumā eDoc Viewer komanda nav atbildīga par jebkādiem netiešiem, nejaušiem, īpašiem, sekas vai soda zaudējumiem, kas izriet no jūsu lietotnes izmantošanas vai nespējas to izmantot.</target>
+  <source>The eDoc Viewer team isn't responsible for any problems that might arise from using this app. We've created it to help you, but you use it at your own risk.</source>
+  <target>eDoc Viewer komanda nav atbildīga par problēmām, kas var rasties, izmantojot šo lietotni. Izveidojām, lai tas būtu noderīgs, but tā lietošana ir katra paša risks.</target>
 </trans-unit>
 <trans-unit id="legal.disclaimer_verification_title">
   <source>3. Signature Verification</source>
   <target>3. Parakstu pārbaude</target>
 </trans-unit>
 <trans-unit id="legal.disclaimer_verification_content">
-  <source>While eDoc Viewer attempts to accurately verify electronic signatures, we recommend using official tools provided by governmental agencies for legally binding verification. eDoc Viewer should be considered a convenience tool rather than an authoritative verification source.</source>
-  <target>Lai gan eDoc Viewer cenšas precīzi pārbaudīt elektroniskos parakstus, mēs iesakām izmantot valsts iestāžu sniegtus oficiālos rīkus juridiskai pārbaudei. eDoc Viewer vajadzētu uzskatīt par ērtības rīku, nevis oficiālu pārbaudes avotu.</target>
+  <source>While eDoc Viewer tries to verify electronic signatures,
+                    for legally binding verification please use official
+                    qualified validation services from
+                    <x id="0" equiv-text="&lt;a href=&quot;https://eidas.ec.europa.eu/efda/trust-services/browse/eidas/tls/search/type?step=1&quot; target=&quot;_blank&quot;&gt;"/>EU Trusted service providers list<x id="1" equiv-text="&lt;/a&gt;"/>
+                    or
+                    <x id="2" equiv-text="&lt;a href=&quot;https://www.eparaksts.lv/&quot; target=&quot;_blank&quot;&gt;"/>Latvian eParaksts validator<x id="3" equiv-text="&lt;/a&gt;"/>. Think of eDoc Viewer as a convenient way to check
+                    documents, not an official verification tool.</source>
+  <target>Lai gan eDoc Viewer mēģina pārbaudīt elektroniskos parakstus, juridiski saistošai pārbaudei, lūdzu, izmantojiet oficiālos rīkus, no  <x id="0" equiv-text="&lt;a href=&quot;https://eidas.ec.europa.eu/efda/trust-services/browse/eidas/tls/search/type?step=1&quot; target=&quot;_blank&quot;&gt;"/>ES uzticamu sertifikācijas pakalpojumu sniedzēju saraksta<x id="1" equiv-text="&lt;/a&gt;"/> vai <x id="2" equiv-text="&lt;a href=&quot;https://www.eparaksts.lv/&quot; target=&quot;_blank&quot;&gt;"/>Latvijas eParaksts validatoru<x id="3" equiv-text="&lt;/a&gt;"/>. Uztveriet eDoc Viewer kā ērtu veidu ātrai dokumentu pārbaudei, nevis kā oficiālu verifikācijas rīku.</target>
 </trans-unit>
 <trans-unit id="legal.disclaimer_security_title">
   <source>4. Security Considerations</source>
   <target>4. Drošības apsvērumi</target>
 </trans-unit>
 <trans-unit id="legal.disclaimer_security_content">
-  <source>Although we process files locally in your browser for privacy reasons, this may not provide the same level of security as server-side processing in all cases. Please ensure your device and browser are up-to-date and secure when handling sensitive documents.</source>
-  <target>Lai gan mēs apstrādājam failus lokāli jūsu pārlūkprogrammā privātuma aizsardzības nolūkos, tas var nenodrošināt tādu pašu drošības līmeni kā servera puses apstrāde visos gadījumos. Lūdzu, pārliecinieties, ka jūsu ierīce un pārlūkprogramma ir atjauninātas un drošas, apstrādājot jutīgus dokumentus.</target>
+  <source>While processing files locally in your browser helps protect your privacy, be aware that browser extensions or other software might potentially access your data. Please make sure your device and browser are up-to-date and secure when handling important documents.</source>
+  <target>Lai gan failu lokāla apstrāde jūsu pārlūkprogrammā palīdz aizsargāt jūsu privātumu, ņemiet vērā, ka pārlūkprogrammas paplašinājumi vai cita programmatūra potenciāli var piekļūt jūsu datiem. Lūdzu, pārliecinieties, ka jūsu ierīce un pārlūkprogramma ir atjauninātas un drošas, kad darbojaties ar svarīgiem dokumentiem.</target>
 </trans-unit>
 <trans-unit id="legal.disclaimer_opensource_title">
-  <source>5. Open Source Software</source>
-  <target>5. Atvērtā koda programmatūra</target>
+  <source>5. Open Source Components</source>
+  <target>5. Atvērtā koda komponenti</target>
 </trans-unit>
 <trans-unit id="legal.disclaimer_opensource_content">
   <source>eDoc Viewer uses various open source software components, each with its own license. These components are provided "as is" by their respective authors.</source>
-  <target>eDoc Viewer izmanto dažādus atvērtā koda programmatūras komponentus, kuriem katrai ir sava licence. Šie komponenti tiek nodrošināti "kādi ir" no attiecīgo autoru puses.</target>
+  <target>eDoc Viewer izmanto dažādus atvērtā koda programmatūras komponentus, kuriem katram ir sava licence. Šos komponentus to attiecīgie autori nodrošina "tādi, kādi tie ir".</target>
 </trans-unit>
-<trans-unit id="legal.close_button">
-  <source>Close</source>
-  <target>Aizvērt</target>
+<trans-unit id="app.title">
+  <source>eDoc Viewer</source>
+  <target>eDoc Viewer</target>
 </trans-unit>
-<trans-unit id="legal.about_tab">
-  <source>About</source>
-  <target>Par</target>
-</trans-unit>
-<trans-unit id="legal.about_title">
-  <source>About eDoc Viewer</source>
-  <target>Par eDoc Viewer</target>
-</trans-unit>
-<trans-unit id="legal.about_intro">
-  <source>eDoc Viewer is a simple tool for viewing and verifying electronic signature files. Here's what you need to know:</source>
-  <target>eDoc Viewer ir vienkāršs rīks elektronisko parakstu failu apskatei un pārbaudei. Lūk, kas jums jāzina:</target>
-</trans-unit>
-<trans-unit id="legal.about_feature1">
-  <source>Fast viewing of ASiC-E and eDoc content - easily see what documents are inside your electronic signature containers without installing special software.</source>
-  <target>Ātra ASiC-E un eDoc satura apskate - viegli redzēt, kādi dokumenti atrodas jūsu elektronisko parakstu konteineros, neinstalējot papildu programmatūru.</target>
-</trans-unit>
-<trans-unit id="legal.about_feature2">
-  <source>Signature verification is included, but please note that verification can be unreliable. For legally binding verification, use official tools from your government.</source>
-  <target>Parakstu pārbaude ir iekļauta, taču ņemiet vērā, ka tā var būt neprecīza. Juridiski saistošai pārbaudei izmantojiet oficiālus valdības rīkus.</target>
-</trans-unit>
-<trans-unit id="legal.about_feature3">
-  <source>For optimal usage, open in Chrome on your desktop and install it as an app. This allows you to quickly view eDoc/ASiC-E files directly from your computer by simply clicking on them.</source>
-  <target>Optimālai lietošanai atveriet eDoc Viewer Chrome pārlūkprogrammā datorā un instalējiet to kā lietotni. Tas ļaus jums ātri apskatīt eDoc/ASiC-E failus tieši no sava datora, vienkārši uz tiem noklikšķinot.</target>
-</trans-unit>
-<trans-unit id="legal.about_feature4">
-  <source>Mobile use is supported, but limited. On mobile devices, you'll need to manually open the app first, then click the browse button to select eDoc/ASiC-E files from your device.</source>
-  <target>Mobilā lietošana ir atbalstīta, bet ar ierobežojumiem. Mobilajās ierīcēs vispirms būs manuāli jāatver lietotne un pēc tam jānoklikšķina uz pārlūkošanas pogas, lai atlasītu eDoc/ASiC-E failus no sava ierīces.</target>
-</trans-unit>
-<trans-unit id="legal.about_feature5">
-  <source>All processing happens locally in your browser - your documents are never uploaded to any server, providing maximum privacy.</source>
-  <target>Visa apstrāde notiek lokāli jūsu pārlūkprogrammā - jūsu dokumenti nekad netiek augšupielādēti uz serveriem, nodrošinot maksimālu privātumu.</target>
-</trans-unit>
-<trans-unit id="legal.about_opensource">
-  <source>eDoc Viewer is an open-source project. Feel free to contribute or report issues on our GitHub repository.</source>
-  <target>eDoc Viewer ir atvērtā koda projekts. Jūs varat dot savu ieguldījumu vai ziņot par problēmām mūsu GitHub repozitorijā.</target>
+<trans-unit id="app.description">
+  <source>View and verify EU standard ASiC-E and Latvian eDoc electronic signature files (.asice, .edoc)</source>
+  <target>Skatīt un pārbaudīt EU standarta ASiC-E un Latvijas eDoc elektroniskā paraksta failus (.asice, .edoc)</target>
 </trans-unit>
 <trans-unit id="app.learn_more">
   <source>Learn more</source>
   <target>Vairāk</target>
+</trans-unit>
+<trans-unit id="app.backButtonLabel">
+  <source>Back</source>
+  <target>Atpakaļ</target>
+</trans-unit>
+<trans-unit id="app.version">
+  <source>Version</source>
+  <target>Versija</target>
+</trans-unit>
+<trans-unit id="app.open_source">
+  <source>Open Source</source>
+  <target>Atvērtais kods</target>
+</trans-unit>
+<trans-unit id="app.questions_support">
+  <source>Questions, suggestions, or bug reports</source>
+  <target>Jautājumiem, ieteikumiem un kļūdu ziņojumiem</target>
+</trans-unit>
+<trans-unit id="legal.about_feature2_verification_tools">
+  <source>For legally binding verification please use official
+                        qualified validation services from
+                        <x id="0" equiv-text="&lt;a href=&quot;https://eidas.ec.europa.eu/efda/trust-services/browse/eidas/tls/search/type?step=1&quot; target=&quot;_blank&quot;&gt;"/>EU Trusted service providers list<x id="1" equiv-text="&lt;/a&gt;"/>
+                        or
+                        <x id="2" equiv-text="&lt;a href=&quot;https://www.eparaksts.lv/&quot; target=&quot;_blank&quot;&gt;"/>Latvian eParaksts validator<x id="3" equiv-text="&lt;/a&gt;"/>. Think of eDoc Viewer as a convenient way to check
+                        documents, not an official verification tool.</source>
+  <target>Juridiski saistošai pārbaudei jāizmanto oficiālie rīki  no  <x id="0" equiv-text="&lt;a href=&quot;https://eidas.ec.europa.eu/efda/trust-services/browse/eidas/tls/search/type?step=1&quot; target=&quot;_blank&quot;&gt;"/>ES uzticamu sertifikācijas pakalpojumu sniedzēju saraksta<x id="1" equiv-text="&lt;/a&gt;"/> vai <x id="2" equiv-text="&lt;a href=&quot;https://www.eparaksts.lv/&quot; target=&quot;_blank&quot;&gt;"/>Latvijas eParaksts validatoru<x id="3" equiv-text="&lt;/a&gt;"/>. Uztveriet eDoc Viewer kā ērtu veidu ātrai dokumentu pārbaudei, nevis kā oficiālu verifikācijas rīku.</target>
 </trans-unit>
 </body>
 </file>
