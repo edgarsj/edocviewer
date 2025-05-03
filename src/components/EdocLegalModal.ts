@@ -309,10 +309,15 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
                 ${msg(
                   html`eDoc Viewer is an open-source project. Feel free to
                     contribute or report issues on our
+
                     <a
                       href="https://github.com/edgarsj/edocviewer"
                       target="_blank"
                       >GitHub repository</a
+                    >
+                    or contact us at
+                    <a href="mailto:edocviewer@zenomy.tech"
+                      >edocviewer@zenomy.tech</a
                     >.`,
                   { id: "legal.about_opensource" },
                 )}

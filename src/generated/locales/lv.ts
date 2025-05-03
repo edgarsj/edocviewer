@@ -34,7 +34,7 @@
 'legal.about_feature4': `Mobilā lietošana ir atbalstīta, bet ar ierobežojumiem. Mobilajās ierīcēs vispirms būs manuāli jāatver lietotne un pēc tam jānoklikšķina uz pārlūkošanas pogas, lai atlasītu eDoc/ASiC-E failus no sava ierīces.`,
 'legal.about_feature5': `Visa apstrāde notiek lokāli jūsu pārlūkprogrammā - jūsu dokumenti nekad netiek augšupielādēti uz serveriem, nodrošinot maksimālu privātumu.`,
 'legal.about_intro': `eDoc Viewer ir vienkāršs rīks elektronisko parakstu failu apskatei un pārbaudei. Īsumā:`,
-'legal.about_opensource': html`eDoc Viewer ir atvērtā koda projekts. Jūs varat piedāvāt uzlabojumus vai ziņot par problēmām <a href="https://github.com/edgarsj/edocviewer" target="_blank">GitHub projektā</a>.`,
+'legal.about_opensource': html`eDoc Viewer ir atvērtā koda projekts. Jūs varat piedāvāt uzlabojumus vai ziņot par problēmām <a href="https://github.com/edgarsj/edocviewer" target="_blank">GitHub projektā</a> vai sazināties ar mums pa e-pastu <a href="mailto:edocviewer@zenomy.tech">edocviewer@zenomy.tech</a>.`,
 'legal.about_tab': `Par`,
 'legal.about_title': `Par eDoc Viewer`,
 'legal.close_button': `Aizvērt`,

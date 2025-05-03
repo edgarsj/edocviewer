@@ -149,8 +149,11 @@
 <trans-unit id="legal.about_opensource">
   <source>eDoc Viewer is an open-source project. Feel free to
                     contribute or report issues on our
-                    <x id="0" equiv-text="&lt;a href=&quot;https://github.com/edgarsj/edocviewer&quot; target=&quot;_blank&quot;&gt;"/>GitHub repository<x id="1" equiv-text="&lt;/a&gt;"/>.</source>
-  <target>eDoc Viewer ir atvērtā koda projekts. Jūs varat piedāvāt uzlabojumus vai ziņot par problēmām <x id="0" equiv-text="&lt;a href=&quot;https://github.com/edgarsj/edocviewer&quot; target=&quot;_blank&quot;&gt;"/>GitHub projektā<x id="1" equiv-text="&lt;/a&gt;"/>.</target>
+
+                    <x id="0" equiv-text="&lt;a href=&quot;https://github.com/edgarsj/edocviewer&quot; target=&quot;_blank&quot;&gt;"/>GitHub repository<x id="1" equiv-text="&lt;/a&gt;"/>
+                    or contact us at
+                    <x id="2" equiv-text="&lt;a href=&quot;mailto:edocviewer@zenomy.tech&quot;&gt;"/>edocviewer@zenomy.tech<x id="3" equiv-text="&lt;/a&gt;"/>.</source>
+  <target>eDoc Viewer ir atvērtā koda projekts. Jūs varat piedāvāt uzlabojumus vai ziņot par problēmām <x id="0" equiv-text="&lt;a href=&quot;https://github.com/edgarsj/edocviewer&quot; target=&quot;_blank&quot;&gt;"/>GitHub projektā<x id="1" equiv-text="&lt;/a&gt;"/> vai sazināties ar mums e-pastā <x id="2" equiv-text="&lt;a href=&quot;mailto:edocviewer@zenomy.tech&quot;&gt;"/>edocviewer@zenomy.tech<x id="3" equiv-text="&lt;/a&gt;"/>.</target>
 </trans-unit>
 <trans-unit id="legal.terms_title">
   <source>Terms of Service</source>
