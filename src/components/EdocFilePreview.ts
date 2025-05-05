@@ -518,6 +518,10 @@ export class EdocFilePreview extends LocaleAwareMixin(LitElement) {
   }
 
   render() {
+    const fileExtension = this.getFileExtension(this.fileName);
+    const showOpenInNewTab =
+      !this.isMobile && fileExtension !== "pdf" && fileExtension !== "docx"; // Added docx to exclusion
+
     return html`
       <sl-dialog
         ?open=${this.isOpen}
@@ -557,9 +561,7 @@ export class EdocFilePreview extends LocaleAwareMixin(LitElement) {
                 ${msg("Download", { id: "file.download" })}
               </sl-button>
 
-              ${!this.isMobile ||
-              (this.getFileExtension(this.fileName) !== "pdf" &&
-                this.getFileExtension(this.fileName) !== "docx")
+              ${showOpenInNewTab
                 ? html`
                     <sl-button
                       size="small"
