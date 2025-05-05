@@ -61,7 +61,11 @@ export class EdocDocuments extends LocaleAwareMixin(LitElement) {
                   variant="primary"
                   class="download-all-button"
                   @click=${this.handleDownloadAll}
-                >
+                  ><sl-icon
+                    slot="prefix"
+                    name="download"
+                    style="font-size: 1rem;"
+                  ></sl-icon>
                   ${msg("Download All")}
                 </sl-button>
               `

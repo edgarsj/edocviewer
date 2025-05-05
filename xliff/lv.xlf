@@ -54,10 +54,6 @@
   <source>No files found</source>
   <target>Nav failu</target>
 </trans-unit>
-<trans-unit id="file.view">
-  <source>View</source>
-  <target>Skatīt</target>
-</trans-unit>
 <trans-unit id="file.download">
   <source>Download</source>
   <target>Saglabāt</target>
@@ -349,6 +345,18 @@
 <trans-unit id="signatures.betaTagTooltip">
   <source>Signature verification might be unreliable, more »</source>
   <target>Parakstu pārbaude var būt neprecīza, vairāk »</target>
+</trans-unit>
+<trans-unit id="file.clickToView">
+  <source>Click to view</source>
+  <target>Skatīt</target>
+</trans-unit>
+<trans-unit id="file.clickToDownload">
+  <source>Click to download</source>
+  <target>Lejupielādēt</target>
+</trans-unit>
+<trans-unit id="file.view">
+  <source>View</source>
+  <target>Skatīt</target>
 </trans-unit>
 </body>
 </file>

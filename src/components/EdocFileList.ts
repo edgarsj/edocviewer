@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { msg } from "@lit/localize";
 import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
 import "@shoelace-style/shoelace/dist/components/button/button.js";
+import "@shoelace-style/shoelace/dist/components/icon/icon.js";
 
 /**
  * Component for displaying a list of files in the eDoc container
@@ -28,10 +29,30 @@ export class EdocFileList extends LocaleAwareMixin(LitElement) {
       align-items: center;
       padding: 0.75rem 1rem;
       border-bottom: 1px solid var(--sl-color-primary-200);
+      cursor: pointer;
+      position: relative;
     }
 
     .file-item:last-child {
       border-bottom: none;
+    }
+
+    .file-info {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+      min-width: 0;
+      gap: 0.5rem;
+    }
+
+    .file-icon {
+      flex-shrink: 0;
+      color: var(--sl-color-gray-600);
+      font-size: 1.25rem;
+    }
+
+    .file-icon-viewable {
+      color: var(--sl-color-primary-600);
     }
 
     .file-name {
@@ -41,16 +62,44 @@ export class EdocFileList extends LocaleAwareMixin(LitElement) {
       padding-right: 1rem;
     }
 
+    .file-name-viewable {
+      color: var(--sl-color-primary-700);
+    }
+
     .file-actions {
-      display: flex;
-      gap: 0.5rem;
       flex-shrink: 0;
+      z-index: 1; /* Ensure buttons stay clickable */
+      display: flex;
+      gap: 0.25rem;
+      position: relative;
+    }
+
+    /* Expanded click areas for buttons */
+    .action-area {
+      position: absolute;
+      top: -0.75rem; /* Match the padding of the file-item */
+      bottom: -0.75rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .action-area-download {
+      right: 0;
+      width: 2.5rem;
     }
 
     .empty-message {
       color: var(--sl-color-gray-600);
       text-align: center;
       padding: 1rem;
+    }
+
+    /* Enhance tap target for mobile */
+    /* Highlight on tap/hover for clickable areas */
+    .file-item:hover,
+    .file-item:active {
+      background-color: var(--sl-color-primary-50);
+      border-radius: 0.25rem;
     }
   `;
 
@@ -80,28 +129,70 @@ export class EdocFileList extends LocaleAwareMixin(LitElement) {
     const extension = this.getFileExtension(filename);
     const displayName = this.getDisplayName(filename);
     const canView = this.canViewFile(extension);
+    const fileIcon = this.getFileIcon(extension);
 
+    // Styles for viewable files
+    const fileNameClass = canView
+      ? "file-name file-name-viewable"
+      : "file-name";
+    const fileIconClass = canView
+      ? "file-icon file-icon-viewable"
+      : "file-icon";
+
+    // Instead of making the whole row clickable, just make the file info area clickable
     return html`
-      <div class="file-item">
-        <span class="file-name" title="${filename}">${displayName}</span>
+      <div
+        class="file-item"
+        @click=${() => this.handleDefaultAction(filename, canView)}
+        title="${canView
+          ? msg("Click to view", { id: "file.clickToView" })
+          : msg("Click to download", { id: "file.clickToDownload" })}"
+        style="cursor: pointer;"
+      >
+        <div class="file-info">
+          <sl-icon name="${fileIcon}" class="${fileIconClass}"></sl-icon>
+          <span class="${fileNameClass}" title="${filename}">
+            ${displayName}
+          </span>
+        </div>
         <div class="file-actions">
           ${canView
             ? html`
                 <sl-button
                   size="small"
-                  @click=${() => this.handleView(filename)}
+                  variant="neutral"
+                  @click=${(e: Event) => {
+                    e.stopPropagation();
+                    this.handleView(filename);
+                  }}
+                  title="${msg("View", { id: "file.view" })}"
                 >
-                  ${msg("View", { id: "file.view" })}
+                  <sl-icon
+                    name="eye"
+                    style="font-size: 1rem; vertical-align: -0.3rem;"
+                  ></sl-icon>
                 </sl-button>
               `
             : ""}
+          <div
+            class="action-area action-area-download"
+            @click=${(e: Event) => {
+              e.stopPropagation();
+              this.handleDownload(filename);
+            }}
+            title="${msg("Download", { id: "file.download" })}"
+          ></div>
 
           <sl-button
             size="small"
-            variant="primary"
-            @click=${() => this.handleDownload(filename)}
+            variant="neutral"
+            @click=${(e: Event) => {
+              e.stopPropagation();
+              this.handleDownload(filename);
+            }}
+            title="${msg("Download", { id: "file.download" })}"
           >
-            ${msg("Download", { id: "file.download" })}
+            <sl-icon name="download" style="font-size: 1rem;"></sl-icon>
           </sl-button>
         </div>
       </div>
@@ -130,6 +221,18 @@ export class EdocFileList extends LocaleAwareMixin(LitElement) {
     );
   }
 
+  /**
+   * Handle the default action when clicking on a file item
+   * For viewable files, view them. For non-viewable files, download them.
+   */
+  private handleDefaultAction(filename: string, canView: boolean) {
+    if (canView) {
+      this.handleView(filename);
+    } else {
+      this.handleDownload(filename);
+    }
+  }
+
   private getFileExtension(filename: string): string {
     return filename.split(".").pop()?.toLowerCase() || "";
   }
@@ -140,8 +243,32 @@ export class EdocFileList extends LocaleAwareMixin(LitElement) {
   }
 
   private canViewFile(extension: string): boolean {
-    // Currently only PDFs are viewable
-    return extension === "pdf";
+    // List of viewable file types - currently only PDF but can be expanded
+    const viewableExtensions = ["pdf"];
+    return viewableExtensions.includes(extension);
+  }
+
+  private getFileIcon(extension: string): string {
+    // Map file extensions to appropriate icons
+    const iconMap: Record<string, string> = {
+      pdf: "file-earmark-pdf",
+      doc: "file-earmark-word",
+      docx: "file-earmark-word",
+      xls: "file-earmark-excel",
+      xlsx: "file-earmark-excel",
+      ppt: "file-earmark-ppt",
+      pptx: "file-earmark-ppt",
+      txt: "file-earmark-text",
+      jpg: "file-earmark-image",
+      jpeg: "file-earmark-image",
+      png: "file-earmark-image",
+      gif: "file-earmark-image",
+      xml: "file-earmark-code",
+      json: "file-earmark-code",
+      csv: "file-earmark-spreadsheet",
+    };
+
+    return iconMap[extension] || "file-earmark";
   }
 }
 

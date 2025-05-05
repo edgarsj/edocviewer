@@ -25,6 +25,8 @@
 'dropzone.suggestedFileLabel': `Ieteiktais fails:`,
 'dropzone.title': `Ievelc eDoc/Asic-E failu šeit`,
 'error.title': `Kļūda`,
+'file.clickToDownload': `Lejupielādēt`,
+'file.clickToView': `Skatīt`,
 'file.download': `Saglabāt`,
 'file.view': `Skatīt`,
 'legal.about_feature1': `Ātra ASiC-E un eDoc satura apskate - viegli redzēt un piekļūt dokumentiem jūsu elektroniski parakstītajos konteineros, neinstalējot papildu programmatūru.`,
