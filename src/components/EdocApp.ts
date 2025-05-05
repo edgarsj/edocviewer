@@ -267,9 +267,6 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
     // Listen for the modal closing to ensure URL is clean
     this.addEventListener("edoc-legal-modal-closed", () => {
       // Clear URL hash
-      console.log(
-        `edoc-legal-modal-closed event, window.location.hash: ${window.location.hash}`,
-      );
       if (window.location.hash) {
         history.replaceState(
           "",

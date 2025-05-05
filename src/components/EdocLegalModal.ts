@@ -156,15 +156,11 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
       // Set active tab based on property - FIXED: Use the proper way to activate a tab
       const tabGroup = this.shadowRoot?.querySelector("sl-tab-group");
       if (tabGroup) {
-        console.log("SlDialog open, set active tab to: ", this.activeTab);
-
-        // This is the key fix - using the show() method instead of setAttribute
         tabGroup.show(this.activeTab);
       }
 
       // If an anchor is provided, scroll to it after dialog is shown
       if (this.anchor) {
-        console.log("SlDialog open, anchor:", this.anchor);
         // Need to wait for dialog to be fully rendered and tab to be active
         setTimeout(() => {
           const element = this.shadowRoot?.querySelector(`#${this.anchor}`);
