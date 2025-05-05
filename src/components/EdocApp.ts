@@ -20,6 +20,7 @@ import "./EdocLanguageSelector";
 import "./EdocOfflineNotice";
 import "./EdocInstallButton";
 import "./EdocLegalModal";
+import "./EdocFilePreview";
 
 // Import parser
 import {
@@ -695,6 +696,13 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
     }, 100);
   }
 
+  private isMobileDevice(): boolean {
+    // Simple mobile device detection
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent,
+    );
+  }
+
   private handleFileView(e: CustomEvent) {
     const { filename } = e.detail;
     if (!this.container || !filename) return;
@@ -705,15 +713,40 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
       return;
     }
 
-    // Create a blob URL and open in new tab
-    const blob = new Blob([fileData], { type: this.getContentType(filename) });
-    const url = URL.createObjectURL(blob);
-    window.open(url, "_blank");
+    // Check if this is a PDF file for mobile workaround
+    const extension = this.getFileExtension(filename).toLowerCase();
+    const isPDF = extension === "pdf";
 
-    // Clean up URL after some time
-    setTimeout(() => {
-      URL.revokeObjectURL(url);
-    }, 1000);
+    // If it's a PDF and we're on mobile, open in a new tab directly
+    if (isPDF && this.isMobileDevice()) {
+      // Create blob and object URL
+      const blob = new Blob([fileData], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+
+      // Open in new tab
+      window.open(url, "_blank");
+
+      // Clean up the object URL after a delay
+      setTimeout(() => {
+        URL.revokeObjectURL(url);
+      }, 1000);
+
+      return;
+    }
+
+    // Find the preview component or create it if it doesn't exist
+    let previewComponent = this.shadowRoot?.querySelector("edoc-file-preview");
+    if (!previewComponent) {
+      previewComponent = document.createElement("edoc-file-preview");
+      this.shadowRoot?.appendChild(previewComponent);
+    }
+
+    // Set properties and show the preview
+    const preview = previewComponent as any;
+    preview.fileName = this.getFileNameFromPath(filename);
+    preview.fileData = fileData;
+    preview.mimeType = this.getContentType(filename);
+    preview.show();
   }
 
   private handleFilesDownloadAll(e: CustomEvent) {

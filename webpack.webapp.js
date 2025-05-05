@@ -184,6 +184,7 @@ export default merge(commonConfig, {
     }),
   ],
   devServer: {
+    allowedHosts: "all", // allows any host
     static: {
       directory: path.join(__dirname, "public"),
       publicPath: "/",

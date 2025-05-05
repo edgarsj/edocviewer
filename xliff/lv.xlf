@@ -358,6 +358,26 @@
   <source>View</source>
   <target>Skatīt</target>
 </trans-unit>
+<trans-unit id="preview.noData">
+  <source>No file data available</source>
+  <target>Nav pieejama faila datu informācija</target>
+</trans-unit>
+<trans-unit id="preview.unsupportedType">
+  <source>Unsupported file type for preview</source>
+  <target>Nav atbalstīts faila formāts</target>
+</trans-unit>
+<trans-unit id="preview.openInNewTab">
+  <source>Open in New Tab</source>
+  <target>Atvērt jaunā cilnē</target>
+</trans-unit>
+<trans-unit id="preview.pdfMobileUnsupported">
+  <source>PDF preview is not available on mobile devices</source>
+  <target>PDF apskate nav pieejama mobilajās ierīcēs</target>
+</trans-unit>
+<trans-unit id="preview.openPdf">
+  <source>Open PDF</source>
+  <target>Atvērt PDF</target>
+</trans-unit>
 </body>
 </file>
 </xliff>

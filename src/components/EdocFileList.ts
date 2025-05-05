@@ -243,8 +243,8 @@ export class EdocFileList extends LocaleAwareMixin(LitElement) {
   }
 
   private canViewFile(extension: string): boolean {
-    // List of viewable file types - currently only PDF but can be expanded
-    const viewableExtensions = ["pdf"];
+    // List of viewable file types
+    const viewableExtensions = ["pdf", "jpg", "jpeg", "png", "gif", "svg"];
     return viewableExtensions.includes(extension);
   }
 
@@ -263,6 +263,7 @@ export class EdocFileList extends LocaleAwareMixin(LitElement) {
       jpeg: "file-earmark-image",
       png: "file-earmark-image",
       gif: "file-earmark-image",
+      svg: "file-earmark-image",
       xml: "file-earmark-code",
       json: "file-earmark-code",
       csv: "file-earmark-spreadsheet",
