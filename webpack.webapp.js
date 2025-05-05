@@ -172,14 +172,15 @@ export default merge(commonConfig, {
     new InjectManifest({
       swSrc: "./src/webapp/service-worker.js",
       swDest: "service-worker.js",
-      maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB
-      exclude: [
-        /\.map$/,
-        /manifest$/,
-        /\.htaccess$/,
-        /service-worker\.js$/,
-        /sw\.js$/,
+      // Prevent cache-busting for Shoelace assets
+      dontCacheBustURLsMatching: /shoelace\/assets\/.*/,
+      include: [
+        /\.(js|css|html|json|ico|svg|png|jpg|jpeg|gif|webp|woff2?|ttf|eot)$/,
+        /shoelace\/assets\/.*/,
+        /\/?$/,
+        /\/index\.html$/,
       ],
+      maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
     }),
   ],
   devServer: {
