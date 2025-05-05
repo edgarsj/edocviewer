@@ -11,6 +11,8 @@ import {
 import { ensureInitialized } from "./uiInitializer";
 import { initializeLocaleIntegration } from "../utils/locale-integration";
 
+import "../utils/docxPreloader";
+
 // Global flag to prevent double initialization
 let appInitialized = false;
 

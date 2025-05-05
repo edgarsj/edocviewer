@@ -1,5 +1,6 @@
 // src/components/EdocFilePreview.ts
-import { LitElement, html, css } from "lit";
+
+import { LitElement, html, css, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { msg } from "@lit/localize";
 import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
@@ -9,7 +10,11 @@ import "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
 import "@shoelace-style/shoelace/dist/components/icon-button/icon-button.js";
 import "@shoelace-style/shoelace/dist/components/button/button.js";
 import "@shoelace-style/shoelace/dist/components/icon/icon.js";
+import "@shoelace-style/shoelace/dist/components/spinner/spinner.js";
 import { SlDialog } from "@shoelace-style/shoelace";
+
+// We'll import our docx adapter dynamically when needed
+// import { renderDocx } from "../utils/docxAdapter";
 
 /**
  * Component for previewing files in a modal dialog
@@ -177,19 +182,50 @@ export class EdocFilePreview extends LocaleAwareMixin(LitElement) {
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
 
-    .debug-info {
-      background: rgba(255, 255, 255, 0.8);
-      padding: 0.5rem 0.75rem;
-      border-radius: 0.25rem;
-      font-size: 0.75rem;
-      color: var(--sl-color-gray-700);
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    }
-
     .error-message {
       padding: 2rem;
       text-align: center;
       color: var(--sl-color-danger-600);
+    }
+
+    /* Loading spinner overlay */
+    .loading-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.7);
+      z-index: 50;
+    }
+
+    .loading-text {
+      margin-top: 1rem;
+      color: var(--sl-color-primary-600);
+      font-weight: 500;
+    }
+
+    /* Additional styles for DOCX preview */
+    .docx-container {
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: var(--sl-color-gray-100);
+      position: relative;
+    }
+
+    /* Style the docx-preview elements */
+    :host ::part(docx-preview) {
+      padding: 1rem;
+      background-color: white;
+    }
+
+    :host ::part(docx-wrapper) {
+      margin: 0 auto;
     }
 
     /* Hide elements when needed */
@@ -232,14 +268,14 @@ export class EdocFilePreview extends LocaleAwareMixin(LitElement) {
   @state() private objectUrl: string = "";
 
   /**
+   * Track loading state (for DOCX loading)
+   */
+  @state() private isLoading: boolean = false;
+
+  /**
    * Check if device is mobile
    */
   @state() private isMobile: boolean = false;
-
-  /**
-   * Store debugging info
-   */
-  @state() private debugInfo: string = "";
 
   constructor() {
     super();
@@ -248,33 +284,10 @@ export class EdocFilePreview extends LocaleAwareMixin(LitElement) {
       /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent,
       );
-
-    // Generate debug info
-    this.updateDebugInfo();
-
-    // Update debug info on resize
-    window.addEventListener("resize", () => this.updateDebugInfo());
-  }
-
-  /**
-   * Update debugging information
-   */
-  private updateDebugInfo() {
-    const viewportHeight = window.innerHeight;
-    const documentHeight = document.documentElement.clientHeight;
-
-    this.debugInfo =
-      `Screen: ${window.innerWidth}x${window.innerHeight}, ` +
-      `Viewport: ${viewportHeight}px, ` +
-      `Doc: ${documentHeight}px, ` +
-      `Mobile: ${this.isMobile ? "Yes" : "No"}`;
   }
 
   firstUpdated() {
     this.dialog = this.shadowRoot?.querySelector("sl-dialog") as SlDialog;
-
-    // Update debug info after components are rendered
-    setTimeout(() => this.updateDebugInfo(), 100);
   }
 
   /**
@@ -285,8 +298,12 @@ export class EdocFilePreview extends LocaleAwareMixin(LitElement) {
     if (this.dialog) {
       this.dialog.show();
     }
-    // Update debug info when showing
-    this.updateDebugInfo();
+
+    // For DOCX files, we need to wait for dialog to open before rendering
+    if (this.getFileExtension(this.fileName) === "docx") {
+      this.isLoading = true;
+      setTimeout(() => this.renderDocxContent(), 100);
+    }
   }
 
   /**
@@ -329,13 +346,60 @@ export class EdocFilePreview extends LocaleAwareMixin(LitElement) {
    * Handle download of the current file
    */
   private handleDownload() {
-    if (this.objectUrl && this.fileName) {
+    if (this.fileData && this.fileName) {
+      const blob = new Blob([this.fileData], { type: this.mimeType });
+      const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
-      a.href = this.objectUrl;
+      a.href = url;
       a.download = this.fileName;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  }
+
+  /**
+   * Dynamically render DOCX content
+   */
+  private async renderDocxContent() {
+    if (!this.fileData) return;
+
+    try {
+      this.isLoading = true;
+
+      // First get the container from the shadow DOM
+      const container = this.shadowRoot?.querySelector(
+        ".docx-container",
+      ) as HTMLElement;
+      if (!container) {
+        throw new Error("DOCX container not found in shadow DOM");
+      }
+
+      // Dynamically import the docx adapter (which in turn dynamically imports docx-preview)
+      const docxAdapter = await import("../utils/docxAdapter");
+
+      // Render the DOCX file
+      await docxAdapter.renderDocx(this.fileData, container);
+    } catch (error) {
+      console.error("Error rendering DOCX:", error);
+
+      // Show error message in container
+      const container = this.shadowRoot?.querySelector(".docx-container");
+      if (container) {
+        container.innerHTML = `
+          <div class="error-message">
+            ${msg(
+              "Error rendering DOCX file. The file may be corrupted or not supported.",
+              {
+                id: "preview.docxError",
+              },
+            )}
+          </div>
+        `;
+      }
+    } finally {
+      this.isLoading = false;
     }
   }
 
@@ -352,10 +416,13 @@ export class EdocFilePreview extends LocaleAwareMixin(LitElement) {
     const extension = this.getFileExtension(this.fileName);
     const isImage = /^(jpg|jpeg|png|gif|svg)$/i.test(extension);
     const isPdf = /^pdf$/i.test(extension);
+    const isDocx = /^docx$/i.test(extension);
 
-    // Create blob and object URL
-    const blob = new Blob([this.fileData], { type: this.mimeType });
-    this.objectUrl = URL.createObjectURL(blob);
+    // Create blob and object URL for images and PDFs
+    if (isImage || isPdf) {
+      const blob = new Blob([this.fileData], { type: this.mimeType });
+      this.objectUrl = URL.createObjectURL(blob);
+    }
 
     if (isImage) {
       return this.renderImage();
@@ -366,6 +433,8 @@ export class EdocFilePreview extends LocaleAwareMixin(LitElement) {
       } else {
         return this.renderPdf();
       }
+    } else if (isDocx) {
+      return this.renderDocx();
     } else {
       return html`<div class="error-message">
         ${msg("Unsupported file type for preview", {
@@ -424,6 +493,30 @@ export class EdocFilePreview extends LocaleAwareMixin(LitElement) {
     `;
   }
 
+  /**
+   * Render DOCX preview
+   */
+  private renderDocx() {
+    return html`
+      <div class="docx-container"></div>
+      ${this.isLoading ? this.renderLoading() : nothing}
+    `;
+  }
+
+  /**
+   * Render loading spinner
+   */
+  private renderLoading() {
+    return html`
+      <div class="loading-container">
+        <sl-spinner style="font-size: 2rem;"></sl-spinner>
+        <div class="loading-text">
+          ${msg("Loading document...", { id: "preview.loading" })}
+        </div>
+      </div>
+    `;
+  }
+
   render() {
     return html`
       <sl-dialog
@@ -436,7 +529,6 @@ export class EdocFilePreview extends LocaleAwareMixin(LitElement) {
             <div class="file-title" title="${this.fileName}">
               ${this.fileName}
             </div>
-            <!-- <div class="debug-info">${this.debugInfo}</div> -->
           </div>
 
           <sl-icon-button
@@ -465,7 +557,9 @@ export class EdocFilePreview extends LocaleAwareMixin(LitElement) {
                 ${msg("Download", { id: "file.download" })}
               </sl-button>
 
-              ${!this.isMobile || this.getFileExtension(this.fileName) !== "pdf"
+              ${!this.isMobile ||
+              (this.getFileExtension(this.fileName) !== "pdf" &&
+                this.getFileExtension(this.fileName) !== "docx")
                 ? html`
                     <sl-button
                       size="small"

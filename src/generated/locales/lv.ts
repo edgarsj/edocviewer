@@ -83,6 +83,8 @@
 'metadata.noMetadata': `Nav metadatu failu`,
 'metadata.title': `Metadati`,
 'offline.message': `Nav pieejas internetam. Dažas funkcijas var būt ierobežotas.`,
+'preview.docxError': `Kļūda attēlojot DOCX failu. Fails var būt bojāts vai arī nav atbalstīts.`,
+'preview.loading': `Atvēršana...`,
 'preview.noData': `Nav pieejama faila datu informācija`,
 'preview.openInNewTab': `Atvērt jaunā cilnē`,
 'preview.openPdf': `Atvērt PDF`,

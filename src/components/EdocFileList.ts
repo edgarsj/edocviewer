@@ -244,7 +244,15 @@ export class EdocFileList extends LocaleAwareMixin(LitElement) {
 
   private canViewFile(extension: string): boolean {
     // List of viewable file types
-    const viewableExtensions = ["pdf", "jpg", "jpeg", "png", "gif", "svg"];
+    const viewableExtensions = [
+      "pdf",
+      "jpg",
+      "jpeg",
+      "png",
+      "gif",
+      "svg",
+      "docx",
+    ];
     return viewableExtensions.includes(extension);
   }
 

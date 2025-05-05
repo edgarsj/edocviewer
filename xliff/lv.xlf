@@ -378,6 +378,14 @@
   <source>Open PDF</source>
   <target>Atvērt PDF</target>
 </trans-unit>
+<trans-unit id="preview.docxError">
+  <source>Error rendering DOCX file. The file may be corrupted or not supported.</source>
+  <target>Kļūda attēlojot DOCX failu. Fails var būt bojāts vai arī nav atbalstīts.</target>
+</trans-unit>
+<trans-unit id="preview.loading">
+  <source>Loading document...</source>
+  <target>Atvēršana...</target>
+</trans-unit>
 </body>
 </file>
 </xliff>

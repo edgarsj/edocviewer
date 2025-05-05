@@ -57,6 +57,14 @@ export default merge(commonConfig, {
             ) {
               return false;
             }
+            // Return false for docx-preview and its dependencies
+            if (
+              module.resource &&
+              (module.resource.includes("node_modules/docx-preview") ||
+                module.resource.includes("node_modules/jszip"))
+            ) {
+              return false;
+            }
             // Return true for all other node_modules
             return /[\\/]node_modules[\\/]/.test(module.resource);
           },
@@ -93,6 +101,20 @@ export default merge(commonConfig, {
           name: "web-components",
           chunks: "all",
           priority: 25, // Higher priority than edockit
+        },
+        // Create a separate chunk for docx-preview and its dependencies
+        docxPreviewBundle: {
+          test: (module) => {
+            return (
+              module.resource &&
+              (module.resource.includes("node_modules/docx-preview") ||
+                module.resource.includes("node_modules/jszip"))
+            );
+          },
+          // name: "docx-preview-bundle",
+          chunks: "all",
+          priority: 26, // Higher priority than web components
+          // enforce: true,
         },
         // Create a special chunk for localization files
         localizationBundle: {
