@@ -10,7 +10,7 @@
 
     export const templates = {
       'app.backButtonLabel': `Atpakaļ`,
-'app.description': `Skatīt un pārbaudīt EU standarta ASiC-E un Latvijas eDoc elektroniskā paraksta failus (.asice, .edoc)`,
+'app.description': `Skatīt un pārbaudīt EU standarta ASiC-E un Latvijas eDoc ZAdES elektroniskā paraksta failus (.asice, .sce, .edoc)`,
 'app.installButton': `Instalēt jūsu ierīcē`,
 'app.learn_more': `Vairāk`,
 'app.open_source': `Atvērtais kods`,
@@ -67,7 +67,7 @@
 'legal.privacy_title': `Privātuma politika`,
 'legal.terms_acceptance_content': `Izmantojot eDoc Viewer lietotni, jūs piekrītat ievērot šos Pakalpojumu noteikumus. Ja jūs nepiekrītat šiem noteikumiem, lūdzu, nelietojiet šo lietotni.`,
 'legal.terms_acceptance_title': `2. Noteikumu pieņemšana`,
-'legal.terms_description_content': `eDoc Viewer ir tīmekļa lietotne, kas ļauj lietotājiem skatīt un pārbaudīt ES standarta ASiC-E un Latvijas eDoc elektroniskās paraksta failus (.asice, .edoc). Lietotne apstrādā failus lokāli jūsu pārlūkprogrammā un neaugšupielādē jūsu dokumentus uz nekādiem serveriem.`,
+'legal.terms_description_content': `eDoc Viewer ir tīmekļa lietotne, kas ļauj lietotājiem skatīt un pārbaudīt ES standarta ASiC-E un Latvijas eDoc XAdES elektroniskās paraksta failus (.asice, .sce, .edoc). Lietotne apstrādā failus lokāli jūsu pārlūkprogrammā un neaugšupielādē jūsu dokumentus uz nekādiem serveriem.`,
 'legal.terms_description_title': `3. Pakalpojuma apraksts`,
 'legal.terms_effective_content': `Šie Pakalpojumu noteikumi ir spēkā no 2025. gada 1. maija.`,
 'legal.terms_effective_title': `1. Stāšanās spēkā`,

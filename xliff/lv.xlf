@@ -119,16 +119,16 @@
   <target>Par eDoc Viewer</target>
 </trans-unit>
 <trans-unit id="legal.about_intro">
-  <source>eDoc Viewer is a simple tool for viewing and verifying electronic signature files. Here's what you need to know:</source>
-  <target>eDoc Viewer ir vienkāršs rīks elektronisko parakstu failu apskatei un pārbaudei. Īsumā:</target>
+  <source>eDoc Viewer is a simple tool for viewing and verifying XAdES electronic signature packed in ASIC-E files. Here's what you need to know:</source>
+  <target>eDoc Viewer ir vienkāršs rīks XAdES elektronisko parakstu ASIC-E failu apskatei un pārbaudei. Īsumā:</target>
 </trans-unit>
 <trans-unit id="legal.about_feature1">
-  <source>Fast viewing of ASiC-E and eDoc content - easily see and access the documents inside your electronically signed containers without installing special software.</source>
-  <target>Ātra ASiC-E un eDoc satura apskate - viegli redzēt un piekļūt dokumentiem jūsu elektroniski parakstītajos konteineros, neinstalējot papildu programmatūru.</target>
+  <source>Fast viewing of ASiC-E and eDoc content - easily see and access the documents inside your ASIC-E containers containing XAdES electronic signatures without installing special software.</source>
+  <target>Ātra ASiC-E un eDoc satura apskate - viegli redzēt un piekļūt dokumentiem jūsu ASIC-E konteineros kas satur XAdES elektroniskos parakstus, neinstalējot papildu programmatūru.</target>
 </trans-unit>
 <trans-unit id="legal.about_feature2">
-  <source>Signature verification is included, but please note that verification can be unreliable.</source>
-  <target>Parakstu pārbaude ir iekļauta, taču ņemiet vērā, ka tā var būt neprecīza.</target>
+  <source>XAdES electronic signature verification is included, but please note that verification can be unreliable.</source>
+  <target>XAdES elektronisko parakstu pārbaude ir iekļauta, taču ņemiet vērā, ka tā var būt neprecīza.</target>
 </trans-unit>
 <trans-unit id="legal.about_feature3">
   <source>For optimal usage, open in Chrome on your desktop and install it as an app. This allows you to quickly view eDoc/ASiC-E files directly from your computer by simply clicking on them.</source>
@@ -176,8 +176,8 @@
   <target>3. Pakalpojuma apraksts</target>
 </trans-unit>
 <trans-unit id="legal.terms_description_content">
-  <source>eDoc Viewer is a web application that allows users to view and verify EU standard ASiC-E and Latvian eDoc electronic signature files (.asice, .edoc). The application processes files locally in your browser and does not upload your documents to any server.</source>
-  <target>eDoc Viewer ir tīmekļa lietotne, kas ļauj lietotājiem skatīt un pārbaudīt ES standarta ASiC-E un Latvijas eDoc elektroniskās paraksta failus (.asice, .edoc). Lietotne apstrādā failus lokāli jūsu pārlūkprogrammā un neaugšupielādē jūsu dokumentus uz nekādiem serveriem.</target>
+  <source>eDoc Viewer is a web application that allows users to view and verify EU standard ASiC-E and Latvian eDoc XAdES electronic signature files (.asice, .sce, .edoc). The application processes files locally in your browser and does not upload your documents to any server.</source>
+  <target>eDoc Viewer ir tīmekļa lietotne, kas ļauj lietotājiem skatīt un pārbaudīt ES standarta ASiC-E un Latvijas eDoc XAdES elektroniskās paraksta failus (.asice, .sce, .edoc). Lietotne apstrādā failus lokāli jūsu pārlūkprogrammā un neaugšupielādē jūsu dokumentus uz nekādiem serveriem.</target>
 </trans-unit>
 <trans-unit id="legal.terms_usage_title">
   <source>4. Intended Use</source>
@@ -280,14 +280,14 @@
   <target>3. Parakstu pārbaude</target>
 </trans-unit>
 <trans-unit id="legal.disclaimer_verification_content">
-  <source>While eDoc Viewer tries to verify electronic signatures,
+  <source>While eDoc Viewer tries to verify XAdES electronic signatures,
                     for legally binding verification please use official
                     qualified validation services from
                     <x id="0" equiv-text="&lt;a href=&quot;https://eidas.ec.europa.eu/efda/trust-services/browse/eidas/tls/search/type?step=1&quot; target=&quot;_blank&quot;&gt;"/>EU Trusted service providers list<x id="1" equiv-text="&lt;/a&gt;"/>
                     or
                     <x id="2" equiv-text="&lt;a href=&quot;https://www.eparaksts.lv/&quot; target=&quot;_blank&quot;&gt;"/>Latvian eParaksts validator<x id="3" equiv-text="&lt;/a&gt;"/>. Think of eDoc Viewer as a convenient way to check
                     documents, not an official verification tool.</source>
-  <target>Lai gan eDoc Viewer mēģina pārbaudīt elektroniskos parakstus, juridiski saistošai pārbaudei, lūdzu, izmantojiet oficiālos rīkus, no  <x id="0" equiv-text="&lt;a href=&quot;https://eidas.ec.europa.eu/efda/trust-services/browse/eidas/tls/search/type?step=1&quot; target=&quot;_blank&quot;&gt;"/>ES uzticamu sertifikācijas pakalpojumu sniedzēju saraksta<x id="1" equiv-text="&lt;/a&gt;"/> vai <x id="2" equiv-text="&lt;a href=&quot;https://www.eparaksts.lv/&quot; target=&quot;_blank&quot;&gt;"/>Latvijas eParaksts validatoru<x id="3" equiv-text="&lt;/a&gt;"/>. Uztveriet eDoc Viewer kā ērtu veidu ātrai dokumentu pārbaudei, nevis kā oficiālu verifikācijas rīku.</target>
+  <target>Lai gan eDoc Viewer mēģina pārbaudīt XAdES elektroniskos parakstus, juridiski saistošai pārbaudei, lūdzu, izmantojiet oficiālos rīkus, no  <x id="0" equiv-text="&lt;a href=&quot;https://eidas.ec.europa.eu/efda/trust-services/browse/eidas/tls/search/type?step=1&quot; target=&quot;_blank&quot;&gt;"/>ES uzticamu sertifikācijas pakalpojumu sniedzēju saraksta<x id="1" equiv-text="&lt;/a&gt;"/> vai <x id="2" equiv-text="&lt;a href=&quot;https://www.eparaksts.lv/&quot; target=&quot;_blank&quot;&gt;"/>Latvijas eParaksts validatoru<x id="3" equiv-text="&lt;/a&gt;"/>. Uztveriet eDoc Viewer kā ērtu veidu ātrai dokumentu pārbaudei, nevis kā oficiālu verifikācijas rīku.</target>
 </trans-unit>
 <trans-unit id="legal.disclaimer_security_title">
   <source>4. Security Considerations</source>
@@ -310,8 +310,8 @@
   <target>eDoc Viewer</target>
 </trans-unit>
 <trans-unit id="app.description">
-  <source>View and verify EU standard ASiC-E and Latvian eDoc electronic signature files (.asice, .edoc)</source>
-  <target>Skatīt un pārbaudīt EU standarta ASiC-E un Latvijas eDoc elektroniskā paraksta failus (.asice, .edoc)</target>
+  <source>View and verify EU standard ASiC-E and Latvian eDoc XAdES electronic signature files (.asice, .sce, .edoc)</source>
+  <target>Skatīt un pārbaudīt EU standarta ASiC-E un Latvijas eDoc XAdES elektroniskā paraksta failus (.asice, .sce, .edoc)</target>
 </trans-unit>
 <trans-unit id="app.learn_more">
   <source>Learn more</source>
@@ -343,8 +343,8 @@
   <target>Juridiski saistošai pārbaudei jāizmanto oficiālie rīki  no  <x id="0" equiv-text="&lt;a href=&quot;https://eidas.ec.europa.eu/efda/trust-services/browse/eidas/tls/search/type?step=1&quot; target=&quot;_blank&quot;&gt;"/>ES uzticamu sertifikācijas pakalpojumu sniedzēju saraksta<x id="1" equiv-text="&lt;/a&gt;"/> vai <x id="2" equiv-text="&lt;a href=&quot;https://www.eparaksts.lv/&quot; target=&quot;_blank&quot;&gt;"/>Latvijas eParaksts validatoru<x id="3" equiv-text="&lt;/a&gt;"/>. Uztveriet eDoc Viewer kā ērtu veidu ātrai dokumentu pārbaudei, nevis kā oficiālu verifikācijas rīku.</target>
 </trans-unit>
 <trans-unit id="signatures.betaTagTooltip">
-  <source>Signature verification might be unreliable, more »</source>
-  <target>Parakstu pārbaude var būt neprecīza, vairāk »</target>
+  <source>XAdES electronic signature verification might be unreliable, more »</source>
+  <target>XAdES elektronisko parakstu pārbaude var būt neprecīza, vairāk »</target>
 </trans-unit>
 <trans-unit id="file.clickToView">
   <source>Click to view</source>

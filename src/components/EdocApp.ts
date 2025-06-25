@@ -422,7 +422,7 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
                 <div class="app-description-wrapper">
                   <h2 class="app-description">
                     ${msg(
-                      "View and verify EU standard ASiC-E and Latvian eDoc electronic signature files (.asice, .edoc)",
+                      "View and verify EU standard ASiC-E and Latvian eDoc XAdES electronic signature files (.asice, .sce, .edoc)",
                       {
                         id: "app.description",
                       },

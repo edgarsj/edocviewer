@@ -6,19 +6,19 @@ A modern viewer for EU standard ASiC-E containers and Latvian eDoc files. Works 
 
 ## Features
 
-- View and verify signatures in eDoc and ASiC-E containers
+- View and verify XAdES signatures in eDoc and ASiC-E containers
 - Download files contained within the container
 - View supported document types directly in the browser
 - Multilingual support (English, Latvian)
 - Drag and drop file upload
-- File handling for .edoc and .asice files through Progressive Web App functionality
+- File handling for `.edoc`, `.asice` and `.sce` files through Progressive Web App functionality
 
 ## Application
 
 The web application allows users to:
 
 1. Upload eDoc files through drag & drop or file selection
-2. View file signatures and verification status
+2. View file XAdES signatures and verification status
 3. Access document files contained in the container
 4. Download the original container or its contents
 
@@ -27,7 +27,7 @@ The web application allows users to:
 The Progressive Web Application (PWA) capabilities provide:
 
 1. Offline access to the viewer
-2. File handling for .edoc and .asice files directly in your operating system
+2. File handling for `.edoc`, `.asice` and `.sce` files directly in your operating system
 3. Same viewing capabilities as the web application
 
 ## Development
