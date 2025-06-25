@@ -233,7 +233,7 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
 
               <p>
                 ${msg(
-                  "eDoc Viewer is a simple tool for viewing and verifying electronic signature files. Here's what you need to know:",
+                  "eDoc Viewer is a simple tool for viewing and verifying XAdES electronic signature files. Here's what you need to know:",
                   { id: "legal.about_intro" },
                 )}
               </p>
@@ -359,7 +359,7 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
               </h3>
               <p>
                 ${msg(
-                  "eDoc Viewer is a web application that allows users to view and verify EU standard ASiC-E and Latvian eDoc electronic signature files (.asice, .edoc). The application processes files locally in your browser and does not upload your documents to any server.",
+                  "eDoc Viewer is a web application that allows users to view and verify EU standard ASiC-E and Latvian eDoc XAdES electronic signature files (.asice, .sce, .edoc). The application processes files locally in your browser and does not upload your documents to any server.",
                   { id: "legal.terms_description_content" },
                 )}
               </p>
@@ -520,7 +520,7 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
               </h3>
               <p>
                 ${msg(
-                  html`While eDoc Viewer tries to verify electronic signatures,
+                  html`While eDoc Viewer tries to verify XAdES electronic signatures,
                     for legally binding verification please use official
                     qualified validation services from
                     <a

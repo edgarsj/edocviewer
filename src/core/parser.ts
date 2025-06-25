@@ -56,7 +56,7 @@ export async function parseEdocFile(
 }
 
 /**
- * Verify signatures in an eDoc container
+ * Verify XAdES signatures in an eDoc container
  * @param container The parsed container
  * @returns Array of signature validation results
  */
@@ -70,7 +70,7 @@ export async function verifyEdocSignatures(
     const signatureResults = await Promise.all(
       container.signatures.map(async (signature) => {
         try {
-          // Verify the signature
+          // Verify XAdES signature
           const result = await verifySignature(signature, container.files);
 
           // Format signer info
