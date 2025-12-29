@@ -192,6 +192,16 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
       margin-top: 0.25rem;
     }
 
+    .update-check-link {
+      margin-left: 0.5rem;
+      color: var(--sl-color-gray-400);
+      cursor: pointer;
+    }
+
+    .update-check-link:hover {
+      color: var(--sl-color-primary-600);
+    }
+
     .hidden {
       display: none !important;
     }
@@ -215,6 +225,8 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
   @state() private processingCount = 0; // Track active file processing
   @state() private version = VERSION;
   @state() private currentFileName = ""; // Track current file name
+  @state() private checkingForUpdates = false;
+  @state() private updateStatus: "idle" | "checking" | "updating" | "up-to-date" = "idle";
 
   connectedCallback() {
     super.connectedCallback();
@@ -528,6 +540,21 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
               <span title="${this.version.commit}"
                 >(${this.version.commit.substring(0, 7)})</span
               >
+              <a
+                href="#"
+                class="update-check-link"
+                title="${msg("Check for updates", { id: "app.check_updates" })}"
+                @click=${(e: Event) => {
+                  e.preventDefault();
+                  this.checkForUpdates();
+                }}
+              >${this.updateStatus === "checking"
+                  ? msg("Checking...", { id: "app.checking_updates" })
+                  : this.updateStatus === "updating"
+                    ? msg("Updating...", { id: "app.updating" })
+                    : this.updateStatus === "up-to-date"
+                      ? msg("Up to date", { id: "app.up_to_date" })
+                      : html`<sl-icon name="arrow-clockwise" style="vertical-align: -0.125em;"></sl-icon>`}</a>
             </span>
           </p>
           <p class="footer-links">
@@ -811,5 +838,61 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
     this.container = null;
     this.signatures = [];
     this.error = "";
+  }
+
+  private async checkForUpdates() {
+    if (!("serviceWorker" in navigator)) {
+      return;
+    }
+
+    this.updateStatus = "checking";
+
+    try {
+      const registration = await navigator.serviceWorker.getRegistration();
+      if (!registration) {
+        this.updateStatus = "up-to-date";
+        setTimeout(() => (this.updateStatus = "idle"), 2000);
+        return;
+      }
+
+      // Force check for updates
+      await registration.update();
+
+      // Check if there's a waiting worker (new version ready)
+      const waitingWorker = registration.waiting;
+      if (waitingWorker) {
+        this.updateStatus = "updating";
+        // Tell the waiting worker to skip waiting and activate
+        waitingWorker.postMessage({ type: "SKIP_WAITING" });
+        // Reload after the new service worker takes over
+        navigator.serviceWorker.addEventListener("controllerchange", () => {
+          window.location.reload();
+        });
+        return;
+      }
+
+      // Check if there's an installing worker
+      const installingWorker = registration.installing;
+      if (installingWorker) {
+        this.updateStatus = "updating";
+        // Wait for it to finish installing
+        installingWorker.addEventListener("statechange", () => {
+          if (installingWorker.state === "installed") {
+            installingWorker.postMessage({ type: "SKIP_WAITING" });
+            navigator.serviceWorker.addEventListener("controllerchange", () => {
+              window.location.reload();
+            });
+          }
+        });
+        return;
+      }
+
+      // No update available
+      this.updateStatus = "up-to-date";
+      setTimeout(() => (this.updateStatus = "idle"), 2000);
+    } catch (error) {
+      console.error("Error checking for updates:", error);
+      this.updateStatus = "idle";
+    }
   }
 }

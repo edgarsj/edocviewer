@@ -386,6 +386,22 @@
   <source>Loading document...</source>
   <target>Atvēršana...</target>
 </trans-unit>
+<trans-unit id="app.check_updates">
+  <source>Check for updates</source>
+  <target>Pārbaudīt atjauninājumus</target>
+</trans-unit>
+<trans-unit id="app.checking_updates">
+  <source>Checking...</source>
+  <target>Pārbauda...</target>
+</trans-unit>
+<trans-unit id="app.updating">
+  <source>Updating...</source>
+  <target>Atjaunina...</target>
+</trans-unit>
+<trans-unit id="app.up_to_date">
+  <source>Up to date</source>
+  <target>Aktuāla versija</target>
+</trans-unit>
 </body>
 </file>
 </xliff>

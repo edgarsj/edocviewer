@@ -10,6 +10,8 @@
 
     export const templates = {
       'app.backButtonLabel': `Atpakaļ`,
+'app.check_updates': `Pārbaudīt atjauninājumus`,
+'app.checking_updates': `Pārbauda...`,
 'app.description': `Skatīt un pārbaudīt EU standarta ASiC-E un Latvijas eDoc elektroniskā paraksta failus (.asice, .edoc)`,
 'app.installButton': `Instalēt jūsu ierīcē`,
 'app.learn_more': `Vairāk`,
@@ -17,6 +19,8 @@
 'app.processing_document': `Dokumenta apstrāde...`,
 'app.questions_support': `Jautājumiem, ieteikumiem un kļūdu ziņojumiem`,
 'app.title': `eDoc Viewer`,
+'app.up_to_date': `Aktuāla versija`,
+'app.updating': `Atjaunina...`,
 'app.version': `Versija`,
 'documents.noDocuments': `Nav dokumentu`,
 'documents.title': `Dokumenti`,
