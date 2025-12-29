@@ -1,9 +1,9 @@
+/* Import Shoelace styles for the light theme - must come before @tailwind */
+@import "@shoelace-style/shoelace/dist/themes/light.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Import Shoelace styles for the light theme */
-@import "@shoelace-style/shoelace/dist/themes/light.css";
 
 /* Override Shoelace theme variables with our edoc green theme */
 :root {

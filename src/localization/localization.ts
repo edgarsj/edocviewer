@@ -14,7 +14,7 @@ export const { getLocale, setLocale, msg, str } = configureLocalization({
     // Only load non-English locales
     if (locale !== "en") {
       try {
-        const module = await import(`../generated/locales/${locale}`);
+        const module = await import(`../generated/locales/${locale}.ts`);
         return module.default || module;
       } catch (error) {
         console.error(`Error loading locale ${locale}:`, error);
