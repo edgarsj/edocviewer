@@ -4,6 +4,16 @@ export interface SignerInfo {
   signatureDate: string; // Add signature date
 }
 
+export interface RevocationInfo {
+  status: "valid" | "revoked" | "unknown";
+  method?: "OCSP" | "CRL";
+}
+
+export interface TimestampInfo {
+  time: string;
+  valid: boolean;
+}
+
 export interface SignatureValidationResult {
   signerInfo: SignerInfo;
   valid: boolean;
@@ -12,6 +22,8 @@ export interface SignatureValidationResult {
   signedFiles: string[];
   unsignedFiles: string[];
   originalVerificationValid: boolean;
+  revocation?: RevocationInfo;
+  timestamp?: TimestampInfo;
 }
 
 export interface EdocContainer {
@@ -70,8 +82,11 @@ export async function verifyEdocSignatures(
     const signatureResults = await Promise.all(
       container.signatures.map(async (signature) => {
         try {
-          // Verify the signature
-          const result = await verifySignature(signature, container.files);
+          // Verify the signature with full certificate checks
+          const result = await verifySignature(signature, container.files, {
+            checkRevocation: true,
+            verifyTimestamps: true,
+          });
 
           // Format signer info
           let signerName = "";
@@ -126,6 +141,22 @@ export async function verifyEdocSignatures(
             (file) => !signedFiles.includes(file),
           );
 
+          // Extract revocation info if available
+          const revocation: RevocationInfo | undefined = result.revocation
+            ? {
+                status: result.revocation.status,
+                method: result.revocation.method,
+              }
+            : undefined;
+
+          // Extract timestamp info if available
+          const timestamp: TimestampInfo | undefined = result.timestamp
+            ? {
+                time: result.timestamp.time,
+                valid: result.timestamp.valid,
+              }
+            : undefined;
+
           return {
             signerInfo: {
               signerName,
@@ -142,6 +173,8 @@ export async function verifyEdocSignatures(
             signedFiles,
             unsignedFiles,
             originalVerificationValid: result.isValid,
+            revocation,
+            timestamp,
           };
         } catch (error) {
           console.error("Error verifying signature:", error);

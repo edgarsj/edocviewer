@@ -1,0 +1,6 @@
+name = "edocviewer-cors-proxy"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+
+# Optional: custom domain (uncomment and configure if needed)
+# routes = [{ pattern = "cors-proxy.edocviewer.app", zone_name = "edocviewer.app" }]
