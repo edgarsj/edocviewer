@@ -1,0 +1,68 @@
+{
+  "name": "eDoc Viewer",
+  "short_name": "eDoc",
+  "description": "View and verify EU standard ASiC-E and Latvian eDoc files",
+  "icons": [
+    {
+      "src": "icons/edoc-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshots/desktop_doc.png",
+      "sizes": "1210x800",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "screenshots/desktop_drop.png",
+      "sizes": "1210x800",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "screenshots/mobile_doc.png",
+      "sizes": "500x800",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "screenshots/mobile_drop.png",
+      "sizes": "500x800",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#10B981",
+  "background_color": "#ECFDF5",
+  "file_handlers": [
+    {
+      "action": "index.html",
+      "accept": {
+        "application/vnd.etsi.asic-e+zip": [".asice"],
+        "application/octet-stream": [".edoc"],
+        "application/zip": [".asice", ".edoc"]
+      }
+    }
+  ],
+  "launch_handler": {
+    "client_mode": ["focus-existing", "auto"]
+  }
+}
