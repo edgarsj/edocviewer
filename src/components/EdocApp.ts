@@ -664,6 +664,9 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
       this.signatures = await verifyEdocSignaturesQuick(this.container);
       this.loading = false;
 
+      // Track view-edoc event with file extension
+      this.trackViewEdoc(file.name);
+
       // Request a re-render to show quick results
       await this.updateComplete;
 
@@ -898,6 +901,30 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
     this.container = null;
     this.signatures = [];
     this.error = "";
+  }
+
+  /**
+   * Track view-edoc event to Plausible with file extension only (privacy-safe)
+   */
+  private trackViewEdoc(fileName: string) {
+    const ext = fileName.split('.').pop()?.toLowerCase() || 'unknown';
+
+    // Use window.plausible if available, otherwise direct API call (PWA)
+    if (typeof (window as any).plausible === 'function') {
+      (window as any).plausible('view-edoc', { props: { ext } });
+    } else {
+      // PWA fallback - direct API call, no pageview tracking
+      fetch('https://n.zenomy.tech/api/event', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: 'view-edoc',
+          url: 'https://edocviewer.app/pwa',
+          domain: 'edocviewer.app',
+          props: { ext }
+        })
+      }).catch(() => {});
+    }
   }
 
   private async checkForUpdates() {

@@ -6,8 +6,3 @@ compatibility_date = "2024-12-01"
 routes = [
   { pattern = "cors-proxy.edocviewer.app", custom_domain = true }
 ]
-
-# R2 bucket for access logs (optional - logging skipped if not configured)
-[[r2_buckets]]
-binding = "LOGS"
-bucket_name = "edocviewer-logs"

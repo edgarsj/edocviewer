@@ -231,9 +231,9 @@
   <source>We use Plausible Analytics, a privacy-friendly analytics service, to collect anonymous usage data. This data helps us improve the application but cannot be used to identify individual users. No personal information is collected, and no cookies are used for tracking purposes.</source>
   <target>Mēs izmantojam Plausible Analytics, privātumam draudzīgu analītikas pakalpojumu, lai apkopotu anonīmus lietošanas datus. Šie dati palīdz uzlabot lietotni, bet tos nevar izmantot atsevišķu lietotāju identificēšanai. Netiek vākta nekāda personiskā informācija, un netiek izmantotas sīkdatnes izsekošanas nolūkos.</target>
 </trans-unit>
-<trans-unit id="legal.privacy_analytics_pwa">
-  <source>Analytics are only enabled in the web version. The Progressive Web App (PWA) version does not include any analytics.</source>
-  <target>Analītika darbojas tikai tīmekļa versijā. Progresīvās tīmekļa lietotnes (PWA) versijā tā netiek veikta.</target>
+<trans-unit id="legal.privacy_analytics_events">
+  <source>We count document verifications and file types to understand usage patterns. We log certificate verification URLs accessed through our proxy to improve compatibility. No document contents, filenames, or personal information is ever transmitted.</source>
+  <target>Mēs uzskaitām dokumentu pārbaudes un faila tipus, lai izprastu lietošanas tendences. Reģistrējam sertifikātu pārbaudes saites, kas tiek izmantotas caur mūsu proxy, lai uzlabotu saderību. Dokumentu saturs, failu nosaukumi vai personiskā informācija nekad netiek pārsūtīta.</target>
 </trans-unit>
 <trans-unit id="legal.privacy_cookies_title">
   <source>3. Local Storage</source>
