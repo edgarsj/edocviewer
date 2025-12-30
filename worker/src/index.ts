@@ -3,6 +3,10 @@
  * Only allows requests from edocviewer origins to known certificate infrastructure
  */
 
+interface Env {
+  AXIOM_TOKEN?: string;
+}
+
 // Fire-and-forget logging to Plausible - never blocks or fails the response
 function logToPlausible(ctx: ExecutionContext, type: 'blocked' | 'accessed', url: string) {
   ctx.waitUntil(fetch('https://n.zenomy.tech/api/event', {
@@ -17,6 +21,20 @@ function logToPlausible(ctx: ExecutionContext, type: 'blocked' | 'accessed', url
       domain: 'edocviewer.app',
       props: { target: new URL(url).hostname }
     })
+  }).catch(() => {}));
+}
+
+// Fire-and-forget logging to Axiom for full URL analysis - never blocks or fails the response
+function logToAxiom(env: Env, ctx: ExecutionContext, type: 'blocked' | 'accessed', url: string) {
+  if (!env.AXIOM_TOKEN) return;
+
+  ctx.waitUntil(fetch('https://api.axiom.co/v1/datasets/edocviewer-proxy/ingest', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${env.AXIOM_TOKEN}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify([{ type, url, _time: new Date().toISOString() }])
   }).catch(() => {}));
 }
 
@@ -48,8 +66,8 @@ const ALLOWED_ORIGINS = [
   'http://localhost:8080',
 ];
 
-// Cloudflare Pages preview deployments pattern
-const PAGES_PREVIEW_PATTERN = /^https:\/\/[a-z0-9]+\.edocviewer\.pages\.dev$/;
+// Cloudflare Pages preview deployments pattern (includes hyphens for branch names)
+const PAGES_PREVIEW_PATTERN = /^https:\/\/[a-z0-9-]+\.edocviewer\.pages\.dev$/;
 
 // Only proxy to known certificate infrastructure domains
 const ALLOWED_DEST_PATTERNS = [
@@ -79,7 +97,7 @@ function isAllowedDestination(url: string): boolean {
 }
 
 export default {
-  async fetch(request: Request, _env: unknown, ctx: ExecutionContext): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const origin = request.headers.get('Origin');
 
     // Check Origin header (browsers can't spoof this)
@@ -111,6 +129,7 @@ export default {
 
     if (!isAllowedDestination(url)) {
       logToPlausible(ctx, 'blocked', url);
+      logToAxiom(env, ctx, 'blocked', url);
       return new Response('Destination not allowed', { status: 400 });
     }
 
