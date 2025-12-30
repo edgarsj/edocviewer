@@ -177,6 +177,7 @@ export default {
       corsResponse.headers.set('Access-Control-Allow-Origin', origin!);
 
       logToPlausible(ctx, 'accessed', url);
+      logToAxiom(env, ctx, 'accessed', url);
       return corsResponse;
     } catch (error) {
       return new Response(`Proxy error: ${(error as Error).message}`, {
