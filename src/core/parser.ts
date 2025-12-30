@@ -230,12 +230,12 @@ export async function verifyEdocSignatureFull(
       },
     });
 
-    // Extract revocation info if available
-    const revocation: RevocationInfo | undefined = result.revocation
+    // Extract revocation info if available (nested in certificate result)
+    const revocation: RevocationInfo | undefined = result.certificate.revocation
       ? {
-          isValid: result.revocation.isValid,
-          status: result.revocation.status,
-          method: result.revocation.method,
+          isValid: result.certificate.revocation.isValid,
+          status: result.certificate.revocation.status,
+          method: result.certificate.revocation.method,
         }
       : undefined;
 
