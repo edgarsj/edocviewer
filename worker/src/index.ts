@@ -3,6 +3,28 @@
  * Only allows requests from edocviewer origins to known certificate infrastructure
  */
 
+interface Env {
+  LOGS?: R2Bucket;
+}
+
+// Fire-and-forget logging to R2 - never blocks or fails the response
+function logRequest(env: Env, ctx: ExecutionContext, type: 'blocked' | 'accessed', url: string) {
+  if (!env.LOGS) return;
+
+  ctx.waitUntil((async () => {
+    try {
+      const line = `${new Date().toISOString()}\t${url}\n`;
+      const key = `${type}/${new Date().toISOString().slice(0, 10)}.log`;
+
+      const existing = await env.LOGS!.get(key);
+      const content = (existing ? await existing.text() : '') + line;
+      await env.LOGS!.put(key, content);
+    } catch {
+      // Silently ignore logging failures
+    }
+  })());
+}
+
 // Cache TTLs in seconds
 const CACHE_TTL = {
   crl: 6 * 60 * 60,      // 6 hours for CRLs
@@ -62,7 +84,7 @@ function isAllowedDestination(url: string): boolean {
 }
 
 export default {
-  async fetch(request: Request): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const origin = request.headers.get('Origin');
 
     // Check Origin header (browsers can't spoof this)
@@ -93,6 +115,7 @@ export default {
     }
 
     if (!isAllowedDestination(url)) {
+      logRequest(env, ctx, 'blocked', url);
       return new Response('Destination not allowed', { status: 400 });
     }
 
@@ -139,6 +162,7 @@ export default {
       });
       corsResponse.headers.set('Access-Control-Allow-Origin', origin!);
 
+      logRequest(env, ctx, 'accessed', url);
       return corsResponse;
     } catch (error) {
       return new Response(`Proxy error: ${(error as Error).message}`, {
