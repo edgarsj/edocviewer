@@ -1,13 +1,14 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { msg } from "@lit/localize";
-import { SignatureValidationResult } from "../core/parser";
+import { SignatureValidationResult, VerificationStatus } from "../core/parser";
 import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
 import { openLegalModal } from "../utils/legalNavigation";
 import "@shoelace-style/shoelace/dist/components/details/details.js";
 import "@shoelace-style/shoelace/dist/components/badge/badge.js";
 import "@shoelace-style/shoelace/dist/components/icon/icon.js";
 import "@shoelace-style/shoelace/dist/components/tooltip/tooltip.js";
+import "@shoelace-style/shoelace/dist/components/spinner/spinner.js";
 
 /**
  * Component for displaying eDoc signature information
@@ -72,6 +73,11 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
       border: 1px solid var(--sl-color-danger-300);
     }
 
+    .pending-icon-container {
+      background-color: var(--sl-color-warning-100);
+      border: 1px solid var(--sl-color-warning-300);
+    }
+
     .status-icon {
       font-size: 3rem;
       display: flex;
@@ -85,6 +91,16 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
 
     .invalid-icon {
       color: var(--sl-color-danger-600);
+    }
+
+    .pending-icon {
+      color: var(--sl-color-warning-600);
+    }
+
+    .pending-icon sl-spinner {
+      font-size: 2.5rem;
+      --indicator-color: var(--sl-color-warning-600);
+      --track-color: var(--sl-color-warning-200);
     }
 
     .error-message {
@@ -193,11 +209,33 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
       return html``;
     }
 
-    const { valid, error } = this.signature;
-    const statusTitle = valid
-      ? msg("Valid signature", { id: "signatures.valid" })
-      : msg("Invalid signature", { id: "signatures.invalid" }) +
+    const { valid, error, verificationStatus } = this.signature;
+    const isPending = verificationStatus === 'pending';
+
+    // Determine status title based on verification state
+    let statusTitle: string;
+    if (isPending) {
+      statusTitle = msg("Verifying certificate status...", { id: "signatures.verifying" });
+    } else if (valid) {
+      statusTitle = msg("Valid signature", { id: "signatures.valid" });
+    } else {
+      statusTitle = msg("Invalid signature", { id: "signatures.invalid" }) +
         (error ? `: ${error}` : "");
+    }
+
+    // Determine icon container class
+    const iconContainerClass = isPending
+      ? "pending-icon-container"
+      : valid
+        ? "valid-icon-container"
+        : "invalid-icon-container";
+
+    // Determine icon class
+    const iconClass = isPending
+      ? "pending-icon"
+      : valid
+        ? "valid-icon"
+        : "invalid-icon";
 
     return html`
       <div class="signature-info">
@@ -210,19 +248,19 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
         <!-- Status icon as a circular badge in top-right corner -->
         <sl-tooltip content="${statusTitle}">
           <div
-            class="status-icon-container ${valid
-              ? "valid-icon-container"
-              : "invalid-icon-container"}"
+            class="status-icon-container ${iconContainerClass}"
             role="img"
             aria-label="${statusTitle}"
           >
-            <div class="status-icon ${valid ? "valid-icon" : "invalid-icon"}">
-              <sl-icon name="${valid ? "check-lg" : "x-lg"}"></sl-icon>
+            <div class="status-icon ${iconClass}">
+              ${isPending
+                ? html`<sl-spinner></sl-spinner>`
+                : html`<sl-icon name="${valid ? "check-lg" : "x-lg"}"></sl-icon>`}
             </div>
           </div>
         </sl-tooltip>
 
-        ${error
+        ${error && !isPending
           ? html`<div class="error-message">
               <sl-tooltip
                 content="${msg(

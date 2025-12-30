@@ -105,5 +105,6 @@
 'signatures.title': `Paraksti`,
 'signatures.unsignedFiles': `Neparakstītie faili`,
 'signatures.valid': `Derīgs`,
+'signatures.verifying': `Paraksta sertifikāta pārbaude...`,
     };
   

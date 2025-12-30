@@ -27,7 +27,8 @@ import {
   EdocContainer,
   SignatureValidationResult,
   parseEdocFile,
-  verifyEdocSignatures,
+  verifyEdocSignaturesQuick,
+  verifyEdocSignatureFull,
 } from "../core/parser";
 
 /**
@@ -658,16 +659,75 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
         return;
       }
 
-      // Process signatures
-      this.signatures = await verifyEdocSignatures(this.container);
+      // Phase 1: Quick verification (crypto only, no network calls)
+      // This shows results immediately with pending status
+      this.signatures = await verifyEdocSignaturesQuick(this.container);
+      this.loading = false;
+
+      // Request a re-render to show quick results
+      await this.updateComplete;
+
+      // Check if this processing was superseded
+      if (currentProcessingId !== this.processingCount) {
+        return;
+      }
+
+      // Phase 2: Full verification (revocation + timestamp checks)
+      // Run async for each signature that needs it
+      this.runFullVerification(this.container, currentProcessingId);
     } catch (error) {
       console.error("File processing error:", error);
       this.error = `Error processing file: ${(error as Error).message}`;
-    } finally {
       this.loading = false;
 
       // Wait for rendering to complete
       await this.updateComplete;
+    }
+  }
+
+  /**
+   * Run full verification for all signatures that need it
+   * Updates signatures array progressively as each completes
+   */
+  private async runFullVerification(
+    container: EdocContainer,
+    processingId: number,
+  ) {
+    // Verify each signature that's still pending
+    for (let i = 0; i < this.signatures.length; i++) {
+      // Check if this processing was superseded
+      if (processingId !== this.processingCount) {
+        return;
+      }
+
+      const sig = this.signatures[i];
+      if (sig.verificationStatus !== 'pending') {
+        continue; // Skip already failed signatures
+      }
+
+      try {
+        const fullResult = await verifyEdocSignatureFull(
+          container,
+          sig.signatureIndex,
+          sig,
+        );
+
+        // Check again if superseded before updating state
+        if (processingId !== this.processingCount) {
+          return;
+        }
+
+        // Update the specific signature in the array
+        this.signatures = this.signatures.map((s, idx) =>
+          idx === i ? fullResult : s
+        );
+      } catch (error) {
+        console.error(`Error in full verification for signature ${i}:`, error);
+        // Mark as failed on error
+        this.signatures = this.signatures.map((s, idx) =>
+          idx === i ? { ...s, verificationStatus: 'failed' as const } : s
+        );
+      }
     }
   }
 

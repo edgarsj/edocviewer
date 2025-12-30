@@ -1,6 +1,6 @@
 {
   "name": "edoc-viewer",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Viewer for ASiC-E/eDoc files",
   "main": "dist/webapp/index.js",
   "type": "module",

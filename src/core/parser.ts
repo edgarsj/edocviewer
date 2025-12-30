@@ -14,6 +14,8 @@ export interface TimestampInfo {
   valid: boolean;
 }
 
+export type VerificationStatus = 'pending' | 'verified' | 'failed';
+
 export interface SignatureValidationResult {
   signerInfo: SignerInfo;
   valid: boolean;
@@ -24,6 +26,10 @@ export interface SignatureValidationResult {
   originalVerificationValid: boolean;
   revocation?: RevocationInfo;
   timestamp?: TimestampInfo;
+  /** Status of full verification (including revocation checks) */
+  verificationStatus: VerificationStatus;
+  /** Index to correlate with original signature for updates */
+  signatureIndex: number;
 }
 
 export interface EdocContainer {
@@ -68,11 +74,12 @@ export async function parseEdocFile(
 }
 
 /**
- * Verify signatures in an eDoc container
+ * Quick verification of signatures (crypto only, no revocation checks)
+ * This is fast and can be used to show initial results while full verification runs
  * @param container The parsed container
- * @returns Array of signature validation results
+ * @returns Array of signature validation results with verificationStatus='pending'
  */
-export async function verifyEdocSignatures(
+export async function verifyEdocSignaturesQuick(
   container: EdocContainer,
 ): Promise<SignatureValidationResult[]> {
   try {
@@ -80,15 +87,12 @@ export async function verifyEdocSignatures(
     const { verifySignature } = await loadEdockit();
 
     const signatureResults = await Promise.all(
-      container.signatures.map(async (signature) => {
+      container.signatures.map(async (signature, index) => {
         try {
-          // Verify the signature with full certificate checks
+          // Quick verification - crypto only, no network calls
           const result = await verifySignature(signature, container.files, {
-            checkRevocation: true,
-            verifyTimestamps: true,
-            revocationOptions: {
-              proxyUrl: 'https://cors-proxy.edocviewer.app/?url=',
-            },
+            checkRevocation: false,
+            verifyTimestamps: false,
           });
 
           // Format signer info
@@ -144,21 +148,7 @@ export async function verifyEdocSignatures(
             (file) => !signedFiles.includes(file),
           );
 
-          // Extract revocation info if available
-          const revocation: RevocationInfo | undefined = result.revocation
-            ? {
-                status: result.revocation.status,
-                method: result.revocation.method,
-              }
-            : undefined;
-
-          // Extract timestamp info if available
-          const timestamp: TimestampInfo | undefined = result.timestamp
-            ? {
-                time: result.timestamp.time,
-                valid: result.timestamp.valid,
-              }
-            : undefined;
+          const cryptoValid = result.isValid && allDocumentsSigned;
 
           return {
             signerInfo: {
@@ -166,7 +156,7 @@ export async function verifyEdocSignatures(
               personalId,
               signatureDate,
             },
-            valid: result.isValid && allDocumentsSigned,
+            valid: cryptoValid,
             error: result.isValid
               ? allDocumentsSigned
                 ? null
@@ -176,9 +166,10 @@ export async function verifyEdocSignatures(
             signedFiles,
             unsignedFiles,
             originalVerificationValid: result.isValid,
-            revocation,
-            timestamp,
-          };
+            // Mark as pending - full verification still needed
+            verificationStatus: cryptoValid ? 'pending' : 'failed',
+            signatureIndex: index,
+          } as SignatureValidationResult;
         } catch (error) {
           console.error("Error verifying signature:", error);
           return {
@@ -193,7 +184,9 @@ export async function verifyEdocSignatures(
             signedFiles: [],
             unsignedFiles: container.documentFileList || [],
             originalVerificationValid: false,
-          };
+            verificationStatus: 'failed',
+            signatureIndex: index,
+          } as SignatureValidationResult;
         }
       }),
     );
@@ -202,6 +195,80 @@ export async function verifyEdocSignatures(
   } catch (error) {
     console.error("Error verifying signatures:", error);
     throw new Error(`Failed to verify signatures: ${(error as Error).message}`);
+  }
+}
+
+/**
+ * Full verification of a single signature (including revocation and timestamp checks)
+ * This is slow due to network calls for CRL/OCSP data
+ * @param container The parsed container
+ * @param signatureIndex Index of the signature to verify
+ * @param quickResult The quick verification result to update
+ * @returns Updated signature validation result with full verification status
+ */
+export async function verifyEdocSignatureFull(
+  container: EdocContainer,
+  signatureIndex: number,
+  quickResult: SignatureValidationResult,
+): Promise<SignatureValidationResult> {
+  // If quick verification already failed, no need to do full verification
+  if (quickResult.verificationStatus === 'failed') {
+    return quickResult;
+  }
+
+  try {
+    const { verifySignature } = await loadEdockit();
+    const signature = container.signatures[signatureIndex];
+
+    // Full verification with revocation and timestamp checks
+    const result = await verifySignature(signature, container.files, {
+      checkRevocation: true,
+      verifyTimestamps: true,
+      revocationOptions: {
+        proxyUrl: 'https://cors-proxy.edocviewer.app/?url=',
+      },
+    });
+
+    // Extract revocation info if available
+    const revocation: RevocationInfo | undefined = result.revocation
+      ? {
+          status: result.revocation.status,
+          method: result.revocation.method,
+        }
+      : undefined;
+
+    // Extract timestamp info if available
+    const timestamp: TimestampInfo | undefined = result.timestamp
+      ? {
+          time: result.timestamp.time,
+          valid: result.timestamp.valid,
+        }
+      : undefined;
+
+    // Determine final validity - must pass both crypto and revocation checks
+    const isFullyValid = result.isValid && quickResult.allDocumentsSigned;
+    const revocationValid = !revocation || revocation.status === 'valid';
+    const finalValid = isFullyValid && revocationValid;
+
+    return {
+      ...quickResult,
+      valid: finalValid,
+      error: !result.isValid
+        ? result.errors?.[0] || "Verification failed"
+        : !revocationValid
+          ? `Certificate ${revocation?.status || 'check failed'}`
+          : quickResult.error,
+      revocation,
+      timestamp,
+      verificationStatus: finalValid ? 'verified' : 'failed',
+    };
+  } catch (error) {
+    console.error("Error in full signature verification:", error);
+    return {
+      ...quickResult,
+      verificationStatus: 'failed',
+      error: quickResult.error || (error as Error).message,
+    };
   }
 }
 

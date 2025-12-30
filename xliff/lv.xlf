@@ -22,6 +22,10 @@
   <source>Valid signature</source>
   <target>Derīgs</target>
 </trans-unit>
+<trans-unit id="signatures.verifying">
+  <source>Verifying certificate status...</source>
+  <target>Paraksta sertifikāta pārbaude...</target>
+</trans-unit>
 <trans-unit id="signatures.invalid">
   <source>Invalid signature</source>
   <target>Nederīgs paraksts</target>
