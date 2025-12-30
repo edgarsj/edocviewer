@@ -3,6 +3,28 @@
  * Only allows requests from edocviewer origins to known certificate infrastructure
  */
 
+// Cache TTLs in seconds
+const CACHE_TTL = {
+  crl: 6 * 60 * 60,      // 6 hours for CRLs
+  cert: 24 * 60 * 60,    // 24 hours for CA certificates
+  ocsp: 10 * 60,         // 10 minutes for OCSP responses
+  default: 60 * 60,      // 1 hour fallback
+};
+
+function getCacheTtl(url: string): number {
+  const lowerUrl = url.toLowerCase();
+  if (lowerUrl.includes('/ocsp') || lowerUrl.includes('ocsp.')) {
+    return CACHE_TTL.ocsp;
+  }
+  if (lowerUrl.endsWith('.crl')) {
+    return CACHE_TTL.crl;
+  }
+  if (lowerUrl.match(/\.(crt|cer|der)$/)) {
+    return CACHE_TTL.cert;
+  }
+  return CACHE_TTL.default;
+}
+
 const ALLOWED_ORIGINS = [
   'https://edocviewer.app',
   'https://www.edocviewer.app',
@@ -14,9 +36,18 @@ const PAGES_PREVIEW_PATTERN = /^https:\/\/[a-z0-9]+\.edocviewer\.pages\.dev$/;
 
 // Only proxy to known certificate infrastructure domains
 const ALLOWED_DEST_PATTERNS = [
-  /^https?:\/\/[^/]*\.sk\.ee\//,                    // Estonian SK (SK ID Solutions)
-  /^https?:\/\/ocsp\.[^/]+\//,                      // OCSP responders
-  /^https?:\/\/[^/]+\/.*\.(crl|crt|cer|der)(\?.*)?$/i,  // CRL/cert files
+  // Latvian eParaksts (LVRTC)
+  /^https?:\/\/(www\.)?eparaksts\.lv\//,            // eparaksts.lv (certs, CRLs)
+  /^https?:\/\/ocsp\.eparaksts\.lv(\/|$)/,          // OCSP responder
+
+  // Estonian SK ID Solutions
+  /^https?:\/\/c\.sk\.ee\//,                        // CA certificates
+  /^https?:\/\/www\.sk\.ee\/crls\//,                // CRLs
+  /^https?:\/\/ocsp\.sk\.ee(\/|$)/,                 // OCSP responder
+
+  // Generic patterns for other EU trust services
+  /^https?:\/\/ocsp\.[^/]+\//,                      // OCSP responders (ocsp.*)
+  /^https?:\/\/[^/]+\/.*\.(crl|crt|cer|der)(\?.*)?$/i,  // CRL/cert files by extension
 ];
 
 function isAllowedOrigin(origin: string | null): boolean {
@@ -66,23 +97,49 @@ export default {
     }
 
     try {
-      // Fetch the certificate/CRL
-      const response = await fetch(url, {
-        headers: {
-          'User-Agent': 'edocviewer-cors-proxy/1.0',
-        },
-      });
+      // Create cache key based on destination URL
+      const cacheKey = new Request(new URL(request.url).toString(), request);
+      const cache = caches.default;
 
-      // Return with CORS headers
-      return new Response(response.body, {
+      // Check edge cache first
+      let response = await cache.match(cacheKey);
+
+      if (!response) {
+        // Cache miss - fetch from origin
+        const originResponse = await fetch(url, {
+          headers: {
+            'User-Agent': 'edocviewer-cors-proxy/1.0',
+          },
+        });
+
+        const ttl = getCacheTtl(url);
+
+        // Create response with cache headers
+        response = new Response(originResponse.body, {
+          status: originResponse.status,
+          headers: {
+            'Content-Type':
+              originResponse.headers.get('Content-Type') ||
+              'application/octet-stream',
+            'Cache-Control': `public, max-age=${ttl}`,
+          },
+        });
+
+        // Store in edge cache (only cache successful responses)
+        if (originResponse.status === 200) {
+          // Clone response before caching (body can only be read once)
+          await cache.put(cacheKey, response.clone());
+        }
+      }
+
+      // Add CORS headers to response
+      const corsResponse = new Response(response.body, {
         status: response.status,
-        headers: {
-          'Access-Control-Allow-Origin': origin!,
-          'Content-Type':
-            response.headers.get('Content-Type') || 'application/octet-stream',
-          'Cache-Control': 'public, max-age=3600', // Cache for 1 hour
-        },
+        headers: response.headers,
       });
+      corsResponse.headers.set('Access-Control-Allow-Origin', origin!);
+
+      return corsResponse;
     } catch (error) {
       return new Response(`Proxy error: ${(error as Error).message}`, {
         status: 502,
