@@ -86,6 +86,9 @@ export async function verifyEdocSignatures(
           const result = await verifySignature(signature, container.files, {
             checkRevocation: true,
             verifyTimestamps: true,
+            revocationOptions: {
+              proxyUrl: 'https://cors-proxy.edocviewer.app/?url=',
+            },
           });
 
           // Format signer info
