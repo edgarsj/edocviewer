@@ -30,6 +30,10 @@
   <source>Invalid signature</source>
   <target>Nederīgs paraksts</target>
 </trans-unit>
+<trans-unit id="signatures.unknown">
+  <source>Could not verify certificate revocation status</source>
+  <target>Nevarēja noteikt paraksta derīguma statusu</target>
+</trans-unit>
 <trans-unit id="signatures.signedBy">
   <source>Signed by:</source>
   <target>Parakstījis:</target>

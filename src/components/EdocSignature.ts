@@ -211,11 +211,14 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
 
     const { valid, error, verificationStatus } = this.signature;
     const isPending = verificationStatus === 'pending';
+    const isUnknown = verificationStatus === 'unknown';
 
     // Determine status title based on verification state
     let statusTitle: string;
     if (isPending) {
       statusTitle = msg("Verifying certificate status...", { id: "signatures.verifying" });
+    } else if (isUnknown) {
+      statusTitle = msg("Could not verify certificate revocation status", { id: "signatures.unknown" });
     } else if (valid) {
       statusTitle = msg("Valid signature", { id: "signatures.valid" });
     } else {
@@ -224,14 +227,14 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
     }
 
     // Determine icon container class
-    const iconContainerClass = isPending
+    const iconContainerClass = isPending || isUnknown
       ? "pending-icon-container"
       : valid
         ? "valid-icon-container"
         : "invalid-icon-container";
 
     // Determine icon class
-    const iconClass = isPending
+    const iconClass = isPending || isUnknown
       ? "pending-icon"
       : valid
         ? "valid-icon"
@@ -255,7 +258,7 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
             <div class="status-icon ${iconClass}">
               ${isPending
                 ? html`<sl-spinner></sl-spinner>`
-                : html`<sl-icon name="${valid ? "check-lg" : "x-lg"}"></sl-icon>`}
+                : html`<sl-icon name="${isUnknown ? "question-lg" : valid ? "check-lg" : "x-lg"}"></sl-icon>`}
             </div>
           </div>
         </sl-tooltip>

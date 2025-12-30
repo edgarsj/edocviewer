@@ -14,7 +14,7 @@ export interface TimestampInfo {
   valid: boolean;
 }
 
-export type VerificationStatus = 'pending' | 'verified' | 'failed';
+export type VerificationStatus = 'pending' | 'verified' | 'failed' | 'unknown';
 
 export interface SignatureValidationResult {
   signerInfo: SignerInfo;
@@ -247,20 +247,28 @@ export async function verifyEdocSignatureFull(
 
     // Determine final validity - must pass both crypto and revocation checks
     const isFullyValid = result.isValid && quickResult.allDocumentsSigned;
-    const revocationValid = !revocation || revocation.status === 'valid';
-    const finalValid = isFullyValid && revocationValid;
+    const revocationValid = revocation?.status === 'valid';
+    const revocationUnknown = !revocation || revocation.status === 'unknown';
+    const revocationRevoked = revocation?.status === 'revoked';
+
+    // Determine verification status: verified (green), unknown (yellow), failed (red)
+    const verificationStatus: VerificationStatus = !isFullyValid || revocationRevoked
+      ? 'failed'
+      : revocationUnknown
+        ? 'unknown'
+        : 'verified';
 
     return {
       ...quickResult,
-      valid: finalValid,
+      valid: isFullyValid && revocationValid,
       error: !result.isValid
         ? result.errors?.[0] || "Verification failed"
-        : !revocationValid
-          ? `Certificate ${revocation?.status || 'check failed'}`
+        : revocationRevoked
+          ? `Certificate revoked`
           : quickResult.error,
       revocation,
       timestamp,
-      verificationStatus: finalValid ? 'verified' : 'failed',
+      verificationStatus,
     };
   } catch (error) {
     console.error("Error in full signature verification:", error);

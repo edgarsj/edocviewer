@@ -103,6 +103,7 @@
 'signatures.referencedFiles': `Parakstā iekļautie faili`,
 'signatures.signedBy': `Parakstījis:`,
 'signatures.title': `Paraksti`,
+'signatures.unknown': `Nevarēja noteikt paraksta derīguma statusu`,
 'signatures.unsignedFiles': `Neparakstītie faili`,
 'signatures.valid': `Derīgs`,
 'signatures.verifying': `Paraksta sertifikāta pārbaude...`,

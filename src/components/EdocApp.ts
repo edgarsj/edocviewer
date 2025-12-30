@@ -697,7 +697,8 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
     processingId: number,
   ) {
     // Verify each signature that's still pending
-    for (let i = 0; i < this.signatures.length; i++) {
+    const signatureCount = this.signatures.length;
+    for (let i = 0; i < signatureCount; i++) {
       // Check if this processing was superseded
       if (processingId !== this.processingCount) {
         return;
