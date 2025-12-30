@@ -54,7 +54,7 @@ function loadPlausibleAnalytics() {
   const script = document.createElement("script");
   script.defer = true;
   script.dataset.domain = "edocviewer.app";
-  script.src = "https://stats.zenomy.tech/js/script.js";
+  script.src = "https://n.zenomy.tech/js/script.js";
 
   // Add to document head
   document.head.appendChild(script);

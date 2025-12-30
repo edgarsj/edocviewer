@@ -438,8 +438,8 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
               </p>
               <p>
                 ${msg(
-                  "Analytics are only enabled in the web version. The Progressive Web App (PWA) version does not include any analytics.",
-                  { id: "legal.privacy_analytics_pwa" },
+                  "We count document verifications and file types to understand usage patterns. We log certificate verification URLs accessed through our proxy to improve compatibility. No document contents, filenames, or personal information is ever transmitted.",
+                  { id: "legal.privacy_analytics_events" },
                 )}
               </p>
 

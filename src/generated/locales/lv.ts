@@ -57,7 +57,7 @@
 'legal.disclaimer_warranty_content': `eDoc Viewer tiek piedāvāts "kāds tas ir", un mēs nevaram garantēt, ka tas vienmēr darbosies perfekti. Mēs to izveidojām, lai tas būtu noderīgs, taču dažreiz tas var nedarboties, kā gaidīts.`,
 'legal.disclaimer_warranty_title': `1. Bez garantijas`,
 'legal.privacy_analytics_content': `Mēs izmantojam Plausible Analytics, privātumam draudzīgu analītikas pakalpojumu, lai apkopotu anonīmus lietošanas datus. Šie dati palīdz uzlabot lietotni, bet tos nevar izmantot atsevišķu lietotāju identificēšanai. Netiek vākta nekāda personiskā informācija, un netiek izmantotas sīkdatnes izsekošanas nolūkos.`,
-'legal.privacy_analytics_pwa': `Analītika darbojas tikai tīmekļa versijā. Progresīvās tīmekļa lietotnes (PWA) versijā tā netiek veikta.`,
+'legal.privacy_analytics_events': `Mēs uzskaitām dokumentu pārbaudes un faila tipus, lai izprastu lietošanas tendences. Reģistrējam sertifikātu pārbaudes saites, kas tiek izmantotas caur mūsu proxy, lai uzlabotu saderību. Dokumentu saturs, failu nosaukumi vai personiskā informācija nekad netiek pārsūtīta.`,
 'legal.privacy_analytics_title': `2. Analītika`,
 'legal.privacy_cookies_content': `eDoc Viewer izmanto jūsu pārlūkprogrammas localStorage funkciju tikai jūsu valodas iestatījumu un lietotnes iestatījumu saglabāšanai. Netiek izmantotas trešo pušu sīkdatnes.`,
 'legal.privacy_cookies_title': `3. Lokālā krātuve`,
@@ -103,7 +103,9 @@
 'signatures.referencedFiles': `Parakstā iekļautie faili`,
 'signatures.signedBy': `Parakstījis:`,
 'signatures.title': `Paraksti`,
+'signatures.unknown': `Nevarēja noteikt paraksta derīguma statusu`,
 'signatures.unsignedFiles': `Neparakstītie faili`,
 'signatures.valid': `Derīgs`,
+'signatures.verifying': `Paraksta sertifikāta pārbaude...`,
     };
   
