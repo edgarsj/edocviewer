@@ -5,8 +5,9 @@ export interface SignerInfo {
 }
 
 export interface RevocationInfo {
-  status: "valid" | "revoked" | "unknown";
-  method?: "OCSP" | "CRL";
+  isValid: boolean;
+  status: "good" | "revoked" | "unknown" | "error";
+  method?: "ocsp" | "crl";
 }
 
 export interface TimestampInfo {
@@ -232,6 +233,7 @@ export async function verifyEdocSignatureFull(
     // Extract revocation info if available
     const revocation: RevocationInfo | undefined = result.revocation
       ? {
+          isValid: result.revocation.isValid,
           status: result.revocation.status,
           method: result.revocation.method,
         }
@@ -247,9 +249,9 @@ export async function verifyEdocSignatureFull(
 
     // Determine final validity - must pass both crypto and revocation checks
     const isFullyValid = result.isValid && quickResult.allDocumentsSigned;
-    const revocationValid = revocation?.status === 'valid';
-    const revocationUnknown = !revocation || revocation.status === 'unknown';
-    const revocationRevoked = revocation?.status === 'revoked';
+    const revocationValid = revocation?.isValid === true;
+    const revocationUnknown = !revocation || revocation.status === 'unknown' || revocation.status === 'error';
+    const revocationRevoked = revocation && !revocation.isValid && revocation.status === 'revoked';
 
     // Determine verification status: verified (green), unknown (yellow), failed (red)
     const verificationStatus: VerificationStatus = !isFullyValid || revocationRevoked
