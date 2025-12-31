@@ -7,28 +7,11 @@ interface Env {
   AXIOM_TOKEN?: string;
 }
 
-// Fire-and-forget logging to Plausible - never blocks or fails the response
-function logToPlausible(ctx: ExecutionContext, type: 'blocked' | 'accessed', url: string) {
-  ctx.waitUntil(fetch('https://n.zenomy.tech/api/event', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'User-Agent': 'edocviewer-cors-proxy/1.0',
-    },
-    body: JSON.stringify({
-      name: `proxy-${type}`,
-      url: 'https://edocviewer.app/cors-proxy',
-      domain: 'edocviewer.app',
-      props: { target: new URL(url).hostname }
-    })
-  }).catch(() => {}));
-}
-
 // Fire-and-forget logging to Axiom for full URL analysis - never blocks or fails the response
 function logToAxiom(env: Env, ctx: ExecutionContext, type: 'blocked' | 'accessed', url: string) {
   if (!env.AXIOM_TOKEN) return;
 
-  ctx.waitUntil(fetch('https://api.axiom.co/v1/datasets/edocviewer-proxy/ingest', {
+  ctx.waitUntil(fetch('https://eu-central-1.aws.edge.axiom.co/v1/ingest/edocviewer-proxy', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${env.AXIOM_TOKEN}`,
@@ -77,11 +60,13 @@ const ALLOWED_DEST_PATTERNS = [
 
   // Estonian SK ID Solutions
   /^https?:\/\/c\.sk\.ee\//,                        // CA certificates
+  /^https?:\/\/aia\.sk\.ee\//,                      // AIA (issuer certs)
   /^https?:\/\/www\.sk\.ee\/crls\//,                // CRLs
   /^https?:\/\/ocsp\.sk\.ee(\/|$)/,                 // OCSP responder
 
   // Generic patterns for other EU trust services
   /^https?:\/\/ocsp\.[^/]+\//,                      // OCSP responders (ocsp.*)
+  /^https?:\/\/aia\.[^/]+\//,                       // AIA endpoints (aia.*)
   /^https?:\/\/[^/]+\/.*\.(crl|crt|cer|der)(\?.*)?$/i,  // CRL/cert files by extension
 ];
 
@@ -94,6 +79,13 @@ function isAllowedOrigin(origin: string | null): boolean {
 
 function isAllowedDestination(url: string): boolean {
   return ALLOWED_DEST_PATTERNS.some((pattern) => pattern.test(url));
+}
+
+function corsError(message: string, status: number, origin: string): Response {
+  return new Response(message, {
+    status,
+    headers: { 'Access-Control-Allow-Origin': origin },
+  });
 }
 
 export default {
@@ -110,44 +102,59 @@ export default {
       return new Response(null, {
         headers: {
           'Access-Control-Allow-Origin': origin!,
-          'Access-Control-Allow-Methods': 'GET',
+          'Access-Control-Allow-Methods': 'GET, POST',
+          'Access-Control-Allow-Headers': 'Content-Type, Accept',
           'Access-Control-Max-Age': '86400',
         },
       });
     }
 
-    // Only allow GET requests
-    if (request.method !== 'GET') {
-      return new Response('Method not allowed', { status: 405 });
+    // Only allow GET and POST requests
+    if (request.method !== 'GET' && request.method !== 'POST') {
+      return corsError('Method not allowed', 405, origin!);
     }
 
     // Get and validate destination URL
     const url = new URL(request.url).searchParams.get('url');
     if (!url) {
-      return new Response('Missing url parameter', { status: 400 });
+      return corsError('Missing url parameter', 400, origin!);
     }
 
     if (!isAllowedDestination(url)) {
-      logToPlausible(ctx, 'blocked', url);
       logToAxiom(env, ctx, 'blocked', url);
-      return new Response('Destination not allowed', { status: 400 });
+      return corsError('Destination not allowed', 400, origin!);
     }
 
     try {
-      // Create cache key based on destination URL
-      const cacheKey = new Request(new URL(request.url).toString(), request);
       const cache = caches.default;
+      const isPost = request.method === 'POST';
+      let response: Response | undefined;
 
-      // Check edge cache first
-      let response = await cache.match(cacheKey);
+      // Only use cache for GET requests (POST responses depend on request body)
+      if (!isPost) {
+        const cacheKey = new Request(new URL(request.url).toString(), request);
+        response = await cache.match(cacheKey);
+      }
 
       if (!response) {
-        // Cache miss - fetch from origin
-        const originResponse = await fetch(url, {
+        // Cache miss or POST - fetch from origin
+        const fetchOptions: RequestInit = {
+          method: request.method,
           headers: {
             'User-Agent': 'edocviewer-cors-proxy/1.0',
           },
-        });
+        };
+
+        // Forward Content-Type and body for POST requests
+        if (isPost) {
+          const contentType = request.headers.get('Content-Type');
+          if (contentType) {
+            (fetchOptions.headers as Record<string, string>)['Content-Type'] = contentType;
+          }
+          fetchOptions.body = await request.arrayBuffer();
+        }
+
+        const originResponse = await fetch(url, fetchOptions);
 
         const ttl = getCacheTtl(url);
 
@@ -158,13 +165,13 @@ export default {
             'Content-Type':
               originResponse.headers.get('Content-Type') ||
               'application/octet-stream',
-            'Cache-Control': `public, max-age=${ttl}`,
+            'Cache-Control': isPost ? 'no-store' : `public, max-age=${ttl}`,
           },
         });
 
-        // Store in edge cache (only cache successful responses)
-        if (originResponse.status === 200) {
-          // Clone response before caching (body can only be read once)
+        // Store in edge cache (only cache successful GET responses)
+        if (!isPost && originResponse.status === 200) {
+          const cacheKey = new Request(new URL(request.url).toString(), request);
           await cache.put(cacheKey, response.clone());
         }
       }
@@ -176,13 +183,10 @@ export default {
       });
       corsResponse.headers.set('Access-Control-Allow-Origin', origin!);
 
-      logToPlausible(ctx, 'accessed', url);
       logToAxiom(env, ctx, 'accessed', url);
       return corsResponse;
     } catch (error) {
-      return new Response(`Proxy error: ${(error as Error).message}`, {
-        status: 502,
-      });
+      return corsError(`Proxy error: ${(error as Error).message}`, 502, origin!);
     }
   },
 };
