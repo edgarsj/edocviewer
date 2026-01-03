@@ -8,7 +8,7 @@ interface Env {
 }
 
 // Fire-and-forget logging to Axiom for full URL analysis - never blocks or fails the response
-function logToAxiom(env: Env, ctx: ExecutionContext, type: 'blocked' | 'accessed', url: string) {
+function logToAxiom(env: Env, ctx: ExecutionContext, type: 'blocked' | 'accessed', url: string, method: string) {
   if (!env.AXIOM_TOKEN) return;
 
   ctx.waitUntil(fetch('https://eu-central-1.aws.edge.axiom.co/v1/ingest/edocviewer-proxy', {
@@ -17,7 +17,7 @@ function logToAxiom(env: Env, ctx: ExecutionContext, type: 'blocked' | 'accessed
       'Authorization': `Bearer ${env.AXIOM_TOKEN}`,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify([{ type, url, _time: new Date().toISOString() }])
+    body: JSON.stringify([{ type, url, method, _time: new Date().toISOString() }])
   }).catch(() => {}));
 }
 
@@ -64,8 +64,11 @@ const ALLOWED_DEST_PATTERNS = [
   /^https?:\/\/www\.sk\.ee\/crls\//,                // CRLs
   /^https?:\/\/ocsp\.sk\.ee(\/|$)/,                 // OCSP responder
 
+  // Ukrainian Diia (government CA)
+  /^https?:\/\/ca\.diia\.gov\.ua\//,                // CA services (certs, OCSP, CRLs)
+
   // Generic patterns for other EU trust services
-  /^https?:\/\/ocsp\.[^/]+\//,                      // OCSP responders (ocsp.*)
+  /^https?:\/\/ocsp[^/]*\.[^/]+(\/|$)/,             // OCSP responders (ocsp*)
   /^https?:\/\/aia\.[^/]+\//,                       // AIA endpoints (aia.*)
   /^https?:\/\/[^/]+\/.*\.(crl|crt|cer|der)(\?.*)?$/i,  // CRL/cert files by extension
 ];
@@ -121,7 +124,7 @@ export default {
     }
 
     if (!isAllowedDestination(url)) {
-      logToAxiom(env, ctx, 'blocked', url);
+      logToAxiom(env, ctx, 'blocked', url, request.method);
       return corsError('Destination not allowed', 400, origin!);
     }
 
@@ -183,7 +186,7 @@ export default {
       });
       corsResponse.headers.set('Access-Control-Allow-Origin', origin!);
 
-      logToAxiom(env, ctx, 'accessed', url);
+      logToAxiom(env, ctx, 'accessed', url, request.method);
       return corsResponse;
     } catch (error) {
       return corsError(`Proxy error: ${(error as Error).message}`, 502, origin!);
