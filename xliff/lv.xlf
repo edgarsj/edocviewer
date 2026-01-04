@@ -38,6 +38,10 @@
   <source>Verification not supported on this platform</source>
   <target>Pārbaude nav atbalstīta šajā platformā</target>
 </trans-unit>
+<trans-unit id="signatures.moreDetails">
+  <source>More details</source>
+  <target>Vairāk informācijas</target>
+</trans-unit>
 <trans-unit id="signatures.signedBy">
   <source>Signed by:</source>
   <target>Parakstījis:</target>

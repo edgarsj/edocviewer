@@ -99,6 +99,7 @@
 'signatures.betaTagTooltip': `Parakstu pārbaude var būt neprecīza, vairāk »`,
 'signatures.date': `Datums`,
 'signatures.invalid': `Nederīgs paraksts`,
+'signatures.moreDetails': `Vairāk informācijas`,
 'signatures.noSignatures': `Nav parakstu`,
 'signatures.referencedFiles': `Parakstā iekļautie faili`,
 'signatures.signedBy': `Parakstījis:`,

@@ -121,47 +121,28 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
       gap: 0.375rem;
     }
 
-    .status-message {
-      margin-top: 0.5rem;
-      font-size: 0.875rem;
-      color: var(--sl-color-neutral-600);
-      display: flex;
-      align-items: flex-start;
-      gap: 0.375rem;
-    }
-
-    .status-message.warning {
-      color: var(--sl-color-warning-700);
-    }
-
-    .status-message.unsupported {
-      color: var(--sl-color-neutral-600);
-    }
-
-    .limitations {
-      margin-top: 0.5rem;
-      padding: 0.5rem;
-      background-color: var(--sl-color-neutral-50);
-      border-radius: 0.25rem;
-      border: 1px solid var(--sl-color-neutral-200);
+    .details-list {
+      margin: 0;
+      padding-left: 1.25rem;
       font-size: 0.8rem;
+      color: var(--sl-color-neutral-600);
     }
 
-    .limitation-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.375rem;
+    .details-list li {
       margin-bottom: 0.25rem;
     }
 
-    .limitation-item:last-child {
+    .details-list li:last-child {
       margin-bottom: 0;
     }
 
-    .limitation-platform {
-      font-size: 0.75rem;
+    sl-details {
+      margin-top: 0.5rem;
+    }
+
+    sl-details::part(summary) {
+      font-size: 0.8rem;
       color: var(--sl-color-neutral-500);
-      margin-left: 1.25rem;
     }
 
     .error-message-icon {
@@ -359,7 +340,7 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
               ${error}
             </div>`
           : ""}
-        ${this.renderStatusDetails(statusMessage, limitations, isUnsupported, isUnknown)}
+        ${this.renderStatusDetails(error, statusMessage, limitations)}
         ${this.renderFileCoverage()}
       </div>
     `;
@@ -409,40 +390,41 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
   // the status icon directly in the main render method
 
   private renderStatusDetails(
+    error: string | null,
     statusMessage: string | undefined,
     limitations: VerificationLimitation[] | undefined,
-    isUnsupported: boolean,
-    isUnknown: boolean
   ) {
-    // Don't show anything if no status details to display
-    if (!statusMessage && (!limitations || limitations.length === 0)) {
+    // Collect additional details that aren't already shown in the error line
+    const additionalDetails: string[] = [];
+
+    // Only add statusMessage if it's different from the error
+    if (statusMessage && statusMessage !== error) {
+      additionalDetails.push(statusMessage);
+    }
+
+    // Add limitation descriptions
+    if (limitations && limitations.length > 0) {
+      for (const limitation of limitations) {
+        if (limitation.description !== error && limitation.description !== statusMessage) {
+          const detail = limitation.platform
+            ? `${limitation.description} (${limitation.platform})`
+            : limitation.description;
+          additionalDetails.push(detail);
+        }
+      }
+    }
+
+    // Don't show anything if no additional details
+    if (additionalDetails.length === 0) {
       return html``;
     }
 
-    const messageClass = isUnsupported ? 'unsupported' : isUnknown ? 'warning' : '';
-
     return html`
-      ${statusMessage
-        ? html`<div class="status-message ${messageClass}">
-            <sl-icon name="${isUnsupported ? 'info-circle' : 'exclamation-triangle'}"></sl-icon>
-            ${statusMessage}
-          </div>`
-        : ""}
-      ${limitations && limitations.length > 0
-        ? html`<div class="limitations">
-            ${limitations.map(
-              (limitation) => html`
-                <div class="limitation-item">
-                  <sl-icon name="exclamation-circle"></sl-icon>
-                  <span>${limitation.description}</span>
-                </div>
-                ${limitation.platform
-                  ? html`<div class="limitation-platform">${limitation.platform}</div>`
-                  : ""}
-              `
-            )}
-          </div>`
-        : ""}
+      <sl-details summary="${msg("More details", { id: "signatures.moreDetails" })}">
+        <ul class="details-list">
+          ${additionalDetails.map(detail => html`<li>${detail}</li>`)}
+        </ul>
+      </sl-details>
     `;
   }
 

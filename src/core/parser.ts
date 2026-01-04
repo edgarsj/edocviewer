@@ -164,31 +164,47 @@ export async function verifyEdocSignaturesQuick(
             (file) => !signedFiles.includes(file),
           );
 
-          // Map edockit status to our UI status
-          const edockitStatus = result.status as EdockitVerificationStatus | undefined;
-          const isUnsupported = edockitStatus === 'UNSUPPORTED';
-          const isIndeterminate = edockitStatus === 'INDETERMINATE';
-          const cryptoValid = result.isValid && allDocumentsSigned;
+          // Map edockit status to our UI status - use status field as source of truth
+          const edockitStatus = result.status as EdockitVerificationStatus;
 
-          // Determine initial verification status
+          // Determine initial verification status based on edockit status
           let verificationStatus: VerificationStatus;
-          if (isUnsupported) {
-            verificationStatus = 'unsupported';
-          } else if (!cryptoValid) {
-            verificationStatus = 'failed';
-          } else if (isIndeterminate) {
-            verificationStatus = 'unknown';
-          } else {
-            verificationStatus = 'pending'; // Will be updated by full verification
+          switch (edockitStatus) {
+            case 'VALID':
+              verificationStatus = allDocumentsSigned ? 'pending' : 'failed'; // pending = awaiting full verification
+              break;
+            case 'INVALID':
+              verificationStatus = 'failed';
+              break;
+            case 'INDETERMINATE':
+              verificationStatus = 'unknown';
+              break;
+            case 'UNSUPPORTED':
+              verificationStatus = 'unsupported';
+              break;
+            default:
+              // Fallback for older edockit versions without status field
+              verificationStatus = result.isValid && allDocumentsSigned ? 'pending' : 'failed';
           }
 
-          // Determine error message
+          // Determine error/status message - use full errors array for detail
           let errorMessage: string | null = null;
-          if (!result.isValid) {
-            errorMessage = result.statusMessage || result.errors?.[0] || "Verification failed";
-          } else if (!allDocumentsSigned) {
-            errorMessage = "Not all document files are signed";
+          if (result.errors && result.errors.length > 0) {
+            // Join all errors for full context, or use statusMessage if more detailed
+            const allErrors = result.errors.join('; ');
+            errorMessage = result.statusMessage && result.statusMessage.length > allErrors.length
+              ? result.statusMessage
+              : allErrors;
+          } else if (result.statusMessage && edockitStatus !== 'VALID') {
+            errorMessage = result.statusMessage;
           }
+
+          if (!allDocumentsSigned) {
+            const unsignedMsg = "Not all document files are signed";
+            errorMessage = errorMessage ? `${errorMessage}; ${unsignedMsg}` : unsignedMsg;
+          }
+
+          const isValid = edockitStatus === 'VALID' && allDocumentsSigned;
 
           return {
             signerInfo: {
@@ -196,7 +212,7 @@ export async function verifyEdocSignaturesQuick(
               personalId,
               signatureDate,
             },
-            valid: cryptoValid && !isUnsupported,
+            valid: isValid,
             error: errorMessage,
             allDocumentsSigned,
             signedFiles,
@@ -283,40 +299,63 @@ export async function verifyEdocSignatureFull(
         }
       : undefined;
 
-    // Map edockit status
-    const edockitStatus = result.status as EdockitVerificationStatus | undefined;
-    const isUnsupported = edockitStatus === 'UNSUPPORTED';
-    const isIndeterminate = edockitStatus === 'INDETERMINATE';
+    // Map edockit status - use status field as source of truth
+    const edockitStatus = result.status as EdockitVerificationStatus;
 
-    // Determine final validity - must pass both crypto and revocation checks
-    const isFullyValid = result.isValid && quickResult.allDocumentsSigned;
+    // Check revocation status
     const revocationValid = revocation?.isValid === true;
     const revocationUnknown = !revocation || revocation.status === 'unknown' || revocation.status === 'error';
     const revocationRevoked = revocation && !revocation.isValid && revocation.status === 'revoked';
 
-    // Determine verification status: verified (green), unknown (yellow), failed (red), unsupported (gray)
+    // Determine verification status based on edockit status + revocation
     let verificationStatus: VerificationStatus;
-    if (isUnsupported) {
-      verificationStatus = 'unsupported';
-    } else if (!isFullyValid || revocationRevoked) {
-      verificationStatus = 'failed';
-    } else if (revocationUnknown || isIndeterminate) {
-      verificationStatus = 'unknown';
-    } else {
-      verificationStatus = 'verified';
+    switch (edockitStatus) {
+      case 'VALID':
+        if (revocationRevoked) {
+          verificationStatus = 'failed';
+        } else if (revocationUnknown) {
+          verificationStatus = 'unknown';
+        } else {
+          verificationStatus = 'verified';
+        }
+        break;
+      case 'INVALID':
+        verificationStatus = 'failed';
+        break;
+      case 'INDETERMINATE':
+        verificationStatus = 'unknown';
+        break;
+      case 'UNSUPPORTED':
+        verificationStatus = 'unsupported';
+        break;
+      default:
+        // Fallback
+        verificationStatus = result.isValid && revocationValid ? 'verified' : 'failed';
     }
 
     // Determine error/status message
-    let errorMessage: string | null = quickResult.error;
-    if (!result.isValid) {
-      errorMessage = result.statusMessage || result.errors?.[0] || "Verification failed";
+    let errorMessage: string | null = null;
+    if (result.errors && result.errors.length > 0) {
+      const allErrors = result.errors.join('; ');
+      errorMessage = result.statusMessage && result.statusMessage.length > allErrors.length
+        ? result.statusMessage
+        : allErrors;
+    } else if (result.statusMessage && edockitStatus !== 'VALID') {
+      errorMessage = result.statusMessage;
     } else if (revocationRevoked) {
       errorMessage = "Certificate revoked";
     }
 
+    // Use quick result error if we don't have a new one
+    if (!errorMessage && quickResult.error) {
+      errorMessage = quickResult.error;
+    }
+
+    const isValid = edockitStatus === 'VALID' && revocationValid && quickResult.allDocumentsSigned;
+
     return {
       ...quickResult,
-      valid: isFullyValid && revocationValid && !isUnsupported,
+      valid: isValid,
       error: errorMessage,
       revocation,
       timestamp,
