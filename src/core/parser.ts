@@ -15,7 +15,18 @@ export interface TimestampInfo {
   valid: boolean;
 }
 
-export type VerificationStatus = 'pending' | 'verified' | 'failed' | 'unknown';
+/** Status returned by edockit v0.3.0+ verification */
+export type EdockitVerificationStatus = 'VALID' | 'INVALID' | 'INDETERMINATE' | 'UNSUPPORTED';
+
+/** Platform limitation info from edockit */
+export interface VerificationLimitation {
+  code: string;
+  description: string;
+  platform?: string;
+}
+
+/** UI verification status for display */
+export type VerificationStatus = 'pending' | 'verified' | 'failed' | 'unknown' | 'unsupported';
 
 export interface SignatureValidationResult {
   signerInfo: SignerInfo;
@@ -29,6 +40,10 @@ export interface SignatureValidationResult {
   timestamp?: TimestampInfo;
   /** Status of full verification (including revocation checks) */
   verificationStatus: VerificationStatus;
+  /** Human-readable status message from edockit */
+  statusMessage?: string;
+  /** Platform/environment limitations affecting validation */
+  limitations?: VerificationLimitation[];
   /** Index to correlate with original signature for updates */
   signatureIndex: number;
 }
@@ -149,7 +164,31 @@ export async function verifyEdocSignaturesQuick(
             (file) => !signedFiles.includes(file),
           );
 
+          // Map edockit status to our UI status
+          const edockitStatus = result.status as EdockitVerificationStatus | undefined;
+          const isUnsupported = edockitStatus === 'UNSUPPORTED';
+          const isIndeterminate = edockitStatus === 'INDETERMINATE';
           const cryptoValid = result.isValid && allDocumentsSigned;
+
+          // Determine initial verification status
+          let verificationStatus: VerificationStatus;
+          if (isUnsupported) {
+            verificationStatus = 'unsupported';
+          } else if (!cryptoValid) {
+            verificationStatus = 'failed';
+          } else if (isIndeterminate) {
+            verificationStatus = 'unknown';
+          } else {
+            verificationStatus = 'pending'; // Will be updated by full verification
+          }
+
+          // Determine error message
+          let errorMessage: string | null = null;
+          if (!result.isValid) {
+            errorMessage = result.statusMessage || result.errors?.[0] || "Verification failed";
+          } else if (!allDocumentsSigned) {
+            errorMessage = "Not all document files are signed";
+          }
 
           return {
             signerInfo: {
@@ -157,18 +196,15 @@ export async function verifyEdocSignaturesQuick(
               personalId,
               signatureDate,
             },
-            valid: cryptoValid,
-            error: result.isValid
-              ? allDocumentsSigned
-                ? null
-                : "Not all document files are signed"
-              : result.errors?.[0] || "Verification failed",
+            valid: cryptoValid && !isUnsupported,
+            error: errorMessage,
             allDocumentsSigned,
             signedFiles,
             unsignedFiles,
             originalVerificationValid: result.isValid,
-            // Mark as pending - full verification still needed
-            verificationStatus: cryptoValid ? 'pending' : 'failed',
+            verificationStatus,
+            statusMessage: result.statusMessage,
+            limitations: result.limitations,
             signatureIndex: index,
           } as SignatureValidationResult;
         } catch (error) {
@@ -212,8 +248,8 @@ export async function verifyEdocSignatureFull(
   signatureIndex: number,
   quickResult: SignatureValidationResult,
 ): Promise<SignatureValidationResult> {
-  // If quick verification already failed, no need to do full verification
-  if (quickResult.verificationStatus === 'failed') {
+  // If quick verification already failed or is unsupported, no need to do full verification
+  if (quickResult.verificationStatus === 'failed' || quickResult.verificationStatus === 'unsupported') {
     return quickResult;
   }
 
@@ -247,30 +283,46 @@ export async function verifyEdocSignatureFull(
         }
       : undefined;
 
+    // Map edockit status
+    const edockitStatus = result.status as EdockitVerificationStatus | undefined;
+    const isUnsupported = edockitStatus === 'UNSUPPORTED';
+    const isIndeterminate = edockitStatus === 'INDETERMINATE';
+
     // Determine final validity - must pass both crypto and revocation checks
     const isFullyValid = result.isValid && quickResult.allDocumentsSigned;
     const revocationValid = revocation?.isValid === true;
     const revocationUnknown = !revocation || revocation.status === 'unknown' || revocation.status === 'error';
     const revocationRevoked = revocation && !revocation.isValid && revocation.status === 'revoked';
 
-    // Determine verification status: verified (green), unknown (yellow), failed (red)
-    const verificationStatus: VerificationStatus = !isFullyValid || revocationRevoked
-      ? 'failed'
-      : revocationUnknown
-        ? 'unknown'
-        : 'verified';
+    // Determine verification status: verified (green), unknown (yellow), failed (red), unsupported (gray)
+    let verificationStatus: VerificationStatus;
+    if (isUnsupported) {
+      verificationStatus = 'unsupported';
+    } else if (!isFullyValid || revocationRevoked) {
+      verificationStatus = 'failed';
+    } else if (revocationUnknown || isIndeterminate) {
+      verificationStatus = 'unknown';
+    } else {
+      verificationStatus = 'verified';
+    }
+
+    // Determine error/status message
+    let errorMessage: string | null = quickResult.error;
+    if (!result.isValid) {
+      errorMessage = result.statusMessage || result.errors?.[0] || "Verification failed";
+    } else if (revocationRevoked) {
+      errorMessage = "Certificate revoked";
+    }
 
     return {
       ...quickResult,
-      valid: isFullyValid && revocationValid,
-      error: !result.isValid
-        ? result.errors?.[0] || "Verification failed"
-        : revocationRevoked
-          ? `Certificate revoked`
-          : quickResult.error,
+      valid: isFullyValid && revocationValid && !isUnsupported,
+      error: errorMessage,
       revocation,
       timestamp,
       verificationStatus,
+      statusMessage: result.statusMessage || quickResult.statusMessage,
+      limitations: result.limitations || quickResult.limitations,
     };
   } catch (error) {
     console.error("Error in full signature verification:", error);

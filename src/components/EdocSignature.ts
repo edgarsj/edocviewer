@@ -1,7 +1,7 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { msg } from "@lit/localize";
-import { SignatureValidationResult, VerificationStatus } from "../core/parser";
+import { SignatureValidationResult, VerificationStatus, VerificationLimitation } from "../core/parser";
 import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
 import { openLegalModal } from "../utils/legalNavigation";
 import "@shoelace-style/shoelace/dist/components/details/details.js";
@@ -78,6 +78,11 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
       border: 1px solid var(--sl-color-warning-300);
     }
 
+    .unsupported-icon-container {
+      background-color: var(--sl-color-neutral-100);
+      border: 1px solid var(--sl-color-neutral-300);
+    }
+
     .status-icon {
       font-size: 3rem;
       display: flex;
@@ -97,6 +102,10 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
       color: var(--sl-color-warning-600);
     }
 
+    .unsupported-icon {
+      color: var(--sl-color-neutral-500);
+    }
+
     .pending-icon sl-spinner {
       font-size: 2.5rem;
       --indicator-color: var(--sl-color-warning-600);
@@ -110,6 +119,49 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
       display: flex;
       align-items: flex-start;
       gap: 0.375rem;
+    }
+
+    .status-message {
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+      color: var(--sl-color-neutral-600);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.375rem;
+    }
+
+    .status-message.warning {
+      color: var(--sl-color-warning-700);
+    }
+
+    .status-message.unsupported {
+      color: var(--sl-color-neutral-600);
+    }
+
+    .limitations {
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      background-color: var(--sl-color-neutral-50);
+      border-radius: 0.25rem;
+      border: 1px solid var(--sl-color-neutral-200);
+      font-size: 0.8rem;
+    }
+
+    .limitation-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.375rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .limitation-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .limitation-platform {
+      font-size: 0.75rem;
+      color: var(--sl-color-neutral-500);
+      margin-left: 1.25rem;
     }
 
     .error-message-icon {
@@ -209,14 +261,17 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
       return html``;
     }
 
-    const { valid, error, verificationStatus } = this.signature;
+    const { valid, error, verificationStatus, statusMessage, limitations } = this.signature;
     const isPending = verificationStatus === 'pending';
     const isUnknown = verificationStatus === 'unknown';
+    const isUnsupported = verificationStatus === 'unsupported';
 
     // Determine status title based on verification state
     let statusTitle: string;
     if (isPending) {
       statusTitle = msg("Verifying certificate status...", { id: "signatures.verifying" });
+    } else if (isUnsupported) {
+      statusTitle = msg("Verification not supported on this platform", { id: "signatures.unsupported" });
     } else if (isUnknown) {
       statusTitle = msg("Could not verify certificate revocation status", { id: "signatures.unknown" });
     } else if (valid) {
@@ -227,18 +282,40 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
     }
 
     // Determine icon container class
-    const iconContainerClass = isPending || isUnknown
-      ? "pending-icon-container"
-      : valid
-        ? "valid-icon-container"
-        : "invalid-icon-container";
+    let iconContainerClass: string;
+    if (isUnsupported) {
+      iconContainerClass = "unsupported-icon-container";
+    } else if (isPending || isUnknown) {
+      iconContainerClass = "pending-icon-container";
+    } else if (valid) {
+      iconContainerClass = "valid-icon-container";
+    } else {
+      iconContainerClass = "invalid-icon-container";
+    }
 
     // Determine icon class
-    const iconClass = isPending || isUnknown
-      ? "pending-icon"
-      : valid
-        ? "valid-icon"
-        : "invalid-icon";
+    let iconClass: string;
+    if (isUnsupported) {
+      iconClass = "unsupported-icon";
+    } else if (isPending || isUnknown) {
+      iconClass = "pending-icon";
+    } else if (valid) {
+      iconClass = "valid-icon";
+    } else {
+      iconClass = "invalid-icon";
+    }
+
+    // Determine which icon to show
+    let iconName: string;
+    if (isUnsupported) {
+      iconName = "slash-circle";
+    } else if (isUnknown) {
+      iconName = "question-lg";
+    } else if (valid) {
+      iconName = "check-lg";
+    } else {
+      iconName = "x-lg";
+    }
 
     return html`
       <div class="signature-info">
@@ -258,12 +335,12 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
             <div class="status-icon ${iconClass}">
               ${isPending
                 ? html`<sl-spinner></sl-spinner>`
-                : html`<sl-icon name="${isUnknown ? "question-lg" : valid ? "check-lg" : "x-lg"}"></sl-icon>`}
+                : html`<sl-icon name="${iconName}"></sl-icon>`}
             </div>
           </div>
         </sl-tooltip>
 
-        ${error && !isPending
+        ${error && !isPending && !isUnsupported
           ? html`<div class="error-message">
               <sl-tooltip
                 content="${msg(
@@ -282,6 +359,7 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
               ${error}
             </div>`
           : ""}
+        ${this.renderStatusDetails(statusMessage, limitations, isUnsupported, isUnknown)}
         ${this.renderFileCoverage()}
       </div>
     `;
@@ -329,6 +407,44 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
 
   // The renderSignatureStatus method is no longer needed as we've integrated
   // the status icon directly in the main render method
+
+  private renderStatusDetails(
+    statusMessage: string | undefined,
+    limitations: VerificationLimitation[] | undefined,
+    isUnsupported: boolean,
+    isUnknown: boolean
+  ) {
+    // Don't show anything if no status details to display
+    if (!statusMessage && (!limitations || limitations.length === 0)) {
+      return html``;
+    }
+
+    const messageClass = isUnsupported ? 'unsupported' : isUnknown ? 'warning' : '';
+
+    return html`
+      ${statusMessage
+        ? html`<div class="status-message ${messageClass}">
+            <sl-icon name="${isUnsupported ? 'info-circle' : 'exclamation-triangle'}"></sl-icon>
+            ${statusMessage}
+          </div>`
+        : ""}
+      ${limitations && limitations.length > 0
+        ? html`<div class="limitations">
+            ${limitations.map(
+              (limitation) => html`
+                <div class="limitation-item">
+                  <sl-icon name="exclamation-circle"></sl-icon>
+                  <span>${limitation.description}</span>
+                </div>
+                ${limitation.platform
+                  ? html`<div class="limitation-platform">${limitation.platform}</div>`
+                  : ""}
+              `
+            )}
+          </div>`
+        : ""}
+    `;
+  }
 
   private renderFileCoverage() {
     const {

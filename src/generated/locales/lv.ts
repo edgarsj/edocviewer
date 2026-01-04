@@ -105,6 +105,7 @@
 'signatures.title': `Paraksti`,
 'signatures.unknown': `Nevarēja noteikt paraksta derīguma statusu`,
 'signatures.unsignedFiles': `Neparakstītie faili`,
+'signatures.unsupported': `Pārbaude nav atbalstīta šajā platformā`,
 'signatures.valid': `Derīgs`,
 'signatures.verifying': `Paraksta sertifikāta pārbaude...`,
     };
