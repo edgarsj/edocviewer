@@ -38,9 +38,33 @@
   <source>Verification not supported on this platform</source>
   <target>Pārbaude nav atbalstīta šajā platformā</target>
 </trans-unit>
-<trans-unit id="signatures.moreDetails">
-  <source>More details</source>
-  <target>Vairāk informācijas</target>
+<trans-unit id="signatures.details">
+  <source>details</source>
+  <target>detaļas</target>
+</trans-unit>
+<trans-unit id="signatures.cryptoCheck">
+  <source>Signature cryptography</source>
+  <target>Paraksta kriptogrāfija</target>
+</trans-unit>
+<trans-unit id="signatures.docsCheck">
+  <source>All documents signed</source>
+  <target>Visi dokumenti parakstīti</target>
+</trans-unit>
+<trans-unit id="signatures.revocationCheck">
+  <source>Certificate revocation</source>
+  <target>Sertifikāta atsaukšana</target>
+</trans-unit>
+<trans-unit id="signatures.timestamp">
+  <source>Timestamp</source>
+  <target>Laika zīmogs</target>
+</trans-unit>
+<trans-unit id="signatures.revoked">
+  <source>revoked</source>
+  <target>atsaukts</target>
+</trans-unit>
+<trans-unit id="signatures.unknownStatus">
+  <source>unknown</source>
+  <target>nezināms</target>
 </trans-unit>
 <trans-unit id="signatures.signedBy">
   <source>Signed by:</source>

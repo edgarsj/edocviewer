@@ -1,7 +1,7 @@
 import { LitElement, html, css } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { msg } from "@lit/localize";
-import { SignatureValidationResult, VerificationStatus, VerificationLimitation } from "../core/parser";
+import { SignatureValidationResult, VerificationStatus } from "../core/parser";
 import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
 import { openLegalModal } from "../utils/legalNavigation";
 import "@shoelace-style/shoelace/dist/components/details/details.js";
@@ -112,43 +112,82 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
       --track-color: var(--sl-color-warning-200);
     }
 
-    .error-message {
-      color: var(--sl-color-danger-600);
+    .status-line {
       margin-top: 0.25rem;
       font-size: 0.875rem;
       display: flex;
-      align-items: flex-start;
+      align-items: baseline;
+      flex-wrap: wrap;
       gap: 0.375rem;
     }
 
-    .details-list {
-      margin: 0;
-      padding-left: 1.25rem;
-      font-size: 0.8rem;
+    .status-line.failed {
+      color: var(--sl-color-danger-600);
+    }
+
+    .status-line.unknown {
+      color: var(--sl-color-warning-700);
+    }
+
+    .status-line.unsupported {
       color: var(--sl-color-neutral-600);
     }
 
-    .details-list li {
+    .status-line-icon {
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .details-link {
+      font-size: 0.8rem;
+      color: var(--sl-color-neutral-500);
+      cursor: pointer;
+      text-decoration: underline;
+      margin-left: 0.25rem;
+    }
+
+    .details-link:hover {
+      color: var(--sl-color-primary-600);
+    }
+
+    .verification-breakdown {
+      margin-top: 0.5rem;
+      padding: 0.75rem;
+      background-color: var(--sl-color-neutral-50);
+      border-radius: 0.25rem;
+      border: 1px solid var(--sl-color-neutral-200);
+      font-size: 0.8rem;
+    }
+
+    .breakdown-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
       margin-bottom: 0.25rem;
     }
 
-    .details-list li:last-child {
+    .breakdown-item:last-child {
       margin-bottom: 0;
     }
 
-    sl-details {
-      margin-top: 0.5rem;
+    .breakdown-item sl-icon {
+      font-size: 0.875rem;
     }
 
-    sl-details::part(summary) {
-      font-size: 0.8rem;
-      color: var(--sl-color-neutral-500);
+    .breakdown-ok {
+      color: var(--sl-color-success-600);
     }
 
-    .error-message-icon {
+    .breakdown-fail {
       color: var(--sl-color-danger-600);
-      cursor: pointer;
-      font-size: 1rem;
+    }
+
+    .breakdown-unknown {
+      color: var(--sl-color-warning-600);
+    }
+
+    .breakdown-pending {
+      color: var(--sl-color-neutral-500);
     }
 
     .file-list {
@@ -228,6 +267,19 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
    */
   @property({ type: Object })
   signature!: SignatureValidationResult;
+
+  /**
+   * Whether to show the verification breakdown details
+   */
+  @state()
+  private showDetails = false;
+
+  /**
+   * Toggle showing verification details
+   */
+  private toggleDetails() {
+    this.showDetails = !this.showDetails;
+  }
 
   /**
    * Handle click on the info icon to open legal modal
@@ -321,26 +373,20 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
           </div>
         </sl-tooltip>
 
-        ${error && !isPending && !isUnsupported
-          ? html`<div class="error-message">
-              <sl-tooltip
-                content="${msg(
-                  "Signature verification might be unreliable, more »",
-                  {
-                    id: "signatures.betaTagTooltip",
-                  },
-                )}"
-              >
-                <sl-icon
-                  name="exclamation-square"
-                  class="error-message-icon"
-                  @click=${this.handleLegalModalClick}
-                ></sl-icon>
-              </sl-tooltip>
-              ${error}
+        ${error && !isPending
+          ? html`<div class="status-line ${verificationStatus}">
+              <sl-icon
+                name="exclamation-square"
+                class="status-line-icon"
+                @click=${this.handleLegalModalClick}
+              ></sl-icon>
+              <span>${error}</span>
+              <span class="details-link" @click=${this.toggleDetails}>
+                ${msg("details", { id: "signatures.details" })}
+              </span>
             </div>`
           : ""}
-        ${this.renderStatusDetails(error, statusMessage, limitations)}
+        ${this.renderVerificationBreakdown()}
         ${this.renderFileCoverage()}
       </div>
     `;
@@ -389,42 +435,76 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
   // The renderSignatureStatus method is no longer needed as we've integrated
   // the status icon directly in the main render method
 
-  private renderStatusDetails(
-    error: string | null,
-    statusMessage: string | undefined,
-    limitations: VerificationLimitation[] | undefined,
-  ) {
-    // Collect additional details that aren't already shown in the error line
-    const additionalDetails: string[] = [];
-
-    // Only add statusMessage if it's different from the error
-    if (statusMessage && statusMessage !== error) {
-      additionalDetails.push(statusMessage);
-    }
-
-    // Add limitation descriptions
-    if (limitations && limitations.length > 0) {
-      for (const limitation of limitations) {
-        if (limitation.description !== error && limitation.description !== statusMessage) {
-          const detail = limitation.platform
-            ? `${limitation.description} (${limitation.platform})`
-            : limitation.description;
-          additionalDetails.push(detail);
-        }
-      }
-    }
-
-    // Don't show anything if no additional details
-    if (additionalDetails.length === 0) {
+  private renderVerificationBreakdown() {
+    if (!this.showDetails) {
       return html``;
     }
 
+    const { originalVerificationValid, revocation, timestamp, verificationStatus, allDocumentsSigned } = this.signature;
+    const isPending = verificationStatus === 'pending';
+
+    // Helper to get icon and class for a check
+    const getCheckStatus = (passed: boolean | undefined | null, pending = false) => {
+      if (pending) return { icon: 'hourglass', cls: 'breakdown-pending' };
+      if (passed === true) return { icon: 'check-circle', cls: 'breakdown-ok' };
+      if (passed === false) return { icon: 'x-circle', cls: 'breakdown-fail' };
+      return { icon: 'question-circle', cls: 'breakdown-unknown' };
+    };
+
+    // Signature crypto check
+    const cryptoStatus = getCheckStatus(originalVerificationValid);
+
+    // Documents signed check
+    const docsStatus = getCheckStatus(allDocumentsSigned);
+
+    // Revocation check
+    let revocationPassed: boolean | null = null;
+    let revocationLabel = msg("Certificate revocation", { id: "signatures.revocationCheck" });
+    if (revocation) {
+      if (revocation.status === 'good') {
+        revocationPassed = true;
+        revocationLabel += ` (${revocation.method?.toUpperCase() || 'OK'})`;
+      } else if (revocation.status === 'revoked') {
+        revocationPassed = false;
+        revocationLabel += ` (${msg("revoked", { id: "signatures.revoked" })})`;
+      } else {
+        revocationLabel += ` (${msg("unknown", { id: "signatures.unknownStatus" })})`;
+      }
+    }
+    const revocationStatus = isPending
+      ? getCheckStatus(null, true)
+      : getCheckStatus(revocationPassed);
+
+    // Timestamp check
+    let timestampPassed: boolean | null = null;
+    let timestampLabel = msg("Timestamp", { id: "signatures.timestamp" });
+    if (timestamp) {
+      timestampPassed = timestamp.valid;
+      if (timestamp.time) {
+        timestampLabel += ` (${timestamp.time})`;
+      }
+    }
+    const timestampStatus = getCheckStatus(timestampPassed);
+
     return html`
-      <sl-details summary="${msg("More details", { id: "signatures.moreDetails" })}">
-        <ul class="details-list">
-          ${additionalDetails.map(detail => html`<li>${detail}</li>`)}
-        </ul>
-      </sl-details>
+      <div class="verification-breakdown">
+        <div class="breakdown-item ${cryptoStatus.cls}">
+          <sl-icon name="${cryptoStatus.icon}"></sl-icon>
+          <span>${msg("Signature cryptography", { id: "signatures.cryptoCheck" })}</span>
+        </div>
+        <div class="breakdown-item ${docsStatus.cls}">
+          <sl-icon name="${docsStatus.icon}"></sl-icon>
+          <span>${msg("All documents signed", { id: "signatures.docsCheck" })}</span>
+        </div>
+        <div class="breakdown-item ${revocationStatus.cls}">
+          <sl-icon name="${revocationStatus.icon}"></sl-icon>
+          <span>${revocationLabel}</span>
+        </div>
+        <div class="breakdown-item ${timestampStatus.cls}">
+          <sl-icon name="${timestampStatus.icon}"></sl-icon>
+          <span>${timestampLabel}</span>
+        </div>
+      </div>
     `;
   }
 
