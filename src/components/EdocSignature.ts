@@ -1,7 +1,7 @@
 import { LitElement, html, css } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { msg } from "@lit/localize";
-import { SignatureValidationResult, VerificationStatus } from "../core/parser";
+import { SignatureValidationResult, VerificationStatus, VerificationLimitation } from "../core/parser";
 import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
 import { openLegalModal } from "../utils/legalNavigation";
 import "@shoelace-style/shoelace/dist/components/details/details.js";
@@ -78,6 +78,11 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
       border: 1px solid var(--sl-color-warning-300);
     }
 
+    .unsupported-icon-container {
+      background-color: var(--sl-color-neutral-100);
+      border: 1px solid var(--sl-color-neutral-300);
+    }
+
     .status-icon {
       font-size: 3rem;
       display: flex;
@@ -97,24 +102,108 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
       color: var(--sl-color-warning-600);
     }
 
+    .unsupported-icon {
+      color: var(--sl-color-neutral-500);
+    }
+
     .pending-icon sl-spinner {
       font-size: 2.5rem;
       --indicator-color: var(--sl-color-warning-600);
       --track-color: var(--sl-color-warning-200);
     }
 
-    .error-message {
-      color: var(--sl-color-danger-600);
+    .status-line {
       margin-top: 0.25rem;
       font-size: 0.875rem;
       display: flex;
-      align-items: flex-start;
+      align-items: baseline;
+      flex-wrap: wrap;
       gap: 0.375rem;
     }
 
-    .error-message-icon {
+    .status-line.failed {
       color: var(--sl-color-danger-600);
+    }
+
+    .status-line.unknown {
+      color: var(--sl-color-warning-700);
+    }
+
+    .status-line.unsupported {
+      color: var(--sl-color-neutral-600);
+    }
+
+    .status-line-icon {
       cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .details-link {
+      font-size: 0.8rem;
+      color: var(--sl-color-neutral-500);
+      cursor: pointer;
+      text-decoration: underline;
+      margin-left: 0.25rem;
+    }
+
+    .details-link:hover {
+      color: var(--sl-color-primary-600);
+    }
+
+    .verification-breakdown {
+      margin-top: 0.5rem;
+      padding: 0.75rem;
+      background-color: var(--sl-color-neutral-50);
+      border-radius: 0.25rem;
+      border: 1px solid var(--sl-color-neutral-200);
+      font-size: 0.8rem;
+    }
+
+    .breakdown-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .breakdown-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .breakdown-item sl-icon {
+      font-size: 0.875rem;
+    }
+
+    .breakdown-ok {
+      color: var(--sl-color-success-600);
+    }
+
+    .breakdown-fail {
+      color: var(--sl-color-danger-600);
+    }
+
+    .breakdown-unknown {
+      color: var(--sl-color-warning-600);
+    }
+
+    .breakdown-pending {
+      color: var(--sl-color-neutral-500);
+    }
+
+    .browser-recommendation {
+      margin-top: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      background-color: var(--sl-color-primary-50);
+      border-radius: 0.25rem;
+      border: 1px solid var(--sl-color-primary-200);
+      font-size: 0.8rem;
+      color: var(--sl-color-primary-700);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .browser-recommendation sl-icon {
       font-size: 1rem;
     }
 
@@ -197,6 +286,47 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
   signature!: SignatureValidationResult;
 
   /**
+   * Whether to show the verification breakdown details
+   */
+  @state()
+  private showDetails = false;
+
+  /**
+   * Toggle showing verification details
+   */
+  private toggleDetails() {
+    this.showDetails = !this.showDetails;
+  }
+
+  /**
+   * Check if user is on a Chrome-based browser
+   */
+  private isChromeBrowser(): boolean {
+    const ua = navigator.userAgent;
+    // Chrome, Edge, Opera, Brave all have "Chrome" in UA
+    return /Chrome/.test(ua) && !/Edg/.test(ua) || /Edg/.test(ua);
+  }
+
+  /**
+   * Check if we should recommend Chrome based on limitations
+   */
+  private shouldRecommendChrome(): boolean {
+    const { limitations, verificationStatus } = this.signature;
+    if (verificationStatus !== 'unsupported') return false;
+    if (this.isChromeBrowser()) return false;
+
+    // Check if there's a browser-related limitation
+    if (limitations && limitations.length > 0) {
+      return limitations.some(l =>
+        l.code?.includes('UNSUPPORTED') ||
+        l.platform?.toLowerCase().includes('browser') ||
+        l.description?.toLowerCase().includes('browser')
+      );
+    }
+    return false;
+  }
+
+  /**
    * Handle click on the info icon to open legal modal
    */
   private handleLegalModalClick(e: Event) {
@@ -209,14 +339,17 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
       return html``;
     }
 
-    const { valid, error, verificationStatus } = this.signature;
+    const { valid, error, verificationStatus, statusMessage, limitations } = this.signature;
     const isPending = verificationStatus === 'pending';
     const isUnknown = verificationStatus === 'unknown';
+    const isUnsupported = verificationStatus === 'unsupported';
 
     // Determine status title based on verification state
     let statusTitle: string;
     if (isPending) {
       statusTitle = msg("Verifying certificate status...", { id: "signatures.verifying" });
+    } else if (isUnsupported) {
+      statusTitle = msg("Verification not supported on this platform", { id: "signatures.unsupported" });
     } else if (isUnknown) {
       statusTitle = msg("Could not verify certificate revocation status", { id: "signatures.unknown" });
     } else if (valid) {
@@ -227,18 +360,40 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
     }
 
     // Determine icon container class
-    const iconContainerClass = isPending || isUnknown
-      ? "pending-icon-container"
-      : valid
-        ? "valid-icon-container"
-        : "invalid-icon-container";
+    let iconContainerClass: string;
+    if (isUnsupported) {
+      iconContainerClass = "unsupported-icon-container";
+    } else if (isPending || isUnknown) {
+      iconContainerClass = "pending-icon-container";
+    } else if (valid) {
+      iconContainerClass = "valid-icon-container";
+    } else {
+      iconContainerClass = "invalid-icon-container";
+    }
 
     // Determine icon class
-    const iconClass = isPending || isUnknown
-      ? "pending-icon"
-      : valid
-        ? "valid-icon"
-        : "invalid-icon";
+    let iconClass: string;
+    if (isUnsupported) {
+      iconClass = "unsupported-icon";
+    } else if (isPending || isUnknown) {
+      iconClass = "pending-icon";
+    } else if (valid) {
+      iconClass = "valid-icon";
+    } else {
+      iconClass = "invalid-icon";
+    }
+
+    // Determine which icon to show
+    let iconName: string;
+    if (isUnsupported) {
+      iconName = "slash-circle";
+    } else if (isUnknown) {
+      iconName = "question-lg";
+    } else if (valid) {
+      iconName = "check-lg";
+    } else {
+      iconName = "x-lg";
+    }
 
     return html`
       <div class="signature-info">
@@ -258,30 +413,31 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
             <div class="status-icon ${iconClass}">
               ${isPending
                 ? html`<sl-spinner></sl-spinner>`
-                : html`<sl-icon name="${isUnknown ? "question-lg" : valid ? "check-lg" : "x-lg"}"></sl-icon>`}
+                : html`<sl-icon name="${iconName}"></sl-icon>`}
             </div>
           </div>
         </sl-tooltip>
 
         ${error && !isPending
-          ? html`<div class="error-message">
-              <sl-tooltip
-                content="${msg(
-                  "Signature verification might be unreliable, more »",
-                  {
-                    id: "signatures.betaTagTooltip",
-                  },
-                )}"
-              >
-                <sl-icon
-                  name="exclamation-square"
-                  class="error-message-icon"
-                  @click=${this.handleLegalModalClick}
-                ></sl-icon>
-              </sl-tooltip>
-              ${error}
+          ? html`<div class="status-line ${verificationStatus}">
+              <sl-icon
+                name="exclamation-square"
+                class="status-line-icon"
+                @click=${this.handleLegalModalClick}
+              ></sl-icon>
+              <span>${error}</span>
+              <span class="details-link" @click=${this.toggleDetails}>
+                ${msg("details", { id: "signatures.details" })}
+              </span>
             </div>`
           : ""}
+        ${this.shouldRecommendChrome()
+          ? html`<div class="browser-recommendation">
+              <sl-icon name="info-circle"></sl-icon>
+              <span>${msg("Chrome recommended", { id: "signatures.chromeRecommended" })}</span>
+            </div>`
+          : ""}
+        ${this.renderVerificationBreakdown()}
         ${this.renderFileCoverage()}
       </div>
     `;
@@ -329,6 +485,79 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
 
   // The renderSignatureStatus method is no longer needed as we've integrated
   // the status icon directly in the main render method
+
+  private renderVerificationBreakdown() {
+    if (!this.showDetails) {
+      return html``;
+    }
+
+    const { originalVerificationValid, revocation, timestamp, verificationStatus, allDocumentsSigned } = this.signature;
+    const isPending = verificationStatus === 'pending';
+
+    // Helper to get icon and class for a check
+    const getCheckStatus = (passed: boolean | undefined | null, pending = false) => {
+      if (pending) return { icon: 'hourglass', cls: 'breakdown-pending' };
+      if (passed === true) return { icon: 'check-circle', cls: 'breakdown-ok' };
+      if (passed === false) return { icon: 'x-circle', cls: 'breakdown-fail' };
+      return { icon: 'question-circle', cls: 'breakdown-unknown' };
+    };
+
+    // Signature crypto check
+    const cryptoStatus = getCheckStatus(originalVerificationValid);
+
+    // Documents signed check
+    const docsStatus = getCheckStatus(allDocumentsSigned);
+
+    // Revocation check
+    let revocationPassed: boolean | null = null;
+    let revocationLabel = msg("Certificate revocation check", { id: "signatures.revocationCheck" });
+    if (revocation) {
+      if (revocation.status === 'good') {
+        revocationPassed = true;
+        revocationLabel += ` (${revocation.method?.toUpperCase() || 'OK'})`;
+      } else if (revocation.status === 'revoked') {
+        revocationPassed = false;
+        revocationLabel += ` (${msg("revoked", { id: "signatures.revoked" })})`;
+      } else {
+        revocationLabel += ` (${msg("unknown", { id: "signatures.unknownStatus" })})`;
+      }
+    }
+    const revocationStatus = isPending
+      ? getCheckStatus(null, true)
+      : getCheckStatus(revocationPassed);
+
+    // Timestamp check
+    let timestampPassed: boolean | null = null;
+    let timestampLabel = msg("Timestamp check", { id: "signatures.timestampCheck" });
+    if (timestamp) {
+      timestampPassed = timestamp.valid;
+      if (timestamp.time) {
+        timestampLabel += ` (${timestamp.time})`;
+      }
+    }
+    const timestampStatus = getCheckStatus(timestampPassed);
+
+    return html`
+      <div class="verification-breakdown">
+        <div class="breakdown-item ${docsStatus.cls}">
+          <sl-icon name="${docsStatus.icon}"></sl-icon>
+          <span>${msg("All documents signed", { id: "signatures.docsCheck" })}</span>
+        </div>
+        <div class="breakdown-item ${cryptoStatus.cls}">
+          <sl-icon name="${cryptoStatus.icon}"></sl-icon>
+          <span>${msg("Signature integrity", { id: "signatures.cryptoCheck" })}</span>
+        </div>
+        <div class="breakdown-item ${revocationStatus.cls}">
+          <sl-icon name="${revocationStatus.icon}"></sl-icon>
+          <span>${revocationLabel}</span>
+        </div>
+        <div class="breakdown-item ${timestampStatus.cls}">
+          <sl-icon name="${timestampStatus.icon}"></sl-icon>
+          <span>${timestampLabel}</span>
+        </div>
+      </div>
+    `;
+  }
 
   private renderFileCoverage() {
     const {

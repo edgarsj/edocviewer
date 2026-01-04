@@ -34,6 +34,42 @@
   <source>Could not verify certificate revocation status</source>
   <target>Nevarēja noteikt paraksta derīguma statusu</target>
 </trans-unit>
+<trans-unit id="signatures.unsupported">
+  <source>Verification not supported on this platform</source>
+  <target>Pārbaude nav atbalstīta šajā platformā</target>
+</trans-unit>
+<trans-unit id="signatures.details">
+  <source>details</source>
+  <target>detaļas</target>
+</trans-unit>
+<trans-unit id="signatures.cryptoCheck">
+  <source>Signature integrity</source>
+  <target>Paraksta integritāte</target>
+</trans-unit>
+<trans-unit id="signatures.docsCheck">
+  <source>All documents signed</source>
+  <target>Visi dokumenti parakstīti</target>
+</trans-unit>
+<trans-unit id="signatures.revocationCheck">
+  <source>Certificate revocation check</source>
+  <target>Sertifikāta atsaukšanas pārbaude</target>
+</trans-unit>
+<trans-unit id="signatures.timestampCheck">
+  <source>Timestamp check</source>
+  <target>Laika zīmoga pārbaude</target>
+</trans-unit>
+<trans-unit id="signatures.revoked">
+  <source>revoked</source>
+  <target>atsaukts</target>
+</trans-unit>
+<trans-unit id="signatures.unknownStatus">
+  <source>unknown</source>
+  <target>nezināms</target>
+</trans-unit>
+<trans-unit id="signatures.chromeRecommended">
+  <source>Chrome recommended</source>
+  <target>Iesakām Chrome</target>
+</trans-unit>
 <trans-unit id="signatures.signedBy">
   <source>Signed by:</source>
   <target>Parakstījis:</target>
