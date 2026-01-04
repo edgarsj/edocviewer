@@ -1,7 +1,7 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { msg } from "@lit/localize";
-import { SignatureValidationResult, VerificationStatus } from "../core/parser";
+import { SignatureValidationResult, VerificationStatus, VerificationLimitation } from "../core/parser";
 import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
 import { openLegalModal } from "../utils/legalNavigation";
 import "@shoelace-style/shoelace/dist/components/details/details.js";
@@ -190,6 +190,23 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
       color: var(--sl-color-neutral-500);
     }
 
+    .browser-recommendation {
+      margin-top: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      background-color: var(--sl-color-primary-50);
+      border-radius: 0.25rem;
+      border: 1px solid var(--sl-color-primary-200);
+      font-size: 0.8rem;
+      color: var(--sl-color-primary-700);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .browser-recommendation sl-icon {
+      font-size: 1rem;
+    }
+
     .file-list {
       max-height: 8rem;
       overflow-y: auto;
@@ -279,6 +296,34 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
    */
   private toggleDetails() {
     this.showDetails = !this.showDetails;
+  }
+
+  /**
+   * Check if user is on a Chrome-based browser
+   */
+  private isChromeBrowser(): boolean {
+    const ua = navigator.userAgent;
+    // Chrome, Edge, Opera, Brave all have "Chrome" in UA
+    return /Chrome/.test(ua) && !/Edg/.test(ua) || /Edg/.test(ua);
+  }
+
+  /**
+   * Check if we should recommend Chrome based on limitations
+   */
+  private shouldRecommendChrome(): boolean {
+    const { limitations, verificationStatus } = this.signature;
+    if (verificationStatus !== 'unsupported') return false;
+    if (this.isChromeBrowser()) return false;
+
+    // Check if there's a browser-related limitation
+    if (limitations && limitations.length > 0) {
+      return limitations.some(l =>
+        l.code?.includes('UNSUPPORTED') ||
+        l.platform?.toLowerCase().includes('browser') ||
+        l.description?.toLowerCase().includes('browser')
+      );
+    }
+    return false;
   }
 
   /**
@@ -386,6 +431,12 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
               </span>
             </div>`
           : ""}
+        ${this.shouldRecommendChrome()
+          ? html`<div class="browser-recommendation">
+              <sl-icon name="info-circle"></sl-icon>
+              <span>${msg("Chrome recommended", { id: "signatures.chromeRecommended" })}</span>
+            </div>`
+          : ""}
         ${this.renderVerificationBreakdown()}
         ${this.renderFileCoverage()}
       </div>
@@ -459,7 +510,7 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
 
     // Revocation check
     let revocationPassed: boolean | null = null;
-    let revocationLabel = msg("Certificate revocation", { id: "signatures.revocationCheck" });
+    let revocationLabel = msg("Certificate revocation check", { id: "signatures.revocationCheck" });
     if (revocation) {
       if (revocation.status === 'good') {
         revocationPassed = true;
@@ -477,7 +528,7 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
 
     // Timestamp check
     let timestampPassed: boolean | null = null;
-    let timestampLabel = msg("Timestamp", { id: "signatures.timestamp" });
+    let timestampLabel = msg("Timestamp check", { id: "signatures.timestampCheck" });
     if (timestamp) {
       timestampPassed = timestamp.valid;
       if (timestamp.time) {
@@ -488,13 +539,13 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
 
     return html`
       <div class="verification-breakdown">
-        <div class="breakdown-item ${cryptoStatus.cls}">
-          <sl-icon name="${cryptoStatus.icon}"></sl-icon>
-          <span>${msg("Signature cryptography", { id: "signatures.cryptoCheck" })}</span>
-        </div>
         <div class="breakdown-item ${docsStatus.cls}">
           <sl-icon name="${docsStatus.icon}"></sl-icon>
           <span>${msg("All documents signed", { id: "signatures.docsCheck" })}</span>
+        </div>
+        <div class="breakdown-item ${cryptoStatus.cls}">
+          <sl-icon name="${cryptoStatus.icon}"></sl-icon>
+          <span>${msg("Signature integrity", { id: "signatures.cryptoCheck" })}</span>
         </div>
         <div class="breakdown-item ${revocationStatus.cls}">
           <sl-icon name="${revocationStatus.icon}"></sl-icon>
