@@ -67,8 +67,11 @@ const ALLOWED_DEST_PATTERNS = [
   // Ukrainian Diia (government CA)
   /^https?:\/\/ca\.diia\.gov\.ua\//,                // CA services (certs, OCSP, CRLs)
 
+  // Slovak SNCA (National Security Authority CA)
+  /^https?:\/\/[^/]*\.snca\.gov\.sk(\/|$)/,         // *.snca.gov.sk (OCSP, CRLs, certs)
+
   // Generic patterns for other EU trust services
-  /^https?:\/\/ocsp[^/]*\.[^/]+(\/|$)/,             // OCSP responders (ocsp*)
+  /^https?:\/\/[^/]*ocsp[^/]*\.[^/]+(\/|$)/,        // OCSP responders (*ocsp*)
   /^https?:\/\/aia\.[^/]+\//,                       // AIA endpoints (aia.*)
   /^https?:\/\/[^/]+\/.*\.(crl|crt|cer|der)(\?.*)?$/i,  // CRL/cert files by extension
 ];
