@@ -683,6 +683,9 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
       this.error = `Error processing file: ${(error as Error).message}`;
       this.loading = false;
 
+      // Track parse error for files with valid extension that failed to parse
+      this.trackParseError(this.currentFileName);
+
       // Wait for rendering to complete
       await this.updateComplete;
     }
@@ -920,6 +923,28 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: 'view-edoc',
+          url: 'https://edocviewer.app/pwa',
+          domain: 'edocviewer.app',
+          props: { ext }
+        })
+      }).catch(() => {});
+    }
+  }
+
+  /**
+   * Track parse-error event to Plausible when a file with valid extension fails to parse
+   */
+  private trackParseError(fileName: string) {
+    const ext = fileName.split('.').pop()?.toLowerCase() || 'unknown';
+
+    if (typeof (window as any).plausible === 'function') {
+      (window as any).plausible('parse-error', { props: { ext } });
+    } else {
+      fetch('https://n.zenomy.tech/api/event', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: 'parse-error',
           url: 'https://edocviewer.app/pwa',
           domain: 'edocviewer.app',
           props: { ext }

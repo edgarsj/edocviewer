@@ -194,6 +194,8 @@ export class FileDropzone extends LocaleAwareMixin(LitElement) {
     // Check file type
     const isValidType = this.validateFileType(file);
     if (!isValidType) {
+      // Track unsupported file type for analytics
+      this.trackUnsupportedFile(file.name);
       // Alert message could be replaced with a more elegant UI notification
       alert(
         `Please select a valid file type (${this.acceptedFileTypes.join(", ")})`,
@@ -219,6 +221,30 @@ export class FileDropzone extends LocaleAwareMixin(LitElement) {
     return this.acceptedFileTypes.some((type) =>
       file.name.toLowerCase().endsWith(type),
     );
+  }
+
+  /**
+   * Track unsupported file type to Plausible with file extension only (privacy-safe)
+   */
+  private trackUnsupportedFile(fileName: string) {
+    const ext = fileName.split(".").pop()?.toLowerCase() || "unknown";
+
+    // Use window.plausible if available, otherwise direct API call (PWA)
+    if (typeof (window as any).plausible === "function") {
+      (window as any).plausible("unsupported-file", { props: { ext } });
+    } else {
+      // PWA fallback - direct API call
+      fetch("https://n.zenomy.tech/api/event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: "unsupported-file",
+          url: "https://edocviewer.app/pwa",
+          domain: "edocviewer.app",
+          props: { ext },
+        }),
+      }).catch(() => {});
+    }
   }
 }
 
