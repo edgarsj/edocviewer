@@ -625,6 +625,9 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
       this.processingCount++;
       const currentProcessingId = this.processingCount;
 
+      // Close any open modals before processing new file
+      this.closeOpenModals();
+
       // Store the file name
       this.currentFileName = file.name;
 
@@ -795,6 +798,18 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
       navigator.userAgent,
     );
+  }
+
+  private closeOpenModals() {
+    const preview = this.shadowRoot?.querySelector("edoc-file-preview") as any;
+    if (preview && typeof preview.hide === "function") {
+      preview.hide();
+    }
+
+    const legalModal = this.shadowRoot?.querySelector("edoc-legal-modal") as any;
+    if (legalModal && typeof legalModal.close === "function") {
+      legalModal.close();
+    }
   }
 
   private handleFileView(e: CustomEvent) {
