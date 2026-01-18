@@ -58,7 +58,7 @@ export function setupFileHandling() {
             );
 
             // Wait for the component to be ready before dispatching
-            waitForComponentAndProcessFile(file);
+            waitForComponentAndProcessFile(file, { source: "file-handling" });
           })
           .catch((error) => {
             console.error("File handling: Error processing files", error);
@@ -82,10 +82,20 @@ export function setupFileHandling() {
     if (files && files.length > 0) {
       const file = files[0];
       console.log(`File handling: Processing file "${file.name}" from event`);
-      waitForComponentAndProcessFile(file);
+      waitForComponentAndProcessFile(file, { source: "file-handling" });
     } else {
       console.log("File handling: No files in event");
     }
+  });
+
+  // Listen for file handoff from another window
+  window.addEventListener("message", (e: MessageEvent) => {
+    if (e.origin !== window.location.origin) return;
+    const data = e.data as { type?: string; file?: File };
+    if (data?.type !== "edoc-open-file" || !data.file) return;
+
+    console.log("File handling: Received file from another window");
+    waitForComponentAndProcessFile(data.file, { source: "window-message" });
   });
 }
 
@@ -115,7 +125,7 @@ function handleUrlParameters() {
         });
 
         console.log(`File fetched from URL: ${filename} (${file.size} bytes)`);
-        waitForComponentAndProcessFile(file);
+        waitForComponentAndProcessFile(file, { source: "file-handling" });
       })
       .catch((error) => {
         console.error("Error fetching file from URL:", error);
@@ -161,7 +171,10 @@ function getFileTypeFromFilename(filename: string): string {
 /**
  * Wait for the edoc-app component to be available and process the file
  */
-function waitForComponentAndProcessFile(file: File) {
+function waitForComponentAndProcessFile(
+  file: File,
+  options?: { source?: string },
+) {
   // Function to find the component and dispatch event
   const findComponentAndProcess = () => {
     const component = document.querySelector("edoc-app");
@@ -170,7 +183,7 @@ function waitForComponentAndProcessFile(file: File) {
       console.log("Found edoc-app component, dispatching file-selected event");
 
       const fileSelectedEvent = new CustomEvent("file-selected", {
-        detail: { file },
+        detail: { file, source: options?.source },
         bubbles: true,
         composed: true,
       });

@@ -614,11 +614,18 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
 
   private async onFileSelected(e: CustomEvent) {
     try {
-      const { file } = e.detail;
+      const { file, source } = e.detail;
 
       if (!file) {
         console.error("No file in event detail");
         return;
+      }
+
+      if (this.shouldOpenInNewWindow(source)) {
+        const opened = this.openFileInNewWindow(file);
+        if (opened) {
+          return;
+        }
       }
 
       // Avoid processing the same file multiple times
@@ -795,6 +802,44 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
       navigator.userAgent,
     );
+  }
+
+  private shouldOpenInNewWindow(source?: string) {
+    if (source !== "file-handling") {
+      return false;
+    }
+
+    return this.view === "result" || !!this.container || !!this.currentFileName;
+  }
+
+  private openFileInNewWindow(file: File) {
+    const targetUrl = `${window.location.origin}${window.location.pathname}`;
+    const newWindow = window.open(targetUrl, "_blank");
+
+    if (!newWindow) {
+      console.warn("Unable to open new window for file");
+      return false;
+    }
+
+    const payload = { type: "edoc-open-file", file };
+    let attempts = 0;
+    const maxAttempts = 25;
+
+    const timer = window.setInterval(() => {
+      if (newWindow.closed) {
+        window.clearInterval(timer);
+        return;
+      }
+
+      newWindow.postMessage(payload, window.location.origin);
+      attempts += 1;
+
+      if (attempts >= maxAttempts) {
+        window.clearInterval(timer);
+      }
+    }, 200);
+
+    return true;
   }
 
   private handleFileView(e: CustomEvent) {
