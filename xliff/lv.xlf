@@ -138,6 +138,42 @@
   <source>Install to device</source>
   <target>Instalēt jūsu ierīcē</target>
 </trans-unit>
+<trans-unit id="app.install.localButton">
+  <source>Add to your local apps</source>
+  <target>Pievienot vietējām lietotnēm</target>
+</trans-unit>
+<trans-unit id="app.install.ios.title">
+  <source>Add to Home Screen</source>
+  <target>Pievienot sākuma ekrānam</target>
+</trans-unit>
+<trans-unit id="app.install.mac.title">
+  <source>Add to Dock</source>
+  <target>Pievienot Dock</target>
+</trans-unit>
+<trans-unit id="app.install.step.share">
+  <source>Open Safari’s Share menu.</source>
+  <target>Atveriet Safari kopīgošanas izvēlni.</target>
+</trans-unit>
+<trans-unit id="app.install.ios.step">
+  <source>Select “Add to Home Screen”.</source>
+  <target>Izvēlieties “Pievienot sākuma ekrānam”.</target>
+</trans-unit>
+<trans-unit id="app.install.mac.step">
+  <source>Select “Add to Dock” (it appears in Launchpad).</source>
+  <target>Izvēlieties “Pievienot Dock” (parādīsies Launchpad).</target>
+</trans-unit>
+<trans-unit id="app.install.safari.note">
+  <source>Safari doesn’t show an install prompt, so these steps are manual.</source>
+  <target>Safari nerāda instalēšanas uzvedni, tāpēc šīs darbības jāveic manuāli.</target>
+</trans-unit>
+<trans-unit id="app.install.ios.imageAlt">
+  <source>Safari Share menu with Add to Home Screen</source>
+  <target>Safari kopīgošanas izvēlne ar “Pievienot sākuma ekrānam”</target>
+</trans-unit>
+<trans-unit id="app.install.mac.imageAlt">
+  <source>Safari Share menu with Add to Dock</source>
+  <target>Safari kopīgošanas izvēlne ar “Pievienot Dock”</target>
+</trans-unit>
 <trans-unit id="legal.close_button">
   <source>Close</source>
   <target>Aizvērt</target>
