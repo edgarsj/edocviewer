@@ -625,6 +625,9 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
       this.processingCount++;
       const currentProcessingId = this.processingCount;
 
+      // Close any open preview modal before processing new file
+      this.closeFilePreview();
+
       // Store the file name
       this.currentFileName = file.name;
 
@@ -795,6 +798,13 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
       navigator.userAgent,
     );
+  }
+
+  private closeFilePreview() {
+    const preview = this.shadowRoot?.querySelector("edoc-file-preview") as any;
+    if (preview && typeof preview.hide === "function") {
+      preview.hide();
+    }
   }
 
   private handleFileView(e: CustomEvent) {
