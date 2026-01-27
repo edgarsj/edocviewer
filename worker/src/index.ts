@@ -37,7 +37,7 @@ function getCacheTtl(url: string): number {
   if (lowerUrl.endsWith('.crl')) {
     return CACHE_TTL.crl;
   }
-  if (lowerUrl.match(/\.(crt|cer|der)$/)) {
+  if (lowerUrl.match(/\.(crt|cer|der|p7c)$/)) {
     return CACHE_TTL.cert;
   }
   return CACHE_TTL.default;
@@ -70,10 +70,13 @@ const ALLOWED_DEST_PATTERNS = [
   // Slovak SNCA (National Security Authority CA)
   /^https?:\/\/[^/]*\.snca\.gov\.sk(\/|$)/,         // *.snca.gov.sk (OCSP, CRLs, certs)
 
+  // Hungarian Microsec (government CA)
+  /^https?:\/\/[^/]*\.hiteles\.gov\.hu(\/|$)/,      // *.hiteles.gov.hu (OCSP, CRLs, certs)
+
   // Generic patterns for other EU trust services
   /^https?:\/\/[^/]*ocsp[^/]*\.[^/]+(\/|$)/,        // OCSP responders (*ocsp*)
   /^https?:\/\/aia\.[^/]+\//,                       // AIA endpoints (aia.*)
-  /^https?:\/\/[^/]+\/.*\.(crl|crt|cer|der)(\?.*)?$/i,  // CRL/cert files by extension
+  /^https?:\/\/[^/]+\/.*\.(crl|crt|cer|der|p7c)(\?.*)?$/i,  // CRL/cert files by extension
 ];
 
 function isAllowedOrigin(origin: string | null): boolean {
