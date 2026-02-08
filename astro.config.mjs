@@ -1,7 +1,7 @@
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import lit from '@astrojs/lit';
-import { VitePWA } from '@vite-pwa/astro';
+import AstroPWA from '@vite-pwa/astro';
 import { execSync } from 'child_process';
 import fs from 'fs';
 
@@ -31,7 +31,7 @@ export default defineConfig({
       // Allow Lit components to work in Astro
       include: ['**/src/components/**/*.ts'],
     }),
-    VitePWA({
+    AstroPWA({
       registerType: 'autoUpdate',
       srcDir: 'src/webapp',
       filename: 'service-worker.js',

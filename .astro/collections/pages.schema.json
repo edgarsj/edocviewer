@@ -1,0 +1,71 @@
+{
+  "$ref": "#/definitions/pages",
+  "definitions": {
+    "pages": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "locale": {
+          "type": "string",
+          "enum": [
+            "en",
+            "lv"
+          ]
+        },
+        "pageType": {
+          "type": "string",
+          "enum": [
+            "main",
+            "open-edoc-file",
+            "asice-reader",
+            "what-is-edoc",
+            "compare-viewers"
+          ]
+        },
+        "alternates": {
+          "type": "object",
+          "properties": {
+            "en": {
+              "type": "string"
+            },
+            "lv": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "defaultViewerLocale": {
+          "type": "string",
+          "enum": [
+            "en",
+            "lv"
+          ],
+          "default": "en"
+        },
+        "countryMentions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "description",
+        "locale",
+        "pageType",
+        "alternates"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

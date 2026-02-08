@@ -2,10 +2,14 @@
 import { getEntry } from 'astro:content';
 import LandingLayout from '../../layouts/LandingLayout.astro';
 
-const entry = await getEntry('pages', 'lv/index');
+// Try both possible entry IDs (Astro handles index files differently)
+let entry = await getEntry('pages', 'lv/index');
+if (!entry) {
+  entry = await getEntry('pages', 'lv');
+}
 
 if (!entry) {
-  throw new Error('Content entry not found: lv/index');
+  throw new Error('Content entry not found: lv/index or lv');
 }
 ---
 
