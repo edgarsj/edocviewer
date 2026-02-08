@@ -78,7 +78,7 @@ export function loadSavedLocale(): "en" | "lv" {
 }
 
 // Set locale function
-export async function setAppLocale(locale: SupportedLocale): Promise<void> {
+export async function setAppLocale(locale: SupportedLocale, persist: boolean = true): Promise<void> {
   // Track and log calls during initialization
   console.log("App locale requested:", locale);
 
@@ -106,10 +106,12 @@ export async function setAppLocale(locale: SupportedLocale): Promise<void> {
     document.documentElement.lang = effectiveLocale;
 
     // Save to localStorage
-    try {
-      localStorage.setItem("edoc-viewer-lang", effectiveLocale);
-    } catch (e) {
-      console.warn("Could not save language preference");
+    if (persist) {
+      try {
+        localStorage.setItem("edoc-viewer-lang", effectiveLocale);
+      } catch (e) {
+        console.warn("Could not save language preference");
+      }
     }
 
     // Update lit-localize

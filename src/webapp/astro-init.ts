@@ -6,6 +6,7 @@ import { setupFileHandling, isRunningAsPWA } from "./fileHandling";
 import {
   loadSavedLocale,
   setAppLocale,
+  type SupportedLocale,
 } from "../localization/localization";
 import { ensureInitialized } from "./uiInitializer";
 import { initializeLocaleIntegration } from "../utils/locale-integration";
@@ -107,13 +108,22 @@ export async function initializeEdocApp() {
 // Separate function to handle locale initialization
 async function initializeLocalization(defaultViewerLocale: string) {
   try {
-    // Get saved language preference (user's choice overrides page default)
-    const savedLocale = loadSavedLocale();
-    const viewerLocale = savedLocale || defaultViewerLocale;
+    const isEmbedded = !!document.querySelector('edoc-app[embedded]');
 
-    console.log(`Astro App: Default viewer locale: ${defaultViewerLocale}`);
-    console.log(`Astro App: Saved locale preference: ${savedLocale || 'none'}`);
-    console.log(`Astro App: Using viewer locale: ${viewerLocale}`);
+    let viewerLocale: SupportedLocale;
+    let persist: boolean;
+
+    if (isEmbedded) {
+      // Embedded mode: always use the page locale, don't save to localStorage
+      viewerLocale = defaultViewerLocale as SupportedLocale;
+      persist = false;
+      console.log(`Astro App: Embedded mode - using page locale: ${viewerLocale}`);
+    } else {
+      // Main page: use saved preference (or auto-detect)
+      viewerLocale = loadSavedLocale();
+      persist = true;
+      console.log(`Astro App: Main mode - using saved/detected locale: ${viewerLocale}`);
+    }
 
     // Initialize the locale integration system
     initializeLocaleIntegration();
@@ -129,7 +139,7 @@ async function initializeLocalization(defaultViewerLocale: string) {
     });
 
     // Apply locale through the full system
-    await setAppLocale(viewerLocale);
+    await setAppLocale(viewerLocale, persist);
     console.log(`Astro App: Viewer locale set to ${viewerLocale}`);
   } catch (error) {
     console.error("Error initializing localization:", error);
