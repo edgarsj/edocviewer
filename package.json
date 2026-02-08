@@ -5,10 +5,13 @@
   "main": "dist/webapp/index.js",
   "type": "module",
   "scripts": {
-    "dev": "npm run localize:build && vite",
-    "build:webapp": "npm run localize:build && vite build",
-    "preview": "vite preview",
+    "dev": "npm run localize:build && astro dev",
+    "build:webapp": "npm run localize:build && node scripts/copy-shoelace.js && astro build",
+    "build:vite": "npm run localize:build && vite build",
+    "preview": "astro preview",
+    "preview:vite": "vite preview",
     "build": "npm run build:webapp",
+    "validate": "node scripts/validate-urls.js",
     "localize:extract": "lit-localize extract",
     "localize:build": "lit-localize build",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -33,9 +36,13 @@
     "workbox-strategies": "^7.3.0"
   },
   "devDependencies": {
+    "@astrojs/lit": "^4.3.0",
+    "@astrojs/tailwind": "^6.0.2",
     "@lit/localize-tools": "^0.7.0",
     "@types/chrome": "^0.0.246",
     "@types/node": "^20.19.27",
+    "@vite-pwa/astro": "^1.2.0",
+    "astro": "^5.17.1",
     "autoprefixer": "^10.4.21",
     "postcss": "^8.4.21",
     "postcss-cli": "^11.0.1",
