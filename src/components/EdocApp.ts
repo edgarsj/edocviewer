@@ -1,6 +1,6 @@
 import { VERSION } from "../config/version";
 import { LitElement, html, css, nothing } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { msg } from "@lit/localize";
 import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
 import { isRunningAsPWA } from "../webapp/fileHandling";
@@ -215,7 +215,32 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
       align-items: center;
       gap: 0.5rem;
     }
+
+    :host([embedded]) header,
+    :host([embedded]) footer {
+      display: none;
+    }
+
+    :host([embedded]) .header-language-selector {
+      display: none;
+    }
+
+    .embedded-lang {
+      display: none;
+    }
+
+    :host([embedded]) .embedded-lang {
+      display: flex;
+      align-items: center;
+    }
+
+    :host([embedded]) .header-language-selector edoc-install-button {
+      display: none;
+    }
   `;
+
+  /** When true, hides the component's own header/footer (for use on content pages). */
+  @property({ type: Boolean, reflect: true }) embedded = false;
 
   @state() private view: "upload" | "result" = "upload";
   @state() private currentYear = new Date().getFullYear();
@@ -464,6 +489,9 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
             <edoc-file-dropzone
               @file-selected=${this.onFileSelected}
             ></edoc-file-dropzone>
+            <div class="embedded-lang" style="justify-content: flex-end; padding-top: 0.5rem;">
+              <edoc-language-selector locale="${this.currentLocale}"></edoc-language-selector>
+            </div>
           </div>
 
           <!-- Result Section - Only shown in result view -->
@@ -485,6 +513,9 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
               <h2 class="file-title" title="${this.currentFileName}">
                 ${this.currentFileName}
               </h2>
+              <span class="embedded-lang">
+                <edoc-language-selector locale="${this.currentLocale}"></edoc-language-selector>
+              </span>
             </div>
 
             <!-- Loading indicator -->
