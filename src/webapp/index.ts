@@ -82,7 +82,8 @@ async function initializeApp() {
     console.log("App: UI initialization complete");
 
     // STEP 2: Set up file handling
-    setupFileHandling();
+    // For the SPA version, we always use 'main' as the page type
+    setupFileHandling('main');
     console.log("App: File handling set up");
 
     // STEP 3: Register service worker

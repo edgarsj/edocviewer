@@ -2,10 +2,11 @@
 /**
  * Set up file handling for PWA
  * This implementation works for both direct OS file handling and file URL parameters
+ * @param pageType - The type of page (main, open-edoc-file, etc.) for context
  */
-export function setupFileHandling() {
+export function setupFileHandling(pageType: string = 'main') {
   // Log file handling environment
-  console.log("Setting up file handling...");
+  console.log(`Setting up file handling for page type: ${pageType}...`);
   const isPWA =
     window.matchMedia("(display-mode: standalone)").matches ||
     window.navigator.standalone ||
