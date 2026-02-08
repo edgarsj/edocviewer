@@ -16,25 +16,15 @@ export function initializeUI(): void {
 
   console.log("Initializing UI...");
 
-  // Get elements
-  const staticContent = document.getElementById("static-content");
-  const appElement = document.getElementById("app");
-
-  // Make sure elements exist
-  if (!staticContent || !appElement) {
-    console.error("Could not find required elements: static-content or app");
-    return;
-  }
-
   try {
-    // Hide static content
-    staticContent.style.display = "none";
-
-    // Show app
-    appElement.style.display = "block";
-
-    // Add class to root element for CSS targeting
+    // Always add js-loaded class — this triggers CSS to show edoc-app and hide #static-content
     document.documentElement.classList.add("js-loaded");
+
+    // Optionally hide static content if it exists
+    const staticContent = document.getElementById("static-content");
+    if (staticContent) {
+      staticContent.style.display = "none";
+    }
 
     initialized = true;
     console.log("UI initialized successfully");

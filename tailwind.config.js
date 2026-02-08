@@ -37,7 +37,9 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
   // Ensure these important TailwindCSS classes aren't purged
   safelist: [
     "bg-edoc-100",
