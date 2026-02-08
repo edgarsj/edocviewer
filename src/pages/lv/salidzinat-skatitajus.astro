@@ -1,0 +1,12 @@
+---
+import { getEntry } from 'astro:content';
+import LandingLayout from '../../layouts/LandingLayout.astro';
+
+const entry = await getEntry('pages', 'lv/salidzinat-skatitajus');
+
+if (!entry) {
+  throw new Error('Content entry not found: lv/salidzinat-skatitajus');
+}
+---
+
+<LandingLayout entry={entry} />

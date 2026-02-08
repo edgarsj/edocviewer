@@ -1,0 +1,56 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'pages'>;
+}
+
+const { entry } = Astro.props;
+const { locale, alternates } = entry.data;
+---
+
+<div class="flex items-center gap-2">
+  {alternates.en && (
+    <a
+      href={alternates.en}
+      class={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+        locale === 'en'
+          ? 'bg-edoc-600 text-white'
+          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+      }`}
+      data-locale="en"
+    >
+      EN
+    </a>
+  )}
+  {alternates.lv && (
+    <a
+      href={alternates.lv}
+      class={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+        locale === 'lv'
+          ? 'bg-edoc-600 text-white'
+          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+      }`}
+      data-locale="lv"
+    >
+      LV
+    </a>
+  )}
+</div>
+
+<script>
+  // Update localStorage when language is switched
+  document.addEventListener('DOMContentLoaded', () => {
+    const languageLinks = document.querySelectorAll('[data-locale]');
+
+    languageLinks.forEach((link) => {
+      link.addEventListener('click', (e) => {
+        const locale = (e.currentTarget as HTMLElement).getAttribute('data-locale');
+        if (locale) {
+          // Update viewer locale in localStorage
+          localStorage.setItem('edoc-viewer-locale', locale);
+        }
+      });
+    });
+  });
+</script>

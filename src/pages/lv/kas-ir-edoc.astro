@@ -1,0 +1,12 @@
+---
+import { getEntry } from 'astro:content';
+import LandingLayout from '../../layouts/LandingLayout.astro';
+
+const entry = await getEntry('pages', 'lv/kas-ir-edoc');
+
+if (!entry) {
+  throw new Error('Content entry not found: lv/kas-ir-edoc');
+}
+---
+
+<LandingLayout entry={entry} />

@@ -1,0 +1,12 @@
+---
+import { getEntry } from 'astro:content';
+import LandingLayout from '../layouts/LandingLayout.astro';
+
+const entry = await getEntry('pages', 'en/open-edoc-file');
+
+if (!entry) {
+  throw new Error('Content entry not found: en/open-edoc-file');
+}
+---
+
+<LandingLayout entry={entry} />

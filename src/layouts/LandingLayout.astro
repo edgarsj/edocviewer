@@ -1,0 +1,77 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import LanguageSwitcher from '../components/LanguageSwitcher.astro';
+
+interface Props {
+  entry: CollectionEntry<'pages'>;
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const { locale, defaultViewerLocale } = entry.data;
+---
+
+<BaseLayout entry={entry}>
+  <!-- Header -->
+  <header class="bg-white border-b border-gray-200">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <a href={locale === 'lv' ? '/lv/' : '/'} class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+          <svg class="w-8 h-8 text-edoc-600" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M12,12L16,16H13.5V19H10.5V16H8L12,12Z" />
+          </svg>
+          <span class="text-xl font-semibold text-gray-800">eDoc Viewer</span>
+        </a>
+      </div>
+      <LanguageSwitcher entry={entry} />
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mx-auto px-4 py-8">
+    <!-- Markdown Content -->
+    <article class="prose prose-lg max-w-4xl mx-auto mb-12">
+      <Content />
+    </article>
+
+    <!-- Viewer Section -->
+    <section class="max-w-6xl mx-auto mt-12">
+      <div class="bg-white rounded-lg shadow-lg p-6">
+        <edoc-app
+          data-page-locale={locale}
+          data-viewer-locale={defaultViewerLocale}
+          class="block"
+        ></edoc-app>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-gray-300 mt-16">
+    <div class="container mx-auto px-4 py-8">
+      <div class="text-center">
+        <p class="text-sm">
+          {locale === 'lv'
+            ? 'Izstrādājis'
+            : 'Developed by'
+          }
+          <a
+            href="https://zenomytech.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-edoc-400 hover:text-edoc-300 font-medium"
+          >
+            ZenomyTech
+          </a>
+        </p>
+        <p class="text-xs mt-2 text-gray-400">
+          {locale === 'lv'
+            ? 'Atvērtā pirmkoda ASiC-E/eDoc skatītājs'
+            : 'Open-source ASiC-E/eDoc viewer'
+          }
+        </p>
+      </div>
+    </div>
+  </footer>
+</BaseLayout>

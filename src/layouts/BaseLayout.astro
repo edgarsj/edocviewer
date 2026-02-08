@@ -1,0 +1,77 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'pages'>;
+}
+
+const { entry } = Astro.props;
+const { title, description, locale, pageType, defaultViewerLocale, alternates } = entry.data;
+
+// Build canonical URL
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+// Build alternate URLs
+const alternateEN = alternates.en ? new URL(alternates.en, Astro.site).href : undefined;
+const alternateLV = alternates.lv ? new URL(alternates.lv, Astro.site).href : undefined;
+---
+
+<!DOCTYPE html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content={locale === 'lv' ? 'lv_LV' : 'en_US'} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+
+    <!-- Canonical and Alternate URLs -->
+    <link rel="canonical" href={canonicalURL} />
+    {alternateEN && <link rel="alternate" hreflang="en" href={alternateEN} />}
+    {alternateLV && <link rel="alternate" hreflang="lv" href={alternateLV} />}
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#10b981" />
+
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+
+    <!-- Dual-locale initialization -->
+    <script is:inline define:vars={{ locale, defaultViewerLocale, pageType }}>
+      window.__EDOC_PAGE_LOCALE__ = locale;
+      window.__EDOC_VIEWER_LOCALE__ = defaultViewerLocale;
+      window.__EDOC_PAGE_TYPE__ = pageType;
+    </script>
+
+    <!-- Main CSS (includes Tailwind) -->
+    <link rel="stylesheet" href="/src/webapp/main.css" />
+  </head>
+  <body class="min-h-screen bg-gray-50">
+    <slot />
+
+    <!-- Astro initialization script -->
+    <script>
+      import '/src/webapp/astro-init.ts';
+    </script>
+  </body>
+</html>
