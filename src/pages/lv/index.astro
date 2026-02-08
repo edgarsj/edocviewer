@@ -2,14 +2,11 @@
 import { getEntry } from 'astro:content';
 import LandingLayout from '../../layouts/LandingLayout.astro';
 
-// Try both possible entry IDs (Astro handles index files differently)
-let entry = await getEntry('pages', 'lv/index');
-if (!entry) {
-  entry = await getEntry('pages', 'lv');
-}
+// Get entry for Latvian index page (index.md files use folder name as ID)
+const entry = await getEntry('pages', 'lv');
 
 if (!entry) {
-  throw new Error('Content entry not found: lv/index or lv');
+  throw new Error('Content entry not found: lv');
 }
 ---
 

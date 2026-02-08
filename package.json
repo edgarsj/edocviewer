@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@astrojs/lit": "^4.3.0",
+    "@astrojs/sitemap": "^3.7.0",
     "@astrojs/tailwind": "^6.0.2",
     "@lit/localize-tools": "^0.7.0",
     "@types/chrome": "^0.0.246",

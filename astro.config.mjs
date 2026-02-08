@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import lit from '@astrojs/lit';
+import sitemap from '@astrojs/sitemap';
 import AstroPWA from '@vite-pwa/astro';
 import { execSync } from 'child_process';
 import fs from 'fs';
@@ -22,7 +23,7 @@ const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://edocviewer.com', // Update with actual domain
+  site: 'https://edocviewer.app',
   integrations: [
     tailwind({
       applyBaseStyles: false, // We handle base styles in main.css
@@ -30,6 +31,18 @@ export default defineConfig({
     lit({
       // Allow Lit components to work in Astro
       include: ['**/src/components/**/*.ts'],
+    }),
+    sitemap({
+      changefreq: 'weekly',
+      priority: 0.7,
+      // Bilingual site configuration
+      i18n: {
+        defaultLocale: 'en',
+        locales: {
+          en: 'en-US',
+          lv: 'lv-LV',
+        },
+      },
     }),
     AstroPWA({
       registerType: 'autoUpdate',
