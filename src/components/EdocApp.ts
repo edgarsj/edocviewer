@@ -225,18 +225,41 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
       display: none;
     }
 
-    .embedded-lang {
+    .embedded-controls {
       display: none;
     }
 
-    :host([embedded]) .embedded-lang {
+    :host([embedded]) .embedded-controls {
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      padding-top: 0.5rem;
     }
 
-    :host([embedded]) .header-language-selector edoc-install-button {
-      display: none;
+    .embedded-about-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.25rem 0.625rem;
+      border: 1px solid var(--sl-color-gray-300);
+      border-radius: 0.375rem;
+      background: white;
+      color: var(--sl-color-gray-600);
+      font-size: 0.8125rem;
+      font-family: var(--sl-font-sans);
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
     }
+
+    .embedded-about-btn:hover {
+      color: var(--sl-color-primary-600);
+      border-color: var(--sl-color-primary-400);
+    }
+
+    .embedded-about-btn sl-icon {
+      font-size: 0.875rem;
+    }
+
   `;
 
   /** When true, hides the component's own header/footer (for use on content pages). */
@@ -489,7 +512,11 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
             <edoc-file-dropzone
               @file-selected=${this.onFileSelected}
             ></edoc-file-dropzone>
-            <div class="embedded-lang" style="justify-content: flex-end; padding-top: 0.5rem;">
+            <div class="embedded-controls">
+              <button class="embedded-about-btn" @click=${() => this.openLegalModalWithSection("about")}>
+                <sl-icon name="info-circle"></sl-icon>
+                ${msg("About", { id: "legal.about_tab" })}
+              </button>
               <edoc-language-selector locale="${this.currentLocale}"></edoc-language-selector>
             </div>
           </div>
@@ -513,7 +540,10 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
               <h2 class="file-title" title="${this.currentFileName}">
                 ${this.currentFileName}
               </h2>
-              <span class="embedded-lang">
+              <span class="embedded-controls" style="padding-top: 0; gap: 0.5rem;">
+                <button class="embedded-about-btn" @click=${() => this.openLegalModalWithSection("about")}>
+                  <sl-icon name="info-circle"></sl-icon>
+                </button>
                 <edoc-language-selector locale="${this.currentLocale}"></edoc-language-selector>
               </span>
             </div>
