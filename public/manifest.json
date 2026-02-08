@@ -54,12 +54,50 @@
   "background_color": "#ECFDF5",
   "file_handlers": [
     {
-      "action": "index.html",
+      "action": "/",
       "accept": {
         "application/vnd.etsi.asic-e+zip": [".asice"],
         "application/octet-stream": [".edoc"],
         "application/zip": [".asice", ".edoc"]
       }
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Open eDoc File",
+      "short_name": "Open File",
+      "description": "Learn how to open eDoc files",
+      "url": "/open-edoc-file",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "ASiC-E Reader",
+      "short_name": "ASiC-E",
+      "description": "ASiC-E format information",
+      "url": "/asice-reader",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Compare Viewers",
+      "short_name": "Compare",
+      "description": "Compare different eDoc viewers",
+      "url": "/compare-viewers",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ],
   "launch_handler": {
