@@ -47,6 +47,7 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 1rem;
+      position: relative;
     }
 
     header {
@@ -60,6 +61,7 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
       align-items: center;
       gap: 0.75rem;
       margin-bottom: 0.5rem;
+      flex: 1;
     }
 
     .app-logo {
@@ -207,10 +209,16 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
       display: none !important;
     }
 
+    .header-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 0 0 0;
+    }
+
     .header-language-selector {
       position: absolute;
-      top: 1rem;
-      right: 1rem;
+      right: 0;
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -444,38 +452,39 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
 
     return html`
       <div class="container">
-        <div class="header-language-selector">
-          ${isStandalone
-            ? html`
-                <sl-button
-                  size="small"
-                  @click=${() => this.openLegalModalWithSection("about")}
-                >
-                  <sl-icon
-                    slot="prefix"
-                    name="question-square-fill"
-                    style="font-size: 16px;"
-                  ></sl-icon>
-                  ${msg("About", { id: "legal.about_tab" })}
-                </sl-button>
-              `
-            : html`<edoc-install-button></edoc-install-button>`}
-          <edoc-language-selector
-            locale="${this.currentLocale}"
-          ></edoc-language-selector>
-        </div>
-
         <header>
-          <div class="app-header">
-            <img
-              src="/icons/edoc-icon.svg"
-              alt="eDoc Viewer Logo"
-              class="app-logo"
-            />
-            <span class="app-title">
-              ${msg("eDoc Viewer", { id: "app.title" })}
-              <span class="beta-tag">BETA</span>
-            </span>
+          <div class="header-top-row">
+            <div class="app-header">
+              <img
+                src="/icons/edoc-icon.svg"
+                alt="eDoc Viewer Logo"
+                class="app-logo"
+              />
+              <span class="app-title">
+                ${msg("eDoc Viewer", { id: "app.title" })}
+                <span class="beta-tag">BETA</span>
+              </span>
+            </div>
+            <div class="header-language-selector">
+              ${isStandalone
+                ? html`
+                    <sl-button
+                      size="small"
+                      @click=${() => this.openLegalModalWithSection("about")}
+                    >
+                      <sl-icon
+                        slot="prefix"
+                        name="question-square-fill"
+                        style="font-size: 16px;"
+                      ></sl-icon>
+                      ${msg("About", { id: "legal.about_tab" })}
+                    </sl-button>
+                  `
+                : html`<edoc-install-button></edoc-install-button>`}
+              <edoc-language-selector
+                locale="${this.currentLocale}"
+              ></edoc-language-selector>
+            </div>
           </div>
 
           ${!isStandalone

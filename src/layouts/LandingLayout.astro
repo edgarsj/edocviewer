@@ -39,11 +39,11 @@ const footerLinks = locale === 'lv'
       data-viewer-locale={defaultViewerLocale}
     ></edoc-app>
 
-    <div id="static-content" class="border-t border-gray-200 bg-gray-50/80 mt-0">
-      <article class="container mx-auto px-6 py-10 prose prose-sm prose-gray max-w-3xl
-        [&>h1]:text-xl [&>h1]:font-semibold [&>h1]:text-gray-600 [&>h1]:mb-4 [&>h1]:mt-0
-        [&>h2]:text-base [&>h2]:font-semibold [&>h2]:text-gray-500
-        text-gray-500">
+    <div id="static-content" class="border-t border-gray-200 bg-gray-50/50">
+      <article class="container mx-auto px-4 py-10 prose prose-gray max-w-4xl
+        [&>h1]:text-2xl [&>h1]:font-bold [&>h1]:text-gray-700 [&>h1]:mb-6 [&>h1]:mt-0
+        [&>h2]:text-lg [&>h2]:font-semibold [&>h2]:text-gray-600
+        text-gray-600">
         <Content />
       </article>
     </div>
@@ -64,7 +64,10 @@ const footerLinks = locale === 'lv'
     </header>
 
     <main class="container mx-auto px-4 py-8">
-      <article class="prose prose-lg max-w-4xl mx-auto mb-12">
+      <article class="prose prose-gray max-w-4xl mx-auto mb-12
+        [&>h1]:text-2xl [&>h1]:font-bold [&>h1]:text-gray-700 [&>h1]:mb-6
+        [&>h2]:text-lg [&>h2]:font-semibold [&>h2]:text-gray-600
+        text-gray-600">
         <Content />
       </article>
 
