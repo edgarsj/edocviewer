@@ -11,10 +11,6 @@ alternates:
 
 # eDoc Skatītājs — Digitālo parakstu skatītājs ASiC-E konteineriem
 
-Atveriet, skatiet un pārbaudiet digitāli parakstītus **eDoc** un **ASiC-E** dokumentus tieši savā pārlūkā. Pārbaudiet digitālos parakstus, validējiet sertifikātus un izvelciet failus no `.edoc` un `.asice` konteineriem — bez instalācijas.
-
-## Funkcijas
-
 - **Digitālo parakstu pārbaude** - Validējiet XAdES parakstus, sertifikātu ķēdes un laika zīmogus
 - **Pilnīgs privātums** - Visa apstrāde notiek lokāli jūsu ierīcē, faili nekad neatstāj pārlūku
 - **Bezsaistes atbalsts** - Instalējiet kā progresīvo tīmekļa lietotni (PWA) un lietojiet bez interneta

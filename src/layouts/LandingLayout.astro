@@ -39,8 +39,11 @@ const footerLinks = locale === 'lv'
       data-viewer-locale={defaultViewerLocale}
     ></edoc-app>
 
-    <div id="static-content">
-      <article class="container mx-auto px-4 py-8 prose prose-lg max-w-4xl">
+    <div id="static-content" class="border-t border-gray-200 bg-gray-50/80 mt-0">
+      <article class="container mx-auto px-6 py-10 prose prose-sm prose-gray max-w-3xl
+        [&>h1]:text-xl [&>h1]:font-semibold [&>h1]:text-gray-600 [&>h1]:mb-4 [&>h1]:mt-0
+        [&>h2]:text-base [&>h2]:font-semibold [&>h2]:text-gray-500
+        text-gray-500">
         <Content />
       </article>
     </div>

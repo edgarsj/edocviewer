@@ -92,13 +92,9 @@ html.js-loaded edoc-app {
     display: block !important;
 }
 
-/* Static content visibility */
+/* Static content is always visible below the viewer for SEO */
 #static-content {
     display: block;
-}
-
-html.js-loaded #static-content {
-    display: none !important;
 }
 
 /* Hide the app when JS is disabled (for graceful degradation) */

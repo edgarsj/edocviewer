@@ -9,7 +9,7 @@
 let initialized = false;
 
 /**
- * Initialize the UI by hiding static content and showing the web components
+ * Initialize the UI by showing the web components
  */
 export function initializeUI(): void {
   if (initialized) return;
@@ -17,14 +17,8 @@ export function initializeUI(): void {
   console.log("Initializing UI...");
 
   try {
-    // Always add js-loaded class — this triggers CSS to show edoc-app and hide #static-content
+    // Always add js-loaded class — this triggers CSS to show edoc-app
     document.documentElement.classList.add("js-loaded");
-
-    // Optionally hide static content if it exists
-    const staticContent = document.getElementById("static-content");
-    if (staticContent) {
-      staticContent.style.display = "none";
-    }
 
     initialized = true;
     console.log("UI initialized successfully");

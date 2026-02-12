@@ -11,10 +11,6 @@ alternates:
 
 # eDoc Viewer — Digital Signature Viewer for ASiC-E Containers
 
-Open, view, and verify digitally signed **eDoc** and **ASiC-E** documents directly in your browser. Inspect digital signatures, validate certificates, and extract files from `.edoc` and `.asice` containers — no installation required.
-
-## Features
-
 - **Digital Signature Verification** - Validate XAdES signatures, certificate chains, and timestamps
 - **Complete Privacy** - All processing happens locally on your device, files never leave your browser
 - **Offline Support** - Install as a Progressive Web App (PWA) and use without internet

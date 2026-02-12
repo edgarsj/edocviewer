@@ -472,10 +472,10 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
               alt="eDoc Viewer Logo"
               class="app-logo"
             />
-            <h1 class="app-title">
+            <span class="app-title">
               ${msg("eDoc Viewer", { id: "app.title" })}
               <span class="beta-tag">BETA</span>
-            </h1>
+            </span>
           </div>
 
           ${!isStandalone
