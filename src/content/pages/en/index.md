@@ -9,20 +9,36 @@ alternates:
   lv: "/lv/"
 ---
 
-# eDoc Viewer
+# eDoc Viewer — Digital Signature Viewer for ASiC-E Containers
 
-Open and view your **eDoc** and **ASiC-E** files securely in your browser. No installation required, works completely offline as a Progressive Web App.
+Open, view, and verify digitally signed **eDoc** and **ASiC-E** documents directly in your browser. Inspect digital signatures, validate certificates, and extract files from `.edoc` and `.asice` containers — no installation required.
 
 ## Features
 
-- **Zero Installation** - Works directly in your browser
-- **Complete Privacy** - All processing happens locally on your device
-- **Offline Support** - Install as PWA and use without internet
-- **Signature Verification** - Validate digital signatures and certificates
-- **Multi-format Support** - View PDFs, images, and Office documents inside containers
+- **Digital Signature Verification** - Validate XAdES signatures, certificate chains, and timestamps
+- **Complete Privacy** - All processing happens locally on your device, files never leave your browser
+- **Offline Support** - Install as a Progressive Web App (PWA) and use without internet
+- **Multi-format Containers** - Open `.edoc`, `.asice`, and `.sce` files
+- **Document Preview** - View PDFs, images, and Office documents embedded inside containers
+- **Certificate Details** - Inspect signer identity, issuer, validity period, and trust chain
 
 ## How It Works
 
-Simply drag and drop your `.edoc` or `.asice` file onto the viewer below, or click to browse for a file. The viewer will extract and display all contents, verify digital signatures, and show certificate information.
+Drag and drop your digitally signed file onto the viewer above, or click to browse. The viewer will extract all contents, verify each digital signature, and display certificate information — all locally in your browser.
 
-All processing happens locally in your browser - your files never leave your device.
+## Supported Formats
+
+This viewer handles common ASiC-E (Associated Signature Container Extended) file extensions:
+
+- **`.edoc`** - Used in Latvia and Estonia for digitally signed documents
+- **`.asice`** - Generic ASiC-E extension used across the EU
+- **`.sce`** - Alternative ASiC-E extension
+
+All these are ZIP-based containers defined by the **ETSI TS 102 918** standard and are legally recognized under the **eIDAS regulation** across EU member states.
+
+## Who Needs This
+
+- Received a `.edoc` or `.asice` file and need to open it
+- Want to verify who signed a document and when
+- Need to extract individual files from a signed container
+- Looking for a privacy-respecting alternative to uploading files to online services

@@ -33,17 +33,17 @@ const footerLinks = locale === 'lv'
 
 <BaseLayout entry={entry}>
   {isMainPage ? (
-    <!-- Main page: edoc-app is the full UI, markdown is SEO-only -->
+    <!-- Main page: edoc-app is the full UI, SEO content sits below -->
+    <edoc-app
+      data-page-locale={locale}
+      data-viewer-locale={defaultViewerLocale}
+    ></edoc-app>
+
     <div id="static-content">
       <article class="container mx-auto px-4 py-8 prose prose-lg max-w-4xl">
         <Content />
       </article>
     </div>
-
-    <edoc-app
-      data-page-locale={locale}
-      data-viewer-locale={defaultViewerLocale}
-    ></edoc-app>
   ) : (
     <!-- Content page: Astro header + styled markdown + edoc-app -->
     <header class="bg-white border-b border-gray-200">

@@ -6,7 +6,8 @@ interface Props {
 }
 
 const { entry } = Astro.props;
-const { title, description, locale, pageType, defaultViewerLocale, alternates } = entry.data;
+const { title, description, locale, pageType, defaultViewerLocale, alternates, image } = entry.data;
+const ogImage = new URL(image || '/screenshots/screen-1200-630x.png', Astro.site).href;
 
 // Build canonical URL
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -33,6 +34,7 @@ const alternateLV = alternates.lv ? new URL(alternates.lv, Astro.site).href : un
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
     <meta property="og:locale" content={locale === 'lv' ? 'lv_LV' : 'en_US'} />
 
     <!-- Twitter -->
@@ -40,6 +42,7 @@ const alternateLV = alternates.lv ? new URL(alternates.lv, Astro.site).href : un
     <meta property="twitter:url" content={canonicalURL} />
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={ogImage} />
 
     <!-- Canonical and Alternate URLs -->
     <link rel="canonical" href={canonicalURL} />

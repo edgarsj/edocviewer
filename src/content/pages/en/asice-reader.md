@@ -28,7 +28,6 @@ ASiC-E files can have different extensions depending on the country:
 
 - `.asice` - Generic ASiC-E extension
 - `.edoc` - Used in Latvia and Estonia
-- `.bdoc` - Legacy extension (Estonia)
 - `.sce` - Some implementations
 
 All these formats are compatible and can be opened with our viewer.

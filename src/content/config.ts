@@ -12,6 +12,7 @@ const pagesCollection = defineCollection({
       lv: z.string().optional(),
     }),
     defaultViewerLocale: z.enum(['en', 'lv']).default('en'),
+    image: z.string().optional(), // OG/Twitter image path relative to public/, e.g. "/screenshots/screen-1200-630x.png"
     countryMentions: z.array(z.string()).optional(), // ['eParaksts', 'Latvijas.lv'] for LV
   }),
 });

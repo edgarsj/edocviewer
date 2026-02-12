@@ -29,7 +29,6 @@ ASiC-E failiem var būt dažādi paplašinājumi atkarībā no valsts:
 
 - `.asice` - Vispārīgs ASiC-E paplašinājums
 - `.edoc` - Izmanto Latvijā un Igaunijā
-- `.bdoc` - Mantojuma paplašinājums (Igaunija)
 - `.sce` - Dažas implementācijas
 
 Visi šie formāti ir saderīgi un var tikt atvērti ar mūsu skatītāju.
