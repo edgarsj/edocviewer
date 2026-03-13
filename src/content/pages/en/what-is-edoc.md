@@ -1,6 +1,6 @@
 ---
-title: "What is an eDoc File? Complete Guide to eDoc Format"
-description: "Comprehensive guide to eDoc files - what they are, how they work, and why they're important for secure digital document exchange in the EU."
+title: "What Is an eDoc File? ASiC-E Explained"
+description: "Learn what an eDoc file is, how it relates to ASiC-E, what is inside the container, and how signed files are verified."
 locale: "en"
 pageType: "what-is-edoc"
 defaultViewerLocale: "en"
@@ -9,24 +9,24 @@ alternates:
   lv: "/lv/kas-ir-edoc"
 ---
 
-# What is an eDoc File?
+# What Is an eDoc File? ASiC-E Explained
 
-An **eDoc file** is a digitally signed document container used for secure document exchange, primarily in Latvia and Estonia. It's based on the **ASiC-E** (Associated Signature Container Extended) standard.
+An **eDoc file** is a digitally signed document container. In practical terms, `.edoc` is a filename extension used for ASiC-E-based signed containers, while `.asice` is the broader format-oriented extension and `.sce` is an alternative extension used by some systems. The underlying idea is the same: bundle documents and signatures together in one tamper-evident package.
 
-## eDoc vs. Regular Documents
+## eDoc vs. a Regular Document
 
 | Feature | Regular PDF/DOCX | eDoc Container |
 |---------|------------------|----------------|
 | **Digital Signatures** | Optional, embedded | Built-in, mandatory |
 | **Multiple Files** | Single file only | Can contain many files |
 | **Verification** | Limited | Full cryptographic validation |
-| **Legal Status** | Depends on jurisdiction | Recognized across EU (eIDAS) |
+| **Legal Context** | Depends on document workflow | Can support eIDAS-relevant electronic signatures |
 | **Integrity** | Can be modified | Tamper-evident |
 
-## Why Use eDoc?
+## Why Use eDoc or ASiC-E?
 
-### Legal Validity
-eDoc files provide **non-repudiation** - the signer cannot deny having signed the document. This makes them legally binding across the European Union under the eIDAS regulation.
+### Signature Evidence
+Signed containers can preserve who signed, what was signed, and when it was signed. Depending on the certificate, signature type, and workflow, that evidence can be important for audit, compliance, and formal document exchange.
 
 ### Security
 - **Tamper Detection** - Any modification invalidates the signature
@@ -55,17 +55,13 @@ eDoc files provide **non-repudiation** - the signer cannot deny having signed th
 - Notarized documents
 - Important personal records
 
-## How eDoc Files are Created
+## How eDoc Files Are Created
 
 eDoc files are typically created using:
 
-1. **eID Card Software** - Official applications provided by governments
-   - Latvia: eParaksts Mobile/Smart-ID
-   - Estonia: DigiDoc4
-   - Belgium: itsme®
-
-2. **Signing Portals** - Web-based signing services
-3. **Enterprise Solutions** - Business document management systems
+1. **Desktop signing applications** provided by trust-service or eID ecosystems
+2. **Signing portals** used by public authorities or private services
+3. **Enterprise systems** that generate or process signed containers
 
 ## File Structure Explained
 
@@ -124,21 +120,20 @@ Use the viewer on this page to:
 
 ## Technical Standards
 
-eDoc is based on:
+eDoc/ASiC-E files are typically built around:
 
-- **ETSI TS 102 918** - ASiC specification
-- **ETSI TS 101 903** - XAdES (XML Advanced Electronic Signatures)
-- **eIDAS Regulation** - EU regulation on electronic identification
-- **RFC 3161** - Time-Stamp Protocol (TSP)
+- **ASiC / ASiC-E container specifications** from ETSI
+- **XAdES electronic signatures** for XML-based signature data
+- **RFC 3161 timestamps** when trusted timestamping is used
+- **eIDAS** as the EU legal framework often discussed alongside these signatures
 
 ## International Compatibility
 
-While eDoc files are most common in the Baltic states, the underlying ASiC-E format is used across Europe:
+While `.edoc` is commonly associated with Baltic workflows, the underlying ASiC-E approach is used more broadly in European electronic-signature ecosystems:
 
-- **European Union** - Recognized under eIDAS
-- **Norway** - Government digital signatures
-- **Switzerland** - E-government services
-- **Other EU Members** - Various national implementations
+- **European Union** - Cross-border signature and trust-service discussions often refer to ASiC-E
+- **Baltic states** - `.edoc`, `.asice`, and related containers are widely encountered in practice
+- **Other European workflows** - Similar signed-container approaches appear in public-sector and regulated exchanges
 
 ## Privacy and Security
 
@@ -149,8 +144,12 @@ When using our viewer:
 - ✅ **Open-source code** - Fully transparent and auditable
 - ⚠️ **Online checks may still be used** - Full certificate and timestamp validation can contact trust-service endpoints
 
+## For Developers
+
+If you need to parse or verify these containers programmatically, eDoc Viewer is built on [edockit](https://github.com/edgarsj/edockit), an open-source library for working with ASiC-E and eDoc files.
+
 ## Learn More
 
-- [How to Open eDoc Files](/open-edoc-file)
+- [How to Open and Verify an eDoc or ASiC-E File](/open-edoc-file)
 - [ASiC-E Reader Technical Details](/asice-reader)
 - [Compare Different Viewers](/compare-viewers)

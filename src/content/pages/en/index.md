@@ -45,9 +45,35 @@ An eDoc file is a signed document container rather than a single document format
 - Need to extract individual files from a signed container
 - Looking for a browser-based way to inspect signed containers without uploading document contents
 
+## FAQ
+
+### What is an eDoc file?
+
+An eDoc file is a signed document container based on the ASiC-E format. Instead of holding just one document, it can package documents, signatures, timestamps, and metadata together in a single file.
+
+### How do I open an eDoc or ASiC-E file?
+
+Drag the `.edoc`, `.asice`, or `.sce` file into the viewer above. The app will extract the container in your browser so you can inspect the included documents and signature details. For a step-by-step guide, see [How to Open and Verify an eDoc or ASiC-E File](/open-edoc-file).
+
+### How do I verify an electronic signature?
+
+Open the signed container in the viewer and review the signer, certificate, and timestamp information shown for each signature. For full live validation, the app may contact certificate revocation and timestamp services.
+
+### What is the difference between `.edoc`, `.asice`, and `.sce`?
+
+They are different filename extensions for the same general ASiC-E container approach. In practice, `.edoc` is commonly associated with Latvian eDoc files, while `.asice` is the broader standards-oriented extension and `.sce` is an alternative extension used by some systems.
+
+### Are my document contents uploaded?
+
+No. Document contents are processed in your browser and are not uploaded to our servers. Network requests may still be used for certificate status, revocation, or timestamp validation.
+
+### Do I need internet to verify signatures?
+
+You can open the container and inspect its contents locally. Internet access may still be needed for live certificate and timestamp checks, especially when you want stronger validation of signature status.
+
 ## Learn More
 
-- [How to Open an eDoc File](/open-edoc-file)
+- [How to Open and Verify an eDoc or ASiC-E File](/open-edoc-file)
 - [What is an eDoc File?](/what-is-edoc)
 - [ASiC-E Reader Guide](/asice-reader)
 - [Compare eDoc Viewers](/compare-viewers)
