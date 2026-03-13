@@ -67,6 +67,10 @@ They are different filename extensions for the same general ASiC-E container app
 
 No. Document contents are processed in your browser and are not uploaded to our servers. Network requests may still be used for certificate status, revocation, or timestamp validation.
 
+### How do I open eDoc files faster?
+
+Install eDoc Viewer as a Progressive Web App (PWA) from Chrome. Once installed, your system can associate `.edoc`, `.asice`, and `.sce` files with the app — then just double-click to open. See the [full PWA setup guide](/open-edoc-file#open-edoc-files-instantly-pwa).
+
 ### Do I need internet to verify signatures?
 
 You can open the container and inspect its contents locally. Internet access may still be needed for live certificate and timestamp checks, especially when you want stronger validation of signature status.

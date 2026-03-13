@@ -19,7 +19,7 @@ If you are here because you need an **ASiC-E reader**, use the viewer on this pa
 
 ## What is ASiC-E?
 
-ASiC-E is a ZIP-based signed-container format built for packaging documents together with electronic signatures and related metadata. In practice, it provides:
+ASiC-E is a ZIP-based container that bundles documents with electronic signatures and metadata:
 
 - **Container Format** - ZIP-based archive for multiple files
 - **Digital Signatures** - XAdES signatures embedded within the container
@@ -73,7 +73,7 @@ Document contents stay local in your browser on your device. When deeper live va
 
 ## ASiC-E and eIDAS
 
-ASiC-E is the container format often used together with electronic signatures discussed under the **eIDAS** framework. In practical terms, that means ASiC-E containers are relevant in workflows such as:
+ASiC-E is the container format used with electronic signatures under the **eIDAS** framework. You'll encounter it in workflows like:
 
 - Official documents
 - Contracts and agreements

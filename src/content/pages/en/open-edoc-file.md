@@ -15,7 +15,7 @@ An **eDoc file** is an ASiC-E-based container for digitally signed documents. If
 
 ## Quick Answer
 
-If you only need to open a signed file and inspect what is inside, the browser viewer below is usually the fastest option. It works locally in your browser, so the document contents stay on your device instead of being sent to a file-processing service. [Open your `.edoc`, `.asice`, or `.sce` file in the viewer below](#viewer). If you need to create signatures, use a desktop signing app. If you need an official or jurisdiction-specific validation record, use the validator recommended by the relevant trust-service provider or public authority.
+If you only need to open a signed file and inspect what is inside, the browser viewer below is usually the fastest option. It runs locally in your browser — your files stay on your device. [Open your `.edoc`, `.asice`, or `.sce` file in the viewer below](#viewer). If you need to create signatures, use a desktop signing app. If you need an official or jurisdiction-specific validation record, use the validator recommended by the relevant trust-service provider or public authority.
 
 ## Step-by-Step: Open and Verify the File
 
@@ -25,7 +25,7 @@ If you only need to open a signed file and inspect what is inside, the browser v
 4. **Check the signatures** to see signer, certificate, and timestamp information
 5. **Download** individual files if needed
 
-Your document contents remain in your own browser on your own device. When deeper signature validation is available, the app may still contact certificate, revocation, or timestamp services for the signature-checking part.
+Your files stay on your device. For full signature validation, the app may contact certificate and timestamp services online.
 
 ## What You Can Check
 
@@ -36,6 +36,17 @@ After opening the file, you can usually:
 - Check whether the document appears signed and intact while keeping the file contents local
 - Review timestamp information when present
 - Extract individual files from the container
+
+## Open eDoc Files Instantly (PWA)
+
+If you open `.edoc` or `.asice` files regularly, install eDoc Viewer as a Progressive Web App for the fastest workflow:
+
+1. Open eDoc Viewer in Chrome
+2. Click the install icon in the address bar (or use the menu → "Install eDoc Viewer")
+3. Once installed, Chrome can associate `.edoc`, `.asice`, and `.sce` files with the app
+4. From then on, **double-click any eDoc file** and it opens immediately in the viewer
+
+This is the closest thing to a native desktop app without installing one — it launches instantly, works offline, and handles file associations so you never have to drag-and-drop again. It's especially useful for quickly previewing PDFs and DOCX files inside signed containers without having to extract and open them separately.
 
 ## When to Use Another Tool
 

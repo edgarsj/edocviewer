@@ -11,7 +11,7 @@ alternates:
 
 # Compare eDoc and ASiC-E Viewers
 
-If you need to open or verify an eDoc or ASiC-E file, the right tool depends on what you are trying to do. Most people only need one of three options: a browser viewer, a desktop signing app, or an official/provider-run web service.
+The right tool depends on what you need to do. There are really only three options:
 
 ## Quick Answer
 
@@ -29,11 +29,11 @@ If you need to open or verify an eDoc or ASiC-E file, the right tool depends on 
 
 ## Important Caveat
 
-Signing, validation depth, and batch capability depend less on whether the tool is called a "viewer" and more on:
+What a tool can do depends more on your signing method and setup than on the tool label:
 
-- The **credential type** being used, such as a smart card, eID card, mobile signing certificate, or cloud-signing identity
-- The **provider workflow**, such as browser redirect flows, provider APIs, or server-side signing platforms
-- The **business context**, for example whether you are validating one received file or integrating a full document workflow
+- **Your credential** — smart card, eID, mobile certificate, or cloud signing
+- **The provider** — some use browser redirects, some have APIs, some sign server-side
+- **Your scale** — opening one file you received vs. integrating a full document workflow
 
 ## Which Option Should You Choose?
 

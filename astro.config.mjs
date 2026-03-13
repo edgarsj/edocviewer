@@ -78,6 +78,9 @@ export default defineConfig({
   ],
   output: 'static',
   vite: {
+    server: {
+      allowedHosts: ['.trycloudflare.com'],
+    },
     esbuild: {
       // Required for Lit decorators to work with TypeScript 5
       target: 'ES2020',

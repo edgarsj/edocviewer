@@ -20,13 +20,13 @@ An **eDoc file** is a digitally signed document container. In practical terms, `
 | **Digital Signatures** | Optional, embedded | Built-in, mandatory |
 | **Multiple Files** | Single file only | Can contain many files |
 | **Verification** | Limited | Full cryptographic validation |
-| **Legal Context** | Depends on document workflow | Can support eIDAS-relevant electronic signatures |
+| **Legal Context** | Depends on document workflow | Designed for eIDAS electronic signatures |
 | **Integrity** | Can be modified | Tamper-evident |
 
 ## Why Use eDoc or ASiC-E?
 
 ### Signature Evidence
-Signed containers can preserve who signed, what was signed, and when it was signed. Depending on the certificate, signature type, and workflow, that evidence can be important for audit, compliance, and formal document exchange.
+Signed containers can preserve who signed, what was signed, and when it was signed. That evidence matters for audit trails, compliance, and formal document exchange.
 
 ### Security
 - **Tamper Detection** - Any modification invalidates the signature
@@ -124,7 +124,7 @@ In plain language:
 - The **timestamp** can prove when the signature existed
 - The **trust decision** comes from validating the certificate chain and checking whether the issuing trust service is on a relevant trusted list
 
-In European trust-service workflows, validators often rely on national and EU trusted lists to decide whether a certificate authority should be trusted for electronic signatures. A public reference point is the [EU trusted list browser](https://eidas.ec.europa.eu/efda/trust-services/browse/eidas/tls/search/type?step=1).
+In Europe, validators check national and EU trusted lists to decide whether a certificate authority is trusted. A public reference point is the [EU trusted list browser](https://eidas.ec.europa.eu/efda/trust-services/browse/eidas/tls/search/type?step=1).
 
 ## Signature Types
 
@@ -163,15 +163,15 @@ eDoc/ASiC-E files are typically built around:
 - **ASiC / ASiC-E container specifications** from ETSI
 - **XAdES electronic signatures** for XML-based signature data
 - **RFC 3161 timestamps** when trusted timestamping is used
-- **eIDAS** as the EU legal framework often discussed alongside these signatures
+- **eIDAS** — the EU legal framework for electronic signatures and trust services
 
 ## International Compatibility
 
-While `.edoc` is primarily associated with Latvian eDoc workflows, the underlying ASiC-E approach is used more broadly in European electronic-signature ecosystems:
+While `.edoc` is primarily associated with Latvian eDoc workflows, the underlying ASiC-E format is used across European electronic signature systems:
 
-- **European Union** - Cross-border signature and trust-service discussions often refer to ASiC-E
+- **European Union** - ASiC-E is the standard container format for cross-border electronic signatures
 - **Latvia** - `.edoc` is the country-specific extension most users encounter in practice
-- **Other European workflows** - Similar signed-container approaches appear in public-sector and regulated exchanges
+- **Other European workflows** - Several countries use ASiC-E containers in government and regulated workflows
 
 ## Privacy and Security
 
