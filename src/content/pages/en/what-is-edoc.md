@@ -144,10 +144,10 @@ While eDoc files are most common in the Baltic states, the underlying ASiC-E for
 
 When using our viewer:
 
-- ✅ **All processing is local** - Files never leave your device
-- ✅ **No uploads to servers** - Everything happens in your browser
+- ✅ **Document contents stay local** - Files are handled in your browser
+- ✅ **No document uploads** - Your signed files are not uploaded to our servers
 - ✅ **Open-source code** - Fully transparent and auditable
-- ✅ **Works offline** - Install as PWA for complete privacy
+- ⚠️ **Online checks may still be used** - Full certificate and timestamp validation can contact trust-service endpoints
 
 ## Learn More
 

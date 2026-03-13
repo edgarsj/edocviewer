@@ -1,6 +1,6 @@
 ---
-title: "How to Open an eDoc File - Complete Guide"
-description: "Learn how to open and view eDoc files online. Compare different viewer options and choose the best solution for your needs."
+title: "How to Open an eDoc File Online | eDoc Reader Guide"
+description: "Learn how to open .edoc, .asice, and .sce files online, inspect attachments, and verify signatures in your browser."
 locale: "en"
 pageType: "open-edoc-file"
 defaultViewerLocale: "en"
@@ -9,15 +9,15 @@ alternates:
   lv: "/lv/atvert-edoc-failu"
 ---
 
-# How to Open an eDoc File
+# How to Open an eDoc File Online
 
-An **eDoc file** (also known as ASiC-E) is a container format for digitally signed documents used across the European Union for secure document exchange.
+An **eDoc file** is an ASiC-E-based container for digitally signed documents. If you received an `.edoc`, `.asice`, or `.sce` file, you can open it in your browser and inspect the signed contents without installing desktop software.
 
 ## Quick Start
 
 The easiest way to open an eDoc file is using our online viewer below:
 
-1. **Drag and drop** your `.edoc` or `.asice` file onto the viewer
+1. **Drag and drop** your `.edoc`, `.asice`, or `.sce` file onto the viewer
 2. The file will be **automatically extracted** and displayed
 3. **Verify signatures** and view all contained documents
 4. **Download** individual files if needed
@@ -29,7 +29,7 @@ While there are several options for opening eDoc files, here's how they compare:
 ### eDoc Viewer (This Site)
 - ✅ Works in any modern browser
 - ✅ No installation required
-- ✅ Complete privacy - files processed locally
+- ✅ Document contents stay local to your browser
 - ✅ Works offline as PWA
 - ✅ Free and open-source
 
@@ -56,3 +56,5 @@ eDoc files use the **ASiC-E** (Associated Signature Container Extended) format, 
 - Manifest files (META-INF/)
 
 Our viewer extracts and verifies all components automatically.
+
+If you want a deeper explanation of the format, see [What is an eDoc File?](/what-is-edoc). If you specifically need the container-standard view, use the [ASiC-E Reader](/asice-reader) page.

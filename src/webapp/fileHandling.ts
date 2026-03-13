@@ -147,6 +147,7 @@ function getFileTypeFromFilename(filename: string): string {
 
   switch (extension) {
     case "asice":
+    case "sce":
       return "application/vnd.etsi.asic-e+zip";
     case "edoc":
       return "application/octet-stream";

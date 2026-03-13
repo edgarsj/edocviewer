@@ -359,7 +359,7 @@ export class EdocLegalModal extends LocaleAwareMixin(LitElement) {
               </h3>
               <p>
                 ${msg(
-                  "eDoc Viewer is a web application that allows users to view and verify EU standard ASiC-E and Latvian eDoc electronic signature files (.asice, .edoc). The application processes files locally in your browser and does not upload your documents to any server.",
+                  "eDoc Viewer is a web application that allows users to view and verify ASiC-E, eDoc, and SCE electronic signature files (.asice, .edoc, .sce). The application processes files locally in your browser and does not upload your documents to any server.",
                   { id: "legal.terms_description_content" },
                 )}
               </p>

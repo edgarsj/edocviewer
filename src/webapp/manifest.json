@@ -1,7 +1,7 @@
 {
   "name": "eDoc Viewer",
   "short_name": "eDoc",
-  "description": "View and verify EU standard ASiC-E and Latvian eDoc files",
+  "description": "View and verify ASiC-E, eDoc, and SCE files",
   "icons": [
     {
       "src": "icons/edoc-icon.svg",
@@ -56,9 +56,9 @@
     {
       "action": "index.html",
       "accept": {
-        "application/vnd.etsi.asic-e+zip": [".asice"],
+        "application/vnd.etsi.asic-e+zip": [".asice", ".sce"],
         "application/octet-stream": [".edoc"],
-        "application/zip": [".asice", ".edoc"]
+        "application/zip": [".asice", ".edoc", ".sce"]
       }
     }
   ],

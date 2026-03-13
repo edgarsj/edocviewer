@@ -19,13 +19,13 @@ Choosing the right eDoc/ASiC-E viewer depends on your needs. This comprehensive 
 |---------|------------------------|----------|---------------|-------------------|
 | **Cost** | Free | Free | Paid (Pro) | Free |
 | **Installation** | None (PWA) | Required | Required | None |
-| **Privacy** | 100% Local | Local | Cloud option | Server-side |
+| **Privacy** | Local document processing | Local | Cloud option | Server-side |
 | **Offline** | ✅ Yes (PWA) | ✅ Yes | ⚠️ Limited | ❌ No |
 | **Platform** | Any browser | Win/Mac/Linux | Win/Mac | Browser |
 | **Signature Verification** | ✅ Full | ✅ Full | ⚠️ Limited | ✅ Full |
 | **Multiple Files** | ✅ Yes | ✅ Yes | ❌ No | ⚠️ Varies |
 | **Open Source** | ✅ Yes | ✅ Yes | ❌ No | ❌ No |
-| **Document Preview** | ✅ PDF, Office, Images | ✅ PDF, Images | ✅ PDF, Office | ⚠️ Limited |
+| **Document Preview** | ✅ PDF, DOCX, Images | ✅ PDF, Images | ✅ PDF, Office | ⚠️ Limited |
 | **File Size Limit** | Browser memory | No limit | No limit | Often limited |
 | **Multi-language** | EN, LV | Many | Many | Local language |
 
@@ -37,11 +37,11 @@ Choosing the right eDoc/ASiC-E viewer depends on your needs. This comprehensive 
 
 #### Advantages
 - ✅ **No Installation** - Works immediately in any modern browser
-- ✅ **Complete Privacy** - Files never leave your device
+- ✅ **Document Privacy** - Document contents stay on your device
 - ✅ **Cross-Platform** - Windows, macOS, Linux, iOS, Android
-- ✅ **Offline PWA** - Install and use without internet
+- ✅ **Offline PWA** - Install and use without a desktop app
 - ✅ **Free Forever** - Open-source, no premium tiers
-- ✅ **Document Preview** - View PDFs, Office docs, images inline
+- ✅ **Document Preview** - View PDFs, DOCX docs, and images inline
 - ✅ **Mobile-Friendly** - Responsive design for tablets and phones
 
 #### Limitations
@@ -157,9 +157,9 @@ Examples: Smart-ID app, Mobile-ID apps
 ## Privacy Comparison
 
 ### 🔒 Most Private: eDoc Viewer & DigiDoc4
-- **Processing**: 100% local on your device
-- **Data Transmission**: Zero - files never leave your computer
-- **Logging**: None
+- **Processing**: Documents are handled locally on your device
+- **Data Transmission**: Document contents stay local; live validation checks may still contact trust services
+- **Logging**: Varies by tool and configuration
 - **Best for**: Sensitive documents, personal data, confidential business files
 
 ### ⚠️ Moderate Privacy: Adobe Acrobat
@@ -261,6 +261,14 @@ Examples: Smart-ID app, Mobile-ID apps
 - ✅ Government service integration
 - ✅ Legal submission
 - ✅ Temporary access (public computer)
+
+---
+
+## Related Guides
+
+- [How to Open an eDoc File](/open-edoc-file)
+- [What is an eDoc File?](/what-is-edoc)
+- [ASiC-E File Reader](/asice-reader)
 
 ---
 

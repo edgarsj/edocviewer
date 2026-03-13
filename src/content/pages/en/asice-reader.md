@@ -1,6 +1,6 @@
 ---
-title: "ASiC-E Reader - View ASiC-E Containers Online"
-description: "Free online ASiC-E reader for viewing Associated Signature Container Extended files. Verify digital signatures and extract documents."
+title: "ASiC-E File Reader - Open ASiC-E Containers Online"
+description: "Free online ASiC-E file reader for .asice, .edoc, and .sce containers. View documents, inspect signatures, and extract files."
 locale: "en"
 pageType: "asice-reader"
 defaultViewerLocale: "en"
@@ -9,9 +9,9 @@ alternates:
   lv: "/lv/asice-lasitajs"
 ---
 
-# ASiC-E Reader
+# ASiC-E File Reader
 
-**ASiC-E** (Associated Signature Container Extended) is a standardized format for digitally signed document containers used across the European Union.
+**ASiC-E** (Associated Signature Container Extended) is a container format for digitally signed files used in European electronic-signature workflows. This page is the quick technical overview for `.asice`, `.edoc`, and `.sce` containers.
 
 ## What is ASiC-E?
 
@@ -30,7 +30,7 @@ ASiC-E files can have different extensions depending on the country:
 - `.edoc` - Used in Latvia and Estonia
 - `.sce` - Some implementations
 
-All these formats are compatible and can be opened with our viewer.
+All these extensions refer to the same underlying container concept and can be opened with our viewer.
 
 ## Structure of an ASiC-E File
 
@@ -65,3 +65,5 @@ ASiC-E is compliant with the **eIDAS regulation** (Electronic Identification and
 - Business transactions
 
 Use the viewer below to open and inspect ASiC-E files.
+
+If you want the eDoc-focused explanation, read [What is an eDoc File?](/what-is-edoc). If you just need step-by-step instructions, see [How to Open an eDoc File](/open-edoc-file). For a side-by-side tool breakdown, see [Compare Viewers](/compare-viewers).
