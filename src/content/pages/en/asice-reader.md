@@ -1,6 +1,6 @@
 ---
-title: "ASiC-E File Reader - Open ASiC-E Containers Online"
-description: "Free online ASiC-E file reader for .asice, .edoc, and .sce containers. View documents, inspect signatures, and extract files."
+title: "ASiC-E File Reader | Open .asice Files Online"
+description: "Free online ASiC-E file reader for .asice, .sce, and Latvian .edoc containers. View documents, inspect signatures, and extract files in your browser."
 locale: "en"
 pageType: "asice-reader"
 defaultViewerLocale: "en"
@@ -11,11 +11,15 @@ alternates:
 
 # ASiC-E File Reader
 
-**ASiC-E** (Associated Signature Container Extended) is a container format for digitally signed files used in European electronic-signature workflows. This page is the quick technical overview for `.asice`, `.edoc`, and `.sce` containers.
+**ASiC-E** (Associated Signature Container Extended) is a container format for digitally signed files used in European electronic-signature workflows. If you received an `.asice`, `.sce`, or Latvian `.edoc` file, you can open it in the viewer below and inspect the contents locally in your browser.
+
+## Quick Answer
+
+If you are here because you need an **ASiC-E reader**, use the viewer on this page. It opens the container in your browser so you can inspect documents, signatures, certificates, and timestamps without uploading document contents to our servers. [Open your `.asice`, `.sce`, or `.edoc` file in the viewer below](#viewer).
 
 ## What is ASiC-E?
 
-ASiC-E is defined by the **ETSI TS 102 918** standard and provides:
+ASiC-E is a ZIP-based signed-container format built for packaging documents together with electronic signatures and related metadata. In practice, it provides:
 
 - **Container Format** - ZIP-based archive for multiple files
 - **Digital Signatures** - XAdES signatures embedded within the container
@@ -27,10 +31,20 @@ ASiC-E is defined by the **ETSI TS 102 918** standard and provides:
 ASiC-E files can have different extensions depending on the country:
 
 - `.asice` - Generic ASiC-E extension
-- `.edoc` - Used in Latvia and Estonia
+- `.edoc` - Latvian eDoc extension for ASiC-E containers
 - `.sce` - Some implementations
 
 All these extensions refer to the same underlying container concept and can be opened with our viewer.
+
+## What This Reader Lets You Do
+
+Use this ASiC-E reader to:
+
+- Open received `.asice`, `.sce`, and `.edoc` files
+- Inspect the documents stored inside the container
+- Check signer, certificate, and timestamp details
+- Download individual files from the container
+- Review signatures locally in your own browser session
 
 ## Structure of an ASiC-E File
 
@@ -55,15 +69,15 @@ Our ASiC-E reader verifies:
 - **Timestamp** - Signature creation time
 - **Certificate Validity** - Check if certificate was valid at signing time
 
-## EU eIDAS Compliance
+Document contents stay local in your browser on your device. When deeper live validation is available, the reader may still contact certificate, revocation, or timestamp services for the signature-checking part.
 
-ASiC-E is compliant with the **eIDAS regulation** (Electronic Identification and Trust Services), making it legally recognized across all EU member states for:
+## ASiC-E and eIDAS
+
+ASiC-E is the container format often used together with electronic signatures discussed under the **eIDAS** framework. In practical terms, that means ASiC-E containers are relevant in workflows such as:
 
 - Official documents
 - Contracts and agreements
 - Government communications
 - Business transactions
 
-Use the viewer below to open and inspect ASiC-E files.
-
-If you want the eDoc-focused explanation, read [What is an eDoc File?](/what-is-edoc). If you just need step-by-step instructions, see [How to Open an eDoc File](/open-edoc-file). For a side-by-side tool breakdown, see [Compare Viewers](/compare-viewers).
+For step-by-step opening instructions, see [How to Open and Verify an eDoc or ASiC-E File](/open-edoc-file). If you want the broader explainer, read [What Is an eDoc File? ASiC-E Explained](/what-is-edoc). For a short tool-choice guide, see [Compare eDoc Viewers](/compare-viewers).
