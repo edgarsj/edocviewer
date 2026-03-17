@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "npm run localize:build && vite",
-    "build:webapp": "npm run localize:build && vite build",
+    "ensure-trusted-list": "[ -f public/assets/trusted-list.json ] || npm run update-trusted-list",
+    "build:webapp": "npm run ensure-trusted-list && npm run localize:build && vite build",
     "preview": "vite preview",
     "build": "npm run build:webapp",
     "localize:extract": "lit-localize extract",

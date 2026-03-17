@@ -474,7 +474,7 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
                 @click=${this.handleLegalModalClick}
               ></sl-icon>
               <span>${error}</span>
-              <span class="details-link" @click=${this.toggleDetails}>
+              <span class="details-link" @click=${() => this.openChecklistModal()}>
                 ${msg("details", { id: "signatures.details" })}
               </span>
             </div>`

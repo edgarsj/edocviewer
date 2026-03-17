@@ -100,8 +100,9 @@ async function getTrustListProvider() {
         createTrustListProvider({ url: "/assets/trusted-list.json" })
       )
       .catch((err) => {
+        console.warn("Failed to load trust-list provider, verification will proceed without trust-list checks:", err);
         trustListProviderPromise = null; // allow retry on next call
-        throw err;
+        return undefined;
       });
   }
   return trustListProviderPromise;
