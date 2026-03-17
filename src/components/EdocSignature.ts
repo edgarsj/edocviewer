@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit";
+import { LitElement, html, css, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { msg } from "@lit/localize";
 import { SignatureValidationResult, VerificationStatus, VerificationLimitation } from "../core/parser";
@@ -9,6 +9,8 @@ import "@shoelace-style/shoelace/dist/components/badge/badge.js";
 import "@shoelace-style/shoelace/dist/components/icon/icon.js";
 import "@shoelace-style/shoelace/dist/components/tooltip/tooltip.js";
 import "@shoelace-style/shoelace/dist/components/spinner/spinner.js";
+import "./EdocVerificationChecklist.js";
+import type { EdocVerificationChecklist } from "./EdocVerificationChecklist";
 
 /**
  * Component for displaying eDoc signature information
@@ -51,12 +53,19 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
       margin-bottom: 0;
     }
 
-    .status-icon-container {
+    .status-area {
       position: absolute;
-      top: 1rem;
+      top: 0.75rem;
       right: 1rem;
-      width: 4rem;
-      height: 4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .status-icon-container {
+      width: 3.25rem;
+      height: 3.25rem;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -84,7 +93,7 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
     }
 
     .status-icon {
-      font-size: 3rem;
+      font-size: 2.5rem;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -107,7 +116,7 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
     }
 
     .pending-icon sl-spinner {
-      font-size: 2.5rem;
+      font-size: 2rem;
       --indicator-color: var(--sl-color-warning-600);
       --track-color: var(--sl-color-warning-200);
     }
@@ -275,7 +284,26 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
     }
 
     .status-icon sl-icon {
-      font-size: 3rem;
+      font-size: 2.5rem;
+    }
+
+    .status-icon-container.clickable {
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    .status-icon-container.clickable:hover {
+      transform: scale(1.08);
+    }
+
+    .details-text {
+      font-size: 0.7rem;
+      color: var(--sl-color-neutral-500);
+      cursor: pointer;
+    }
+
+    .details-text:hover {
+      color: var(--sl-color-primary-600);
     }
   `;
 
@@ -324,6 +352,16 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
       );
     }
     return false;
+  }
+
+  /**
+   * Open the verification checklist modal
+   */
+  private openChecklistModal() {
+    const modal = this.shadowRoot?.querySelector(
+      "edoc-verification-checklist"
+    ) as EdocVerificationChecklist;
+    modal?.show();
   }
 
   /**
@@ -403,20 +441,30 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
           </div>
         </div>
 
-        <!-- Status icon as a circular badge in top-right corner -->
-        <sl-tooltip content="${statusTitle}">
-          <div
-            class="status-icon-container ${iconContainerClass}"
-            role="img"
-            aria-label="${statusTitle}"
-          >
-            <div class="status-icon ${iconClass}">
-              ${isPending
-                ? html`<sl-spinner></sl-spinner>`
-                : html`<sl-icon name="${iconName}"></sl-icon>`}
+        <!-- Status icon + details link -->
+        <div class="status-area">
+          <sl-tooltip content="${statusTitle}">
+            <div
+              class="status-icon-container ${iconContainerClass} ${!isPending ? 'clickable' : ''}"
+              role="${isPending ? 'img' : 'button'}"
+              tabindex="${isPending ? '-1' : '0'}"
+              aria-label="${statusTitle}"
+              @click=${() => !isPending && this.openChecklistModal()}
+              @keydown=${(e: KeyboardEvent) => (e.key === 'Enter' || e.key === ' ') && !isPending && (e.preventDefault(), this.openChecklistModal())}
+            >
+              <div class="status-icon ${iconClass}">
+                ${isPending
+                  ? html`<sl-spinner></sl-spinner>`
+                  : html`<sl-icon name="${iconName}"></sl-icon>`}
+              </div>
             </div>
-          </div>
-        </sl-tooltip>
+          </sl-tooltip>
+          ${!isPending
+            ? html`<span class="details-text" @click=${() => this.openChecklistModal()}>
+                ${msg("Details", { id: "signatures.detailsLink" })}
+              </span>`
+            : nothing}
+        </div>
 
         ${error && !isPending
           ? html`<div class="status-line ${verificationStatus}">
@@ -426,7 +474,7 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
                 @click=${this.handleLegalModalClick}
               ></sl-icon>
               <span>${error}</span>
-              <span class="details-link" @click=${this.toggleDetails}>
+              <span class="details-link" @click=${() => this.openChecklistModal()}>
                 ${msg("details", { id: "signatures.details" })}
               </span>
             </div>`
@@ -439,6 +487,14 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
           : ""}
         ${this.renderVerificationBreakdown()}
         ${this.renderFileCoverage()}
+
+        <edoc-verification-checklist
+          .checklist=${this.signature.checklist || []}
+          .trustListMatch=${this.signature.trustListMatch}
+          .timestampTrustListMatch=${this.signature.timestampTrustListMatch}
+          .signerName=${this.signature.signerInfo.signerName}
+          .issuer=${this.signature.signerInfo.issuer}
+        ></edoc-verification-checklist>
       </div>
     `;
   }

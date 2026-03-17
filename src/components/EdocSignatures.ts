@@ -76,16 +76,6 @@ export class EdocSignatures extends LocaleAwareMixin(LitElement) {
       <div class="signature-section">
         <h3 class="section-title">
           ${msg("Signatures", { id: "signatures.title" })}
-          <a
-            class="beta-tag"
-            href="#about-feature2_verification"
-            title="${msg("Signature verification might be unreliable, more »", {
-              id: "signatures.betaTagTooltip",
-            })}"
-            @click=${this.handleLegalModalClick}
-          >
-            BETA
-          </a>
         </h3>
 
         ${this.signatures.length === 0

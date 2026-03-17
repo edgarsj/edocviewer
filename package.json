@@ -1,17 +1,19 @@
 {
   "name": "edoc-viewer",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Viewer for ASiC-E/eDoc files",
   "main": "dist/webapp/index.js",
   "type": "module",
   "scripts": {
     "dev": "npm run localize:build && vite",
-    "build:webapp": "npm run localize:build && vite build",
+    "ensure-trusted-list": "[ -f public/assets/trusted-list.json ] || npm run update-trusted-list",
+    "build:webapp": "npm run ensure-trusted-list && npm run localize:build && vite build",
     "preview": "vite preview",
     "build": "npm run build:webapp",
     "localize:extract": "lit-localize extract",
     "localize:build": "lit-localize build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "update-trusted-list": "node scripts/update-trusted-list.mjs"
   },
   "keywords": [
     "asice",
@@ -24,7 +26,7 @@
     "@lit/localize": "^0.12.0",
     "@shoelace-style/shoelace": "^2.12.0",
     "docx-preview": "^0.3.5",
-    "edockit": "^0.3.0",
+    "edockit": "^0.4.0-dev.1",
     "i18next": "^22.4.10",
     "i18next-browser-languagedetector": "^7.0.1",
     "lit": "^3.1.0",

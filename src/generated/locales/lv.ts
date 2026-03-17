@@ -22,6 +22,11 @@
 'app.up_to_date': `Aktuāla versija`,
 'app.updating': `Atjaunina...`,
 'app.version': `Versija`,
+'checklist.certIssuer': `Sertifikāta izdevējs`,
+'checklist.signerIssuer': `Paraksta izdevējs`,
+'checklist.timestampAuthority': `Laika zīmoga iestāde`,
+'checklist.title': `Pārbaudes detaļas`,
+'checklist.trustDetails': `Uzticamības saraksta detaļas`,
 'documents.noDocuments': `Nav dokumentu`,
 'documents.title': `Dokumenti`,
 'dropzone.description': `vai klikšķini, lai pārlūkotu failus`,
@@ -101,6 +106,7 @@
 'signatures.cryptoCheck': `Paraksta integritāte`,
 'signatures.date': `Datums`,
 'signatures.details': `detaļas`,
+'signatures.detailsLink': `vairāk..`,
 'signatures.docsCheck': `Visi dokumenti parakstīti`,
 'signatures.invalid': `Nederīgs paraksts`,
 'signatures.noSignatures': `Nav parakstu`,
@@ -116,5 +122,8 @@
 'signatures.unsupported': `Pārbaude nav atbalstīta šajā platformā`,
 'signatures.valid': `Derīgs`,
 'signatures.verifying': `Paraksta sertifikāta pārbaude...`,
+'trustMatch.notFound': `Nav atrasts uzticamo sarakstā`,
+'trustMatch.notTrusted': `Nav uzticams`,
+'trustMatch.trusted': `Uzticams`,
     };
   

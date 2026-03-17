@@ -1,7 +1,14 @@
+export interface CertificateIssuerInfo {
+  commonName?: string;
+  organization?: string;
+  country?: string;
+}
+
 export interface SignerInfo {
   signerName: string;
   personalId: string;
-  signatureDate: string; // Add signature date
+  signatureDate: string;
+  issuer?: CertificateIssuerInfo;
 }
 
 export interface RevocationInfo {
@@ -25,6 +32,24 @@ export interface VerificationLimitation {
   platform?: string;
 }
 
+/** Checklist item from edockit verification */
+export interface ChecklistItemResult {
+  check: string;
+  label: string;
+  status: 'pass' | 'fail' | 'skipped' | 'indeterminate';
+  detail?: string;
+  country?: string;
+}
+
+/** Trust list match result from edockit */
+export interface TrustListMatchResult {
+  found: boolean;
+  trustedAtTime?: boolean;
+  confidence?: 'exact' | 'ski_dn' | 'dn_only';
+  country?: string;
+  detail?: string;
+}
+
 /** UI verification status for display */
 export type VerificationStatus = 'pending' | 'verified' | 'failed' | 'unknown' | 'unsupported';
 
@@ -46,6 +71,12 @@ export interface SignatureValidationResult {
   limitations?: VerificationLimitation[];
   /** Index to correlate with original signature for updates */
   signatureIndex: number;
+  /** Structured verification checklist from edockit */
+  checklist?: ChecklistItemResult[];
+  /** Signer issuer trust-list match result */
+  trustListMatch?: TrustListMatchResult;
+  /** Timestamp authority trust-list match result */
+  timestampTrustListMatch?: TrustListMatchResult;
 }
 
 export interface EdocContainer {
@@ -58,6 +89,24 @@ export interface EdocContainer {
 
 // Keep track of the loading promise to avoid multiple imports
 let edockitLoading: Promise<typeof import("edockit")> | null = null;
+
+// Lazy-loaded trust-list provider
+let trustListProviderPromise: Promise<any> | null = null;
+
+async function getTrustListProvider() {
+  if (!trustListProviderPromise) {
+    trustListProviderPromise = import("edockit/trusted-list")
+      .then(({ createTrustListProvider }) =>
+        createTrustListProvider({ url: "/assets/trusted-list.json" })
+      )
+      .catch((err) => {
+        console.warn("Failed to load trust-list provider, verification will proceed without trust-list checks:", err);
+        trustListProviderPromise = null; // allow retry on next call
+        return undefined;
+      });
+  }
+  return trustListProviderPromise;
+}
 
 /**
  * Dynamically load the edockit library
@@ -101,6 +150,7 @@ export async function verifyEdocSignaturesQuick(
   try {
     // Dynamically import edockit only when needed
     const { verifySignature } = await loadEdockit();
+    const trustListProvider = await getTrustListProvider();
 
     const signatureResults = await Promise.all(
       container.signatures.map(async (signature, index) => {
@@ -109,12 +159,15 @@ export async function verifyEdocSignaturesQuick(
           const result = await verifySignature(signature, container.files, {
             checkRevocation: false,
             verifyTimestamps: false,
+            includeChecklist: true,
+            trustListProvider,
           });
 
           // Format signer info
           let signerName = "";
           let personalId = "";
           let signatureDate = "";
+          let issuer: CertificateIssuerInfo | undefined;
 
           if (signature.signerInfo) {
             const { givenName, surname, commonName, serialNumber } =
@@ -127,6 +180,14 @@ export async function verifyEdocSignaturesQuick(
             }
 
             personalId = serialNumber || "";
+
+            if (signature.signerInfo.issuer) {
+              issuer = {
+                commonName: signature.signerInfo.issuer.commonName,
+                organization: signature.signerInfo.issuer.organization,
+                country: signature.signerInfo.issuer.country,
+              };
+            }
           }
 
           // Extract signature date if available
@@ -211,6 +272,7 @@ export async function verifyEdocSignaturesQuick(
               signerName,
               personalId,
               signatureDate,
+              issuer,
             },
             valid: isValid,
             error: errorMessage,
@@ -222,6 +284,9 @@ export async function verifyEdocSignaturesQuick(
             statusMessage: result.statusMessage,
             limitations: result.limitations,
             signatureIndex: index,
+            checklist: result.checklist,
+            trustListMatch: result.trustListMatch,
+            timestampTrustListMatch: result.timestampTrustListMatch,
           } as SignatureValidationResult;
         } catch (error) {
           console.error("Error verifying signature:", error);
@@ -271,12 +336,15 @@ export async function verifyEdocSignatureFull(
 
   try {
     const { verifySignature } = await loadEdockit();
+    const trustListProvider = await getTrustListProvider();
     const signature = container.signatures[signatureIndex];
 
     // Full verification with revocation and timestamp checks
     const result = await verifySignature(signature, container.files, {
       checkRevocation: true,
       verifyTimestamps: true,
+      includeChecklist: true,
+      trustListProvider,
       revocationOptions: {
         proxyUrl: 'https://cors-proxy.edocviewer.app/?url=',
       },
@@ -362,6 +430,9 @@ export async function verifyEdocSignatureFull(
       verificationStatus,
       statusMessage: result.statusMessage || quickResult.statusMessage,
       limitations: result.limitations || quickResult.limitations,
+      checklist: result.checklist,
+      trustListMatch: result.trustListMatch,
+      timestampTrustListMatch: result.timestampTrustListMatch,
     };
   } catch (error) {
     console.error("Error in full signature verification:", error);
