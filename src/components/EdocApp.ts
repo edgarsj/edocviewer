@@ -73,17 +73,6 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
       color: var(--sl-color-primary-800);
     }
 
-    .beta-tag {
-      display: inline-block;
-      background-color: var(--sl-color-primary-600);
-      color: white;
-      font-size: 0.75rem;
-      padding: 0.125rem 0.5rem;
-      border-radius: 9999px;
-      margin-left: 0.5rem;
-      vertical-align: middle;
-      font-weight: 600;
-    }
 
     .app-description-wrapper {
       display: flex;
@@ -426,7 +415,6 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
             />
             <h1 class="app-title">
               ${msg("eDoc Viewer", { id: "app.title" })}
-              <span class="beta-tag">BETA</span>
             </h1>
           </div>
 
