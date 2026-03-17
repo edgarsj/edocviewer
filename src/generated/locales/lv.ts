@@ -101,7 +101,6 @@
 'preview.unsupportedType': `Nav atbalstīts faila formāts`,
 's1d093e853c7fbc9e': `Saglabāt visus`,
 'sa7c8c31e43a211d5': `Nav failu`,
-'signatures.betaTagTooltip': `Parakstu pārbaude var būt neprecīza, vairāk »`,
 'signatures.chromeRecommended': `Iesakām Chrome`,
 'signatures.cryptoCheck': `Paraksta integritāte`,
 'signatures.date': `Datums`,
