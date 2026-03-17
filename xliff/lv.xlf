@@ -446,6 +446,30 @@
   <source>Up to date</source>
   <target>Aktuāla versija</target>
 </trans-unit>
+<trans-unit id="checklist.title">
+  <source>Verification details</source>
+  <target>Pārbaudes detaļas</target>
+</trans-unit>
+<trans-unit id="checklist.trustDetails">
+  <source>Trust list details</source>
+  <target>Uzticamības saraksta detaļas</target>
+</trans-unit>
+<trans-unit id="checklist.certIssuer">
+  <source>Certificate issuer</source>
+  <target>Sertifikāta izdevējs</target>
+</trans-unit>
+<trans-unit id="checklist.signerIssuer">
+  <source>Signer issuer</source>
+  <target>Paraksta izdevējs</target>
+</trans-unit>
+<trans-unit id="checklist.timestampAuthority">
+  <source>Timestamp authority</source>
+  <target>Laika zīmoga iestāde</target>
+</trans-unit>
+<trans-unit id="signatures.detailsLink">
+  <source>Details</source>
+  <target>vairāk..</target>
+</trans-unit>
 </body>
 </file>
 </xliff>

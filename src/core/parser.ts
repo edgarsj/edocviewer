@@ -1,7 +1,14 @@
+export interface CertificateIssuerInfo {
+  commonName?: string;
+  organization?: string;
+  country?: string;
+}
+
 export interface SignerInfo {
   signerName: string;
   personalId: string;
-  signatureDate: string; // Add signature date
+  signatureDate: string;
+  issuer?: CertificateIssuerInfo;
 }
 
 export interface RevocationInfo {
@@ -155,6 +162,7 @@ export async function verifyEdocSignaturesQuick(
           let signerName = "";
           let personalId = "";
           let signatureDate = "";
+          let issuer: CertificateIssuerInfo | undefined;
 
           if (signature.signerInfo) {
             const { givenName, surname, commonName, serialNumber } =
@@ -167,6 +175,14 @@ export async function verifyEdocSignaturesQuick(
             }
 
             personalId = serialNumber || "";
+
+            if (signature.signerInfo.issuer) {
+              issuer = {
+                commonName: signature.signerInfo.issuer.commonName,
+                organization: signature.signerInfo.issuer.organization,
+                country: signature.signerInfo.issuer.country,
+              };
+            }
           }
 
           // Extract signature date if available
@@ -251,6 +267,7 @@ export async function verifyEdocSignaturesQuick(
               signerName,
               personalId,
               signatureDate,
+              issuer,
             },
             valid: isValid,
             error: errorMessage,

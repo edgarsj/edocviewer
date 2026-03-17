@@ -53,12 +53,19 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
       margin-bottom: 0;
     }
 
-    .status-icon-container {
+    .status-area {
       position: absolute;
-      top: 1rem;
+      top: 0.75rem;
       right: 1rem;
-      width: 4rem;
-      height: 4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .status-icon-container {
+      width: 3.25rem;
+      height: 3.25rem;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -86,7 +93,7 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
     }
 
     .status-icon {
-      font-size: 3rem;
+      font-size: 2.5rem;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -109,7 +116,7 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
     }
 
     .pending-icon sl-spinner {
-      font-size: 2.5rem;
+      font-size: 2rem;
       --indicator-color: var(--sl-color-warning-600);
       --track-color: var(--sl-color-warning-200);
     }
@@ -277,7 +284,7 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
     }
 
     .status-icon sl-icon {
-      font-size: 3rem;
+      font-size: 2.5rem;
     }
 
     .status-icon-container.clickable {
@@ -290,11 +297,6 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
     }
 
     .details-text {
-      position: absolute;
-      top: 5.25rem;
-      right: 1rem;
-      width: 4rem;
-      text-align: center;
       font-size: 0.7rem;
       color: var(--sl-color-neutral-500);
       cursor: pointer;
@@ -439,28 +441,30 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
           </div>
         </div>
 
-        <!-- Status icon as a circular badge in top-right corner -->
-        <sl-tooltip content="${statusTitle}">
-          <div
-            class="status-icon-container ${iconContainerClass} ${!isPending ? 'clickable' : ''}"
-            role="${isPending ? 'img' : 'button'}"
-            tabindex="${isPending ? '-1' : '0'}"
-            aria-label="${statusTitle}"
-            @click=${() => !isPending && this.openChecklistModal()}
-            @keydown=${(e: KeyboardEvent) => e.key === 'Enter' && !isPending && this.openChecklistModal()}
-          >
-            <div class="status-icon ${iconClass}">
-              ${isPending
-                ? html`<sl-spinner></sl-spinner>`
-                : html`<sl-icon name="${iconName}"></sl-icon>`}
+        <!-- Status icon + details link -->
+        <div class="status-area">
+          <sl-tooltip content="${statusTitle}">
+            <div
+              class="status-icon-container ${iconContainerClass} ${!isPending ? 'clickable' : ''}"
+              role="${isPending ? 'img' : 'button'}"
+              tabindex="${isPending ? '-1' : '0'}"
+              aria-label="${statusTitle}"
+              @click=${() => !isPending && this.openChecklistModal()}
+              @keydown=${(e: KeyboardEvent) => e.key === 'Enter' && !isPending && this.openChecklistModal()}
+            >
+              <div class="status-icon ${iconClass}">
+                ${isPending
+                  ? html`<sl-spinner></sl-spinner>`
+                  : html`<sl-icon name="${iconName}"></sl-icon>`}
+              </div>
             </div>
-          </div>
-        </sl-tooltip>
-        ${!isPending
-          ? html`<span class="details-text" @click=${() => this.openChecklistModal()}>
-              ${msg("Details", { id: "signatures.detailsLink" })}
-            </span>`
-          : nothing}
+          </sl-tooltip>
+          ${!isPending
+            ? html`<span class="details-text" @click=${() => this.openChecklistModal()}>
+                ${msg("Details", { id: "signatures.detailsLink" })}
+              </span>`
+            : nothing}
+        </div>
 
         ${error && !isPending
           ? html`<div class="status-line ${verificationStatus}">
@@ -489,6 +493,7 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
           .trustListMatch=${this.signature.trustListMatch}
           .timestampTrustListMatch=${this.signature.timestampTrustListMatch}
           .signerName=${this.signature.signerInfo.signerName}
+          .issuer=${this.signature.signerInfo.issuer}
         ></edoc-verification-checklist>
       </div>
     `;

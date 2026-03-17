@@ -1,7 +1,7 @@
 import { LitElement, html, css, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { msg } from "@lit/localize";
-import { ChecklistItemResult, TrustListMatchResult } from "../core/parser";
+import { ChecklistItemResult, TrustListMatchResult, CertificateIssuerInfo } from "../core/parser";
 import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
 import "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
 import "@shoelace-style/shoelace/dist/components/icon/icon.js";
@@ -114,6 +114,9 @@ export class EdocVerificationChecklist extends LocaleAwareMixin(LitElement) {
   @property({ type: String })
   signerName = "";
 
+  @property({ type: Object })
+  issuer?: CertificateIssuerInfo;
+
   public show() {
     const dialog = this.shadowRoot?.querySelector("sl-dialog") as SlDialog;
     dialog?.show();
@@ -172,15 +175,27 @@ export class EdocVerificationChecklist extends LocaleAwareMixin(LitElement) {
   }
 
   private renderTrustInfo() {
-    if (!this.trustListMatch && !this.timestampTrustListMatch) {
+    if (!this.trustListMatch && !this.timestampTrustListMatch && !this.issuer) {
       return nothing;
     }
+
+    const issuerLabel = this.issuer
+      ? [this.issuer.commonName, this.issuer.organization, this.issuer.country]
+          .filter(Boolean)
+          .join(", ")
+      : null;
 
     return html`
       <div class="trust-section">
         <div class="trust-section-title">
           ${msg("Trust list details", { id: "checklist.trustDetails" })}
         </div>
+        ${issuerLabel
+          ? html`<div class="trust-match">
+              <strong>${msg("Certificate issuer", { id: "checklist.certIssuer" })}:</strong>
+              ${issuerLabel}
+            </div>`
+          : nothing}
         ${this.trustListMatch
           ? this.renderTrustMatch(
               msg("Signer issuer", { id: "checklist.signerIssuer" }),
