@@ -1,77 +1,72 @@
 ---
-title: "Kā atvērt eDoc failu - Pilns ceļvedis"
-description: "Uzziniet, kā atvērt un skatīt eDoc failus tiešsaistē. Salīdziniet dažādas skatītāja iespējas un izvēlieties labāko risinājumu savām vajadzībām."
+title: "Kā atvērt un pārbaudīt elektroniski parakstītu eDoc vai ASiC-E failu tiešsaistē"
+description: "Uzziniet, kā atvērt un pārbaudīt .edoc, .asice un .sce failus tiešsaistē, apskatīt pielikumus un pārbaudīt elektroniskos parakstus savā pārlūkā."
 locale: "lv"
 pageType: "open-edoc-file"
 defaultViewerLocale: "lv"
 alternates:
   en: "/open-edoc-file"
   lv: "/lv/atvert-edoc-failu"
-countryMentions: ["eParaksts", "Latvijas.lv"]
 ---
 
-# Kā atvērt eDoc failu
+# Kā atvērt un pārbaudīt elektroniski parakstītu eDoc vai ASiC-E failu
 
-**eDoc fails** (pazīstams arī kā ASiC-E) ir konteinera formāts digitāli parakstītiem dokumentiem, ko izmanto visā Eiropas Savienībā drošai dokumentu apmaiņai.
+**eDoc fails** ir ASiC-E konteinera formāts elektroniski parakstītiem dokumentiem. Ja saņēmāt `.edoc`, `.asice` vai `.sce` failu, varat to atvērt pārlūkā, apskatīt parakstīto saturu un pārskatīt parakstu informāciju, neinstalējot darbvirsmas programmatūru. Dokumentu saturs paliek jūsu pārlūkā uz jūsu ierīces un netiek augšupielādēts mūsu serveros.
 
-## Ātrā sākšana
+## Īsumā
 
-Vienkāršākais veids, kā atvērt eDoc failu, ir izmantojot mūsu tiešsaistes skatītāju zemāk:
+Ja jums tikai jāatver parakstīts fails un jāapskata saturs — [atveriet savu .edoc`, `.asice` vai `.sce` failu skatītājā](#viewer). Tas darbojas lokāli jūsu pārlūkā — jūsu faili paliek jūsu ierīcē. Ja jums jāizveido paraksti, izmantojiet darbvirsmas parakstīšanas lietotni vai citus oficiālus web bāzētus parakstīšanas rīkus. Ja nepieciešams pārliecināties par paraksta juridisko spēku — izmantojiet jūsu 
+valsts oficiālo validācijas rīku.
 
-1. **Velciet un nometiet** savu `.edoc` vai `.asice` failu uz skatītāja
-2. Fails tiks **automātiski izvilkts** un attēlots
-3. **Pārbaudiet parakstus** un skatiet visus iekļautos dokumentus
-4. **Lejupielādējiet** atsevišķus failus, ja nepieciešams
+## Soli pa solim: atveriet un pārbaudiet failu
 
-## Alternatīvi skatītāji
+1. **Ievelciet** savu `.edoc`, `.asice` vai `.sce` failu skatītājā
+2. Fails tiks **atvērts lokāli jūsu pārlūkā** un saturs būs pieejams
+3. **Apskatiet dokumentus** bez augšupielādes
+4. **Pārbaudiet parakstus**, lai redzētu parakstītāja, paraksta un laika zīmoga informāciju
+5. **Saglabājiet** atsevišķus failus, ja nepieciešams
 
-Lai gan ir vairākas iespējas eDoc failu atvēršanai, lūk, kā tās salīdzinās:
+Jūsu faili paliek jūsu ierīcē. Pilnai parakstu validācijai lietotne var sazināties ar parakstu informācijas un laika zīmogu pakalpojumu serveriem tiešsaistē.
 
-### eDoc Viewer (Šī vietne)
-- ✅ Darbojas jebkurā modernā pārlūkā
-- ✅ Nav nepieciešama instalācija
-- ✅ Pilnīga privātums - faili tiek apstrādāti lokāli
-- ✅ Darbojas bezsaistē kā PWA
-- ✅ Bezmaksas un atvērtā pirmkoda
+## Ko var pārbaudīt
 
-### eParaksts rīki
-- ✅ Oficiāli Latvijas valdības atbalstīti
-- ✅ Integrācija ar eParaksts Mobile/Smart-ID
-- ⚠️ Nepieciešama instalācija
-- ✅ Var parakstīt dokumentus
+Pēc faila atvēršanas parasti varat:
 
-### Latvijas.lv portāls
-- ✅ Oficiāla valdības vietne
-- ✅ Tiešsaistes pārbaude
-- ⚠️ Nepieciešams interneta savienojums
-- ⚠️ Var būt faila izmēra ierobežojumi
-- ⚠️ Faili tiek augšupielādēti serverī
+- Redzēt visus parakstītos dokumentus
+- Apskatīt parakstītāja identitāti un paraksta informāciju
+- Pārbaudīt dokumenta integritāti (paraksta derīgumu, failu nemainīgumu) bez datu augšupielādes
+- Pārskatīt laika zīmoga informāciju, ja tāda ir
+- Saglabāt atsevišķus failus
 
-### Darbvirsmas lietotnes (DigiDoc4, u.c.)
-- ⚠️ Nepieciešama instalācija un atjauninājumi
-- ⚠️ Platformai specifiski (Windows/macOS/Linux)
-- ✅ Var piedāvāt papildu funkcijas
-- ⚠️ Bieži maksas programmatūra
+## Atveriet eDoc failus zibenīgi (PWA)
 
-Detalizētam salīdzinājumam skatiet mūsu lapu [Salīdzināt skatītājus](/lv/salidzinat-skatitajus).
+Ja regulāri atverat `.edoc` vai `.asice` failus, instalējiet eDoc Viewer kā progresīvo tīmekļa lietotni visātrākajai dokumentu apskatei:
 
-## Tehniskie detaļi
+1. Atveriet eDoc Viewer pārlūkā Chrome
+2. Noklikšķiniet uz instalēšanas ikonas adreses joslā (vai izvēlnē → "Instalēt eDoc Viewer")
+3. Pēc instalēšanas Chrome var asociēt `.edoc`, `.asice` un `.sce` failus ar lietotni
+4. Turpmāk **dubultklikšķiniet uz jebkura eDoc faila** un tas uzreiz atvērsies skatītājā
 
-eDoc faili izmanto **ASiC-E** (Associated Signature Container Extended) formātu, kas ir ZIP arhīvs, kurā ietilpst:
+Tas ir vistuvākais vietējai darbvirsmas lietotnei bez instalēšanas — startējas uzreiz, darbojas bezsaistē un atver `.edoc`, `.asice` un `.sce` failus uzreiz no operētājsistēmas. Īpaši noderīgi, lai ātri priekšskatītu PDF un DOCX failus parakstītajos dokumentos.
 
-- Oriģinālie dokumenti (PDF, DOCX, attēli, u.c.)
+## Kad izmantot citu rīku
+
+Izmantojiet citu rīku, ja jūsu mērķis nav tikai faila atvēršana un apskatīšana:
+
+- **Jāparaksta jauns dokuments** — izmantojiet darbvirsmas parakstīšanas lietotni
+- **Nepieciešams oficiāls validācijas ieraksts** — izmantojiet vajadzībai atbilstošo oficiālo validatoru vai portālu
+- **Nepieciešama integrācija ar jūsu dokumentu pārvaldības sistēmu?** [zenomy.tech](https://zenomy.tech/) veido pielāgotas eDoc/ASiC-E parakstīšanas un darbplūsmu integrācijas biznesa sistēmām.
+
+Īsai salīdzināšanai skatiet [Salīdzināt eDoc skatītājus](/lv/salidzinat-skatitajus).
+
+## Kas ir eDoc vai ASiC-E faila iekšienē?
+
+eDoc faili izmanto **ASiC-E** (Associated Signature Container Extended) formātu — ZIP failu, kurā var būt:
+
+- Oriģinālie dokumenti (PDF, DOCX, attēli u.c.)
 - XML parakstu faili (signatures*.xml)
-- Manifest faili (META-INF/)
+- Manifesta faili (META-INF/)
 
-Mūsu skatītājs automātiski izvilks un pārbauda visas sastāvdaļas.
+Mūsu skatītājs ļauj apskatīt šo saturu.
 
-## Saderība ar eParaksts sistēmām
-
-Šis skatītājs atbalsta visus dokumentus, kas parakstīti ar:
-
-- **eParaksts Mobile** - mobilā parakstīšanas lietotne
-- **eParaksts Smart-ID** - Smart-ID parakstīšana
-- **eParaksts Smartcard** - viedkartēm
-- Jebkuru citu ASiC-E saderīgu parakstīšanas rīku
-
-Visi **Latvijas.lv** portālā parakstītie vai saņemtie dokumenti ir pilnībā saderīgi.
+Ja vēlaties detalizētāku formāta skaidrojumu, skatiet [Kas ir eDoc fails? ASiC-E skaidrojums](/lv/kas-ir-edoc). Ja nepieciešams konteinera standarta skats, izmantojiet [ASiC-E lasītāja](/lv/asice-lasitajs) lapu.

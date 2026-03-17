@@ -15,7 +15,7 @@ An **eDoc file** is an ASiC-E-based container for digitally signed documents. If
 
 ## Quick Answer
 
-If you only need to open a signed file and inspect what is inside, the browser viewer below is usually the fastest option. It runs locally in your browser — your files stay on your device. [Open your `.edoc`, `.asice`, or `.sce` file in the viewer below](#viewer). If you need to create signatures, use a desktop signing app. If you need an official or jurisdiction-specific validation record, use the validator recommended by the relevant trust-service provider or public authority.
+If you only need to open a signed file and inspect what is inside, the browser viewer below is usually the fastest option. It runs locally in your browser — your files stay on your device. [Open your `.edoc`, `.asice`, or `.sce` file in the viewer below](#viewer). If you need to create signatures, use a desktop signing app or other official web based signing tools. If you need an official or jurisdiction-specific validation record, use the validator recommended by the relevant trust-service provider or public authority.
 
 ## Step-by-Step: Open and Verify the File
 
@@ -23,7 +23,7 @@ If you only need to open a signed file and inspect what is inside, the browser v
 2. The file will be **opened locally in your browser** and extracted on your device
 3. **Review the documents inside** the container without uploading them anywhere
 4. **Check the signatures** to see signer, certificate, and timestamp information
-5. **Download** individual files if needed
+5. **Save** individual files if needed
 
 Your files stay on your device. For full signature validation, the app may contact certificate and timestamp services online.
 
@@ -33,7 +33,7 @@ After opening the file, you can usually:
 
 - See all attached documents inside the signed container
 - Inspect signer identity and certificate details
-- Check whether the document appears signed and intact while keeping the file contents local
+- Check the document integrity (whether is signed and unchanged)  while keeping the file contents local
 - Review timestamp information when present
 - Extract individual files from the container
 

@@ -1,90 +1,83 @@
 ---
-title: "ASiC-E Lasītājs - Skatiet ASiC-E konteinerus tiešsaistē"
-description: "Bezmaksas tiešsaistes ASiC-E lasītājs Associated Signature Container Extended failu skatīšanai. Pārbaudiet digitālos parakstus un izvelciet dokumentus."
+title: "ASiC-E failu lasītājs | Atveriet .asice failus tiešsaistē"
+description: "Bezmaksas tiešsaistes ASiC-E failu lasītājs .asice, .sce un Latvijas .edoc konteineriem. Skatiet dokumentus, pārbaudiet parakstus un izvelciet failus savā pārlūkā."
 locale: "lv"
 pageType: "asice-reader"
 defaultViewerLocale: "lv"
 alternates:
   en: "/asice-reader"
   lv: "/lv/asice-lasitajs"
-countryMentions: ["eParaksts", "Latvijas.lv"]
 ---
 
-# ASiC-E Lasītājs
+# ASiC-E failu lasītājs
 
-**ASiC-E** (Associated Signature Container Extended) ir standartizēts formāts digitāli parakstītu dokumentu konteineriem, ko izmanto visā Eiropas Savienībā.
+**ASiC-E** (Associated Signature Container Extended) ir konteinera formāts elektroniski parakstītiem failiem, ko izmanto Eiropas elektronisko parakstu darbplūsmās. Ja saņēmāt `.asice`, `.sce` vai Latvijas `.edoc` failu, varat to atvērt zemāk esošajā skatītājā un apskatīt saturu lokāli savā pārlūkā.
+
+## Ātrā atbilde
+
+Ja esat šeit, jo jums vajag **ASiC-E lasītāju**, izmantojiet šīs lapas skatītāju. Tas atver konteineru jūsu pārlūkā, lai jūs varētu apskatīt dokumentus, parakstus, sertifikātus un laika zīmogus, neaugšupielādējot dokumentu saturu uz mūsu serveriem. [Atveriet savu `.asice`, `.sce` vai `.edoc` failu skatītājā zemāk](#viewer).
 
 ## Kas ir ASiC-E?
 
-ASiC-E ir definēts **ETSI TS 102 918** standartā un nodrošina:
+ASiC-E ir ZIP bāzēts konteiners, kas apvieno dokumentus ar elektroniskajiem parakstiem un metadatiem:
 
-- **Konteinera formāts** - ZIP bāzēts arhīvs vairākiem failiem
-- **Digitālie paraksti** - XAdES paraksti iegulti konteinerā
-- **Pārbaude** - Kriptogrāfiskā parakstu un sertifikātu validācija
-- **Savietojamība** - Darbojas dažādās ES eID sistēmās
+- **Konteinera formāts** — ZIP bāzēts arhīvs vairākiem failiem
+- **Elektroniskie paraksti** — XAdES paraksti iegulti konteinerā
+- **Pārbaude** — kriptogrāfiskā parakstu un sertifikātu validācija
+- **Savietojamība** — darbojas dažādās ES eID sistēmās
 
 ## Failu paplašinājumi
 
 ASiC-E failiem var būt dažādi paplašinājumi atkarībā no valsts:
 
-- `.asice` - Vispārīgs ASiC-E paplašinājums
-- `.edoc` - Izmanto Latvijā un Igaunijā
-- `.sce` - Dažas implementācijas
+- `.asice` — vispārīgs ASiC-E paplašinājums
+- `.edoc` — Latvijas eDoc paplašinājums ASiC-E konteineriem
+- `.sce` — dažas implementācijas
 
-Visi šie formāti ir saderīgi un var tikt atvērti ar mūsu skatītāju.
+Visi šie paplašinājumi attiecas uz vienu un to pašu konteinera konceptu un var tikt atvērti ar mūsu skatītāju.
 
-## Izmantošana Latvijā
+## Ko šis lasītājs ļauj darīt
 
-### eParaksts ekosistēma
+Izmantojiet šo ASiC-E lasītāju, lai:
 
-Latvijā ASiC-E faili (ar .edoc paplašinājumu) ir standarta formāts, ko izmanto:
-
-- **eParaksts Mobile** - mobilā parakstīšana
-- **eParaksts Smart-ID** - parakstīšana ar Smart-ID
-- **eParaksts Smartcard** - parakstīšana ar viedkartes lasītāju
-
-### Latvijas.lv portāls
-
-Valsts pakalpojumu portāls **Latvijas.lv** izmanto eDoc/ASiC-E formātu:
-
-- Oficiālu dokumentu saņemšanai
-- Iesniegumu parakstīšanai
-- Komunikācijai ar valsts institūcijām
-
-Visi šajā portālā lejupielādētie dokumenti var tikt atvērti ar šo skatītāju.
+- Atvērtu saņemtos `.asice`, `.sce` un `.edoc` failus
+- Apskatītu konteinerā glabātos dokumentus
+- Pārbaudītu parakstītāja, sertifikāta un laika zīmoga informāciju
+- Lejupielādētu atsevišķus failus no konteinera
+- Pārskatītu parakstus lokāli savā pārlūka sesijā
 
 ## ASiC-E faila struktūra
 
 ASiC-E konteineris ir ZIP arhīvs ar šādu struktūru:
 
 ```
-dokuments.asice
-├── līgums.pdf              # Oriģinālais dokuments(i)
-├── attēls.jpg              # Var saturēt vairākus failus
+konteineris.asice
+├── dokuments.pdf          # Oriģinālais dokuments(i)
+├── attēls.jpg             # Var saturēt vairākus failus
 ├── META-INF/
 │   ├── manifest.xml        # Failu saraksts
-│   ├── signatures0.xml     # Digitālais paraksts(i)
+│   ├── signatures0.xml     # Elektroniskais paraksts(i)
 │   └── ...
 ```
 
-## Paraksta pārbaude
+## Parakstu pārbaude
 
 Mūsu ASiC-E lasītājs pārbauda:
 
-- **Paraksta derīgums** - Kriptogrāfiskā paraksta pārbaude
-- **Sertifikātu ķēde** - Uzticamības ķēdes validācija
-- **Laika zīmogs** - Paraksta izveides laiks
-- **Sertifikāta derīgums** - Pārbauda, vai sertifikāts bija derīgs parakstīšanas brīdī
+- **Paraksta derīgumu** — kriptogrāfiskā paraksta pārbaude
+- **Sertifikātu ķēdi** — uzticamības ķēdes validācija
+- **Laika zīmogu** — paraksta izveides laiks
+- **Sertifikāta derīgumu** — vai sertifikāts bija derīgs parakstīšanas brīdī
 
-## eIDAS atbilstība
+Dokumentu saturs paliek lokāli jūsu pārlūkā uz jūsu ierīces. Kad ir pieejama dziļāka tiešsaistes validācija, lasītājs var sazināties ar sertifikātu, atsaukšanas vai laika zīmogu pakalpojumiem parakstu pārbaudei.
 
-ASiC-E atbilst **eIDAS regulai** (Elektroniskā identifikācija un uzticamības pakalpojumi), padarot to juridiski atzītu visās ES dalībvalstīs:
+## ASiC-E un eIDAS
 
-- Oficiāliem dokumentiem
-- Līgumiem un vienošanām
-- Valdības komunikācijām
-- Biznesa darījumiem
+ASiC-E ir konteinera formāts, ko izmanto kopā ar elektroniskajiem parakstiem saskaņā ar **eIDAS** ietvaru. Jūs to sastapsiet tādās darbplūsmās kā:
 
-Latvijā tas nozīmē pilnu saderību ar eParaksts ekosistēmu un Latvijas.lv portālu.
+- Oficiāli dokumenti
+- Līgumi un vienošanās
+- Valsts pārvaldes komunikācijas
+- Biznesa darījumi
 
-Izmantojiet zemāk esošo skatītāju, lai atvērtu un pārbaudītu ASiC-E failus.
+Detalizētam atvēršanas ceļvedim skatiet [Kā atvērt un pārbaudīt eDoc vai ASiC-E failu](/lv/atvert-edoc-failu). Plašākam skaidrojumam lasiet [Kas ir eDoc fails? ASiC-E skaidrojums](/lv/kas-ir-edoc). Īsam rīku izvēles ceļvedim skatiet [Salīdzināt eDoc skatītājus](/lv/salidzinat-skatitajus).

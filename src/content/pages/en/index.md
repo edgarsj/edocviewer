@@ -15,8 +15,8 @@ Open `.edoc`, `.asice`, and `.sce` files directly in your browser. eDoc Viewer h
 
 - **Open eDoc and ASiC-E Containers** - Browse `.edoc`, `.asice`, and `.sce` files
 - **Digital Signature Verification** - Validate XAdES signatures, certificate chains, and timestamps
-- **Local Document Processing** - Document contents stay on your device while you inspect files
-- **Offline App Support** - Install as a Progressive Web App (PWA) and keep the viewer available offline
+- **Local Document Processing** - Document contents stay on your device
+- **Install as an App** — Open `.edoc` files with a double-click — no drag-and-drop needed (works best in Chrome/Edge)
 - **Document Preview** - View PDFs, images, and DOCX files embedded inside containers
 - **Certificate Details** - Inspect signer identity, issuer, validity period, and trust chain
 
@@ -44,6 +44,7 @@ An eDoc file is a signed document container rather than a single document format
 - Want to verify who signed a document and when
 - Need to extract individual files from a signed container
 - Looking for a browser-based way to inspect signed containers without uploading document contents
+- Want to quickly preview the contents of e-signed files
 
 ## FAQ
 
