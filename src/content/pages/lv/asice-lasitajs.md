@@ -15,11 +15,11 @@ alternates:
 
 ## Ātrā atbilde
 
-Ja esat šeit, jo jums vajag **ASiC-E lasītāju**, izmantojiet šīs lapas skatītāju. Tas atver konteineru jūsu pārlūkā, lai jūs varētu apskatīt dokumentus, parakstus, sertifikātus un laika zīmogus, neaugšupielādējot dokumentu saturu uz mūsu serveriem. [Atveriet savu `.asice`, `.sce` vai `.edoc` failu skatītājā zemāk](#viewer).
+Ja esat šeit, jo jums vajag **ASiC-E lasītāju**, izmantojiet šīs lapas skatītāju. Tas atver konteineru jūsu pārlūkā, lai jūs varētu apskatīt dokumentus, parakstus, sertifikātus un laika zīmogus, neaugšupielādējot dokumentu saturu uz mūsu serveriem. [Atveriet savu `.asice`, `.sce` vai `.edoc` failu skatītājā](#viewer).
 
 ## Kas ir ASiC-E?
 
-ASiC-E ir ZIP bāzēts konteiners, kas apvieno dokumentus ar elektroniskajiem parakstiem un metadatiem:
+ASiC-E ir ZIP bāzēts konteinera formāta fails, kas apvieno dokumentus ar elektroniskajiem parakstiem un metadatiem:
 
 - **Konteinera formāts** — ZIP bāzēts arhīvs vairākiem failiem
 - **Elektroniskie paraksti** — XAdES paraksti iegulti konteinerā
@@ -34,17 +34,17 @@ ASiC-E failiem var būt dažādi paplašinājumi atkarībā no valsts:
 - `.edoc` — Latvijas eDoc paplašinājums ASiC-E konteineriem
 - `.sce` — dažas implementācijas
 
-Visi šie paplašinājumi attiecas uz vienu un to pašu konteinera konceptu un var tikt atvērti ar mūsu skatītāju.
+Visi šie paplašinājumi attiecas uz vienu un to pašu konteinera faila formātu un var tikt atvērti ar mūsu skatītāju.
 
 ## Ko šis lasītājs ļauj darīt
 
 Izmantojiet šo ASiC-E lasītāju, lai:
 
 - Atvērtu saņemtos `.asice`, `.sce` un `.edoc` failus
-- Apskatītu konteinerā glabātos dokumentus
+- Apskatītu failā glabātos dokumentus
 - Pārbaudītu parakstītāja, sertifikāta un laika zīmoga informāciju
-- Lejupielādētu atsevišķus failus no konteinera
-- Pārskatītu parakstus lokāli savā pārlūka sesijā
+- Lejupielādētu atsevišķus dokumentus no konteinera faila
+- Pārbaudītu parakstus lokāli savā pārlūkā
 
 ## ASiC-E faila struktūra
 
@@ -65,15 +65,15 @@ konteineris.asice
 Mūsu ASiC-E lasītājs pārbauda:
 
 - **Paraksta derīgumu** — kriptogrāfiskā paraksta pārbaude
-- **Sertifikātu ķēdi** — uzticamības ķēdes validācija
-- **Laika zīmogu** — paraksta izveides laiks
+- **Sertifikātu ķēdi** — uzticamības ķēdes (trust chain latviski :( ) validācija
+- **Laika zīmogu** — norādīto paraksta izveides laika patiesumu
 - **Sertifikāta derīgumu** — vai sertifikāts bija derīgs parakstīšanas brīdī
 
-Dokumentu saturs paliek lokāli jūsu pārlūkā uz jūsu ierīces. Kad ir pieejama dziļāka tiešsaistes validācija, lasītājs var sazināties ar sertifikātu, atsaukšanas vai laika zīmogu pakalpojumiem parakstu pārbaudei.
+Dokumentu saturs atrodas tikai jūsu pārlūkā uz jūsu ierīces. Lasītājs pieslēdzas tiešsaistes sertifikātu un laika zīmogu servisiem, tikai pašu parakstu derīguma (vai nav atsaukti) un laika zīmogu pārbaudei.
 
 ## ASiC-E un eIDAS
 
-ASiC-E ir konteinera formāts, ko izmanto kopā ar elektroniskajiem parakstiem saskaņā ar **eIDAS** ietvaru. Jūs to sastapsiet tādās darbplūsmās kā:
+ASiC-E ir konteinera formāts, ko izmanto kopā ar elektroniskajiem parakstiem saskaņā ar **eIDAS** ietvaru. Jūs to sastapsiet tādās jomās kā:
 
 - Oficiāli dokumenti
 - Līgumi un vienošanās

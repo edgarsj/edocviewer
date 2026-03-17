@@ -29,7 +29,7 @@ Velciet failu uz skatītāju augstāk vai noklikšķiniet, lai izvēlētos no da
 Šis skatītājs apstrādā izplatītos ASiC-E (Associated Signature Container Extended) failu paplašinājumus:
 
 - **`.edoc`** - eDoc paplašinājums ASiC-E konteineriem Latvijā
-- **`.asice`** - Vispārīgs ASiC-E paplašinājums, ko izmanto visā ES
+- **`.asice`** - Vispārīgs ASiC-E paplašinājums, ko izmanto visā Eiropas Savienībā
 - **`.sce`** - Alternatīvs paplašinājums tai pašai ASiC-E konteinera struktūrai
 
 Visi šie ir ZIP bāzēti elektronisko parakstu faili, kas balstīti uz ASiC-E formātu, tāpēc lietotne darbojas vienādi neatkarīgi no saņemtā paplašinājuma.

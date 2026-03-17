@@ -39,7 +39,7 @@ What a tool can do depends more on your signing method and setup than on the too
 
 ### I just need to open an eDoc file someone sent me
 
-Use a **browser viewer**. This is the fastest option when you want to inspect the contents, identify who signed the file, and download the individual documents inside the container.
+Use a **browser viewer**. This is the fastest option when you want to inspect the contents, identify who signed the file, and download the individual documents inside the signed file container.
 
 ### I need to sign documents or use a national eID workflow
 
@@ -61,8 +61,7 @@ This depends more on the **provider and credential type** than on web vs desktop
 
 eDoc Viewer is best when you want:
 
-- Fast access in any modern browser
-- No desktop installation
+- Fast access in any modern browser — no software to install or update
 - Local handling of document contents
 - Quick inspection of signatures, certificates, and timestamps
 - A simple way to open `.edoc`, `.asice`, and `.sce` files

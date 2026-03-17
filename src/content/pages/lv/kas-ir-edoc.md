@@ -96,33 +96,33 @@ Augstā līmenī eDoc/ASiC-E paraksts darbojas šādi:
 Dokumentu faili
     |
     v
-Tiek aprēķināti parakstītā satura heši/kopsavilkumi
+Tiek aprēķinātas parakstītā satura čeksummas (hashes / checksums)
     |
     v
 Parakstītāja privātā atslēga izveido paraksta vērtību
     |
     v
 Paraksts satur atsauces uz parakstīto saturu
-un parasti iekļauj parakstītāja sertifikātu
+un parasti iekļauj parakstītāja publisko sertifikātu
     |
     v
 Neobligāts laika zīmogs pierāda, ka paraksts eksistēja noteiktā brīdī
     |
     v
 Validators pārbauda:
-- vai failu heši joprojām sakrīt
+- vai failu čeksummas joprojām sakrīt
 - vai sertifikāta publiskā atslēga atbilst parakstam
-- vai sertifikātu ķēde ved pie uzticamas CA
-- vai uzticamības sarakstu / atsaukšanas / laika zīmogu pārbaudes ir veiksmīgas
+- vai sertifikātu ķēde ved pie uzticamas CA (certificate authority? latviski)
+- vai uzticamības sarakstu / atsaukšanas / laika zīmogu pārbaudes ir korektas
 ```
 
 Vienkāršos vārdos:
 
 - **Sertifikāts** norāda, kura publiskā atslēga pieder parakstītājam
 - **Paraksts** pierāda, ka atbilstošā privātā atslēga apstiprināja parakstīto saturu
-- **Heši/kopsavilkumi** pierāda, ka faili nav mainīti kopš parakstīšanas
+- **Čeksummu pārbaude** pierāda, ka faili nav mainīti kopš parakstīšanas
 - **Laika zīmogs** var pierādīt, kad paraksts eksistēja
-- **Uzticamības lēmums** izriet no sertifikātu ķēdes validācijas un pārbaudes, vai izdevēja uzticamības pakalpojums ir attiecīgajā uzticamo sarakstā
+- **Uzticamības lēmums (šis izklausās reāli sūdīgi) ** izriet no sertifikātu ķēdes validācijas un pārbaudes, vai paraksta izdevēja ir uzticamo (parasti ES līmenī pieņemto) servisu sarakstā
 
 Eiropā validatori pārbauda nacionālos un ES uzticamo sarakstus, lai izlemtu, vai sertifikātu izdevējs ir uzticams. Publiska atsauce ir [ES uzticamo sarakstu pārlūks](https://eidas.ec.europa.eu/efda/trust-services/browse/eidas/tls/search/type?step=1).
 
@@ -150,9 +150,9 @@ eDoc atbalsta dažādus parakstu līmeņus:
 
 Izmantojiet šīs lapas skatītāju, lai:
 
-1. **Izvilktu saturu** — skatiet visus failus konteinerā
+1. **Redzētu saturu** — apskatiet visus dokumentus parakstītajā konteinerfailā 
 2. **Pārbaudītu parakstus** — pārbaudiet kriptogrāfisko derīgumu
-3. **Skatītu sertifikātus** — skatiet, kas parakstīja dokumentu
+3. **Apskatītu sertifikātus** — redzoet, kas parakstīja dokumentu
 4. **Pārbaudītu laika zīmogus** — pārbaudiet, kad notika parakstīšana
 5. **Lejupielādētu failus** — izvelciet atsevišķus dokumentus
 
@@ -167,7 +167,7 @@ eDoc/ASiC-E faili parasti balstās uz:
 
 ## Starptautiskā saderība
 
-Lai gan `.edoc` galvenokārt asociējas ar Latvijas eDoc darbplūsmām, ASiC-E formāts tiek izmantots visās Eiropas elektronisko parakstu sistēmās:
+Lai gan `.edoc` galvenokārt asociējas ar Latvijas eDoc infrastruktūru, ASiC-E formāts tiek izmantots visās Eiropas elektronisko parakstu sistēmās:
 
 - **Eiropas Savienība** — ASiC-E ir standarta konteinera formāts pārrobežu elektroniskajiem parakstiem
 - **Latvija** — `.edoc` ir valstij specifiskais paplašinājums, ar ko lietotāji visbiežāk saskaras praksē
@@ -180,7 +180,7 @@ Izmantojot mūsu skatītāju:
 - ✅ **Dokumentu saturs paliek lokāls** — faili tiek apstrādāti jūsu pārlūkā
 - ✅ **Dokumenti netiek augšupielādēti** — jūsu parakstītie faili netiek sūtīti uz mūsu serveriem
 - ✅ **Atvērtā pirmkoda** — pilnībā pārredzams un auditējams kods
-- ⚠️ **Tiešsaistes pārbaudes var tikt izmantotas** — pilna sertifikātu un laika zīmogu validācija var sazināties ar uzticamības pakalpojumu galapunktiem
+- ⚠️ **Tiešsaistes pārbaudes** — pilnai parakstu un laika zīmogu validācijai nepieciešama sazinņa ar sertifikātu un laika zīmogu pakalpojumu serveriem
 
 ## Izstrādātājiem
 
@@ -189,5 +189,5 @@ Ja jums nepieciešams programmatiski parsēt vai verificēt šos konteinerus, eD
 ## Uzzināt vairāk
 
 - [Kā atvērt un pārbaudīt eDoc vai ASiC-E failu](/lv/atvert-edoc-failu)
-- [ASiC-E lasītāja tehniskie detaļi](/lv/asice-lasitajs)
+- [ASiC-E lasītāja informācija](/lv/asice-lasitajs)
 - [Salīdzināt dažādus skatītājus](/lv/salidzinat-skatitajus)

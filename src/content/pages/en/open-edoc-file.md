@@ -52,7 +52,7 @@ This is the closest thing to a native desktop app without installing one — it 
 
 Use a different tool when your goal is not just opening and inspecting the file:
 
-- **Need to sign a new document** - Use a desktop signing application
+- **Need to sign a new document** - Use a desktop signing application or other official web based signing tools
 - **Need an official validation record** - Use the official validator or portal relevant to that workflow
 - **Need an integration with your document management workflow?** [zenomy.tech](https://zenomy.tech/) builds custom eDoc/ASiC-E signing and workflow integrations for business systems.
 

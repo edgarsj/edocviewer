@@ -53,7 +53,7 @@ Tas ir vistuvākais vietējai darbvirsmas lietotnei bez instalēšanas — start
 
 Izmantojiet citu rīku, ja jūsu mērķis nav tikai faila atvēršana un apskatīšana:
 
-- **Jāparaksta jauns dokuments** — izmantojiet darbvirsmas parakstīšanas lietotni
+- **Jāparaksta jauns dokuments** — izmantojiet darbvirsmas parakstīšanas lietotni vai citus oficiālus web bāzētus parakstīšanas rīkus
 - **Nepieciešams oficiāls validācijas ieraksts** — izmantojiet vajadzībai atbilstošo oficiālo validatoru vai portālu
 - **Nepieciešama integrācija ar jūsu dokumentu pārvaldības sistēmu?** [zenomy.tech](https://zenomy.tech/) veido pielāgotas eDoc/ASiC-E parakstīšanas un darbplūsmu integrācijas biznesa sistēmām.
 
