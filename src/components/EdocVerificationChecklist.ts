@@ -18,7 +18,7 @@ export class EdocVerificationChecklist extends LocaleAwareMixin(LitElement) {
       border-bottom: 1px solid var(--sl-color-neutral-100);
     }
 
-    .checklist-item:last-child {
+    .checklist-list > .checklist-item:last-child {
       border-bottom: none;
     }
 
@@ -149,6 +149,7 @@ export class EdocVerificationChecklist extends LocaleAwareMixin(LitElement) {
 
     return html`
       <sl-dialog label="${title}">
+        <div class="checklist-list">
         ${this.checklist.map((item) => {
           const icon = this.getStatusIcon(item.status);
           return html`
@@ -169,6 +170,7 @@ export class EdocVerificationChecklist extends LocaleAwareMixin(LitElement) {
             </div>
           `;
         })}
+        </div>
         ${this.renderTrustInfo()}
       </sl-dialog>
     `;
@@ -217,12 +219,12 @@ export class EdocVerificationChecklist extends LocaleAwareMixin(LitElement) {
       <div class="trust-match">
         <strong>${label}:</strong>
         ${match.found
-          ? html`${match.trustedAtTime ? "Trusted" : "Not trusted"}
+          ? html`${match.trustedAtTime ? msg("Trusted", { id: "trustMatch.trusted" }) : msg("Not trusted", { id: "trustMatch.notTrusted" })}
               ${match.confidence
                 ? html`(<span class="confidence">${match.confidence}</span>)`
                 : nothing}
               ${match.country ? html`— ${match.country}` : nothing}`
-          : "Not found in trusted list"}
+          : msg("Not found in trusted list", { id: "trustMatch.notFound" })}
         ${match.detail ? html`<div>${match.detail}</div>` : nothing}
       </div>
     `;

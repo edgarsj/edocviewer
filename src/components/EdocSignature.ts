@@ -450,7 +450,7 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
               tabindex="${isPending ? '-1' : '0'}"
               aria-label="${statusTitle}"
               @click=${() => !isPending && this.openChecklistModal()}
-              @keydown=${(e: KeyboardEvent) => e.key === 'Enter' && !isPending && this.openChecklistModal()}
+              @keydown=${(e: KeyboardEvent) => (e.key === 'Enter' || e.key === ' ') && !isPending && (e.preventDefault(), this.openChecklistModal())}
             >
               <div class="status-icon ${iconClass}">
                 ${isPending

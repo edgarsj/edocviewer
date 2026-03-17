@@ -122,5 +122,8 @@
 'signatures.unsupported': `Pārbaude nav atbalstīta šajā platformā`,
 'signatures.valid': `Derīgs`,
 'signatures.verifying': `Paraksta sertifikāta pārbaude...`,
+'trustMatch.notFound': `Nav atrasts uzticamo sarakstā`,
+'trustMatch.notTrusted': `Nav uzticams`,
+'trustMatch.trusted': `Uzticams`,
     };
   

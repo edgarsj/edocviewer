@@ -470,6 +470,18 @@
   <source>Details</source>
   <target>vairāk..</target>
 </trans-unit>
+<trans-unit id="trustMatch.trusted">
+  <source>Trusted</source>
+  <target>Uzticams</target>
+</trans-unit>
+<trans-unit id="trustMatch.notTrusted">
+  <source>Not trusted</source>
+  <target>Nav uzticams</target>
+</trans-unit>
+<trans-unit id="trustMatch.notFound">
+  <source>Not found in trusted list</source>
+  <target>Nav atrasts uzticamo sarakstā</target>
+</trans-unit>
 </body>
 </file>
 </xliff>

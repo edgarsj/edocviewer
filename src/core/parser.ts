@@ -95,10 +95,14 @@ let trustListProviderPromise: Promise<any> | null = null;
 
 async function getTrustListProvider() {
   if (!trustListProviderPromise) {
-    trustListProviderPromise = import("edockit/trusted-list").then(
-      ({ createTrustListProvider }) =>
+    trustListProviderPromise = import("edockit/trusted-list")
+      .then(({ createTrustListProvider }) =>
         createTrustListProvider({ url: "/assets/trusted-list.json" })
-    );
+      )
+      .catch((err) => {
+        trustListProviderPromise = null; // allow retry on next call
+        throw err;
+      });
   }
   return trustListProviderPromise;
 }
