@@ -220,8 +220,8 @@
   <target>3. Pakalpojuma apraksts</target>
 </trans-unit>
 <trans-unit id="legal.terms_description_content">
-  <source>eDoc Viewer is a web application that allows users to view and verify EU standard ASiC-E and Latvian eDoc electronic signature files (.asice, .edoc). The application processes files locally in your browser and does not upload your documents to any server.</source>
-  <target>eDoc Viewer ir tīmekļa lietotne, kas ļauj lietotājiem skatīt un pārbaudīt ES standarta ASiC-E un Latvijas eDoc elektroniskās paraksta failus (.asice, .edoc). Lietotne apstrādā failus lokāli jūsu pārlūkprogrammā un neaugšupielādē jūsu dokumentus uz nekādiem serveriem.</target>
+  <source>eDoc Viewer is a web application that allows users to view and verify EU standard ASiC-E and Latvian eDoc electronic signature files (.asice, .sce, .edoc). The application processes files locally in your browser and does not upload your documents to any server.</source>
+  <target>eDoc Viewer ir tīmekļa lietotne, kas ļauj lietotājiem skatīt un pārbaudīt ES standarta ASiC-E un Latvijas eDoc elektroniskās paraksta failus (.asice, .sce, .edoc). Lietotne apstrādā failus lokāli jūsu pārlūkprogrammā un neaugšupielādē jūsu dokumentus uz nekādiem serveriem.</target>
 </trans-unit>
 <trans-unit id="legal.terms_usage_title">
   <source>4. Intended Use</source>
@@ -354,8 +354,8 @@
   <target>eDoc Viewer</target>
 </trans-unit>
 <trans-unit id="app.description">
-  <source>View and verify EU standard ASiC-E and Latvian eDoc electronic signature files (.asice, .edoc)</source>
-  <target>Skatīt un pārbaudīt EU standarta ASiC-E un Latvijas eDoc elektroniskā paraksta failus (.asice, .edoc)</target>
+  <source>View and verify EU standard ASiC-E and Latvian eDoc electronic signature files (.asice, .sce, .edoc)</source>
+  <target>Skatīt un pārbaudīt EU standarta ASiC-E un Latvijas eDoc elektroniskā paraksta failus (.asice, .sce, .edoc)</target>
 </trans-unit>
 <trans-unit id="app.learn_more">
   <source>Learn more</source>
