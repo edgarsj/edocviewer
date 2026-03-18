@@ -64,8 +64,9 @@ const ALLOWED_DEST_PATTERNS = [
   /^https?:\/\/www\.sk\.ee\/crls\//,                // CRLs
   /^https?:\/\/ocsp\.sk\.ee(\/|$)/,                 // OCSP responder
 
-  // Ukrainian Diia (government CA)
-  /^https?:\/\/ca\.diia\.gov\.ua\//,                // CA services (certs, OCSP, CRLs)
+  // Ukrainian CAs (Diia, Informjust)
+  /^https?:\/\/ca\.diia\.gov\.ua\//,                // Diia CA services
+  /^https?:\/\/ca\.informjust\.ua\//,               // Informjust OCSP/CRL
 
   // Slovak SNCA (National Security Authority CA)
   /^https?:\/\/[^/]*\.snca\.gov\.sk(\/|$)/,         // *.snca.gov.sk (OCSP, CRLs, certs)
@@ -73,10 +74,26 @@ const ALLOWED_DEST_PATTERNS = [
   // Hungarian Microsec (government CA)
   /^https?:\/\/[^/]*\.hiteles\.gov\.hu(\/|$)/,      // *.hiteles.gov.hu (OCSP, CRLs, certs)
 
+  // Hungarian Netlock (qualified trust services)
+  /^https?:\/\/[^/]*\.netlock\.hu\//,               // *.netlock.hu (AIA, CRL via CGI endpoints)
+
+  // Lithuanian VRM (government CA)
+  /^https?:\/\/nsc\.vrm\.lt\//,                     // OCSP responder
+
+  // Slovak/Czech Ardaco (TSP/OCSP)
+  /^https?:\/\/tsp\.ardaco\.com\//,                 // TSP/OCSP/CRL services
+
+  // Polish Eurocert
+  /^https?:\/\/services\.eurocert\.pl\//,           // OCSP services
+
+  // FreeTSA (open timestamp authority)
+  /^https?:\/\/www\.freetsa\.org\//,                // CA certificates
+
   // Generic patterns for other EU trust services
-  /^https?:\/\/[^/]*ocsp[^/]*\.[^/]+(\/|$)/,        // OCSP responders (*ocsp*)
+  /^https?:\/\/[^/]*ocsp[^/]*\.[^/]+(\/|$)/,        // OCSP responders (hostname contains "ocsp")
+  /^https?:\/\/[^/]+\/.*ocsp/i,                     // OCSP responders (path contains "ocsp")
   /^https?:\/\/aia\.[^/]+\//,                       // AIA endpoints (aia.*)
-  /^https?:\/\/[^/]+\/.*\.(crl|crt|cer|der|p7c)(\?.*)?$/i,  // CRL/cert files by extension
+  /^https?:\/\/[^/]+\/.*\.(crl|crt|cer|der|p7c|pem)(\?.*)?$/i,  // CRL/cert files by extension
 ];
 
 function isAllowedOrigin(origin: string | null): boolean {
