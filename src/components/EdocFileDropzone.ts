@@ -80,7 +80,7 @@ export class FileDropzone extends LocaleAwareMixin(LitElement) {
    * @type {string[]}
    */
   @property({ type: Array })
-  acceptedFileTypes: string[] = [".edoc", ".asice"];
+  acceptedFileTypes: string[] = [".edoc", ".asice", ".sce"];
 
   /**
    * Optional suggested filename to display

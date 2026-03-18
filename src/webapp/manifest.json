@@ -56,9 +56,9 @@
     {
       "action": "index.html",
       "accept": {
-        "application/vnd.etsi.asic-e+zip": [".asice"],
+        "application/vnd.etsi.asic-e+zip": [".asice", ".sce"],
         "application/octet-stream": [".edoc"],
-        "application/zip": [".asice", ".edoc"]
+        "application/zip": [".asice", ".edoc", ".sce"]
       }
     }
   ],
