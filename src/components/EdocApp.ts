@@ -73,6 +73,23 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
       color: var(--sl-color-primary-800);
     }
 
+    .app-badge-row {
+      margin-top: 0.5rem;
+    }
+
+    .app-badge {
+      display: inline-flex;
+      align-items: center;
+      background: var(--sl-color-primary-50);
+      color: var(--sl-color-primary-800);
+      border: 1px solid var(--sl-color-primary-200);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.15rem 0.6rem;
+      border-radius: 9999px;
+      line-height: 1.2;
+    }
+
 
     .app-description-wrapper {
       display: flex;
@@ -417,6 +434,23 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
               ${msg("eDoc Viewer", { id: "app.title" })}
             </h1>
           </div>
+
+          ${!isStandalone && this.view === "upload"
+            ? html`
+                <div class="app-badge-row">
+                  <span
+                    class="app-badge"
+                    title=${msg("Plausible analytics, May 2025 – Apr 2026", {
+                      id: "app.badge_documents_opened_tooltip",
+                    })}
+                  >
+                    ${msg("35K+ documents opened", {
+                      id: "app.badge_documents_opened",
+                    })}
+                  </span>
+                </div>
+              `
+            : nothing}
 
           ${!isStandalone
             ? html`

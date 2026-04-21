@@ -361,6 +361,14 @@
   <source>Learn more</source>
   <target>Vairāk</target>
 </trans-unit>
+<trans-unit id="app.badge_documents_opened">
+  <source>35K+ documents opened</source>
+  <target>Apskatīti 35K+ dokumenti</target>
+</trans-unit>
+<trans-unit id="app.badge_documents_opened_tooltip">
+  <source>Plausible analytics, May 2025 – Apr 2026</source>
+  <target>Plausible analītika, maijs 2025 – aprīlis 2026</target>
+</trans-unit>
 <trans-unit id="app.backButtonLabel">
   <source>Back</source>
   <target>Atpakaļ</target>
