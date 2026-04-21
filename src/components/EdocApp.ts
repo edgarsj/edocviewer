@@ -441,11 +441,11 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
                   <span
                     class="app-badge"
                     title=${msg("Plausible analytics, May 2025 – Apr 2026", {
-                      id: "app.badge_documents_opened_tooltip",
+                      id: "app.badge_documents_viewed_tooltip",
                     })}
                   >
-                    ${msg("35K+ documents opened", {
-                      id: "app.badge_documents_opened",
+                    ${msg("35K+ documents viewed", {
+                      id: "app.badge_documents_viewed",
                     })}
                   </span>
                 </div>
