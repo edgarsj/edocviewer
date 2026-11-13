@@ -106,6 +106,9 @@ export default defineConfig(({ mode }) => ({
           if (id.includes("node_modules")) {
             return "vendors";
           }
+
+          // Application code: let Rollup decide
+          return undefined;
         },
       },
     },

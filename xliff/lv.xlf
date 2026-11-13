@@ -34,6 +34,10 @@
   <source>Could not verify certificate revocation status</source>
   <target>Nevarēja noteikt paraksta derīguma statusu</target>
 </trans-unit>
+<trans-unit id="signatures.indeterminate">
+  <source>Signature validity could not be fully determined</source>
+  <target>Paraksta derīgumu nevarēja pilnībā noteikt</target>
+</trans-unit>
 <trans-unit id="signatures.unsupported">
   <source>Verification not supported on this platform</source>
   <target>Pārbaude nav atbalstīta šajā platformā</target>
@@ -486,6 +490,10 @@
 <trans-unit id="trustMatch.notFound">
   <source>Not found in trusted list</source>
   <target>Nav atrasts uzticamo sarakstā</target>
+</trans-unit>
+<trans-unit id="trustMatch.thirdCountry">
+  <source>Third-country trusted list (not equivalent to an EU qualified trust service)</source>
+  <target>Trešās valsts uzticamo saraksts (nav pielīdzināms ES kvalificētam uzticamības pakalpojumam)</target>
 </trans-unit>
 </body>
 </file>

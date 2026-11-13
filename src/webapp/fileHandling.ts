@@ -20,9 +20,7 @@ export function setupFileHandling() {
     console.log("File Handling API available, setting up consumer");
 
     try {
-      // TypeScript may not recognize the launchQueue API yet
-      // @ts-ignore
-      window.launchQueue.setConsumer((launchParams) => {
+      window.launchQueue!.setConsumer((launchParams) => {
         console.log("File handling: Launch params received", launchParams);
 
         if (!launchParams.files || !launchParams.files.length) {
@@ -35,7 +33,7 @@ export function setupFileHandling() {
           `File handling: Processing ${launchParams.files.length} files`,
         );
         const filePromises = launchParams.files.map((fileHandle) =>
-          fileHandle.getFile().catch((error) => {
+          fileHandle.getFile().catch((error: unknown) => {
             console.error("Error getting file from handle:", error);
             return null;
           }),

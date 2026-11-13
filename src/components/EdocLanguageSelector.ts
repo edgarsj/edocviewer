@@ -172,7 +172,7 @@ export class EdocLanguageSelector extends LocaleAwareMixin(LitElement) {
    * Add a highlight effect to show the locale change
    */
   private addHighlightEffect() {
-    const container = this.shadowRoot?.querySelector(
+    const container = this.shadowRoot?.querySelector<HTMLElement>(
       ".language-selector-container",
     );
     if (container) {

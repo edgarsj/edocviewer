@@ -57,3 +57,6 @@ temp/
 
 # Generated trusted-list bundle (regenerate with: npm run update-trusted-list)
 public/assets/trusted-list.json
+
+# Wrangler local state
+.wrangler/

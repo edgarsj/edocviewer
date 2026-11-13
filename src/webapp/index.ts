@@ -310,7 +310,7 @@ function setupDebugLogging() {
       await setAppLocale(newLocale);
       return `Changed language from ${currentLocale} to ${newLocale}`;
     },
-    forceLocale: async (locale) => {
+    forceLocale: async (locale: string) => {
       if (locale === "en" || locale === "lv") {
         await setAppLocale(locale);
         return `Set locale to ${locale}`;

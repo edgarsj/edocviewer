@@ -109,6 +109,7 @@
 'signatures.details': `detaļas`,
 'signatures.detailsLink': `vairāk..`,
 'signatures.docsCheck': `Visi dokumenti parakstīti`,
+'signatures.indeterminate': `Paraksta derīgumu nevarēja pilnībā noteikt`,
 'signatures.invalid': `Nederīgs paraksts`,
 'signatures.noSignatures': `Nav parakstu`,
 'signatures.referencedFiles': `Parakstā iekļautie faili`,
@@ -125,6 +126,7 @@
 'signatures.verifying': `Paraksta sertifikāta pārbaude...`,
 'trustMatch.notFound': `Nav atrasts uzticamo sarakstā`,
 'trustMatch.notTrusted': `Nav uzticams`,
+'trustMatch.thirdCountry': `Trešās valsts uzticamo saraksts (nav pielīdzināms ES kvalificētam uzticamības pakalpojumam)`,
 'trustMatch.trusted': `Uzticams`,
     };
   

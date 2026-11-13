@@ -7,7 +7,7 @@ export type SupportedLocale = "en" | "lv";
 let isInitializing = false;
 
 // Simplified configuration without predefined messages
-export const { getLocale, setLocale, msg, str } = configureLocalization({
+export const { getLocale, setLocale } = configureLocalization({
   sourceLocale,
   targetLocales,
   loadLocale: async (locale) => {
