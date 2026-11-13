@@ -52,49 +52,51 @@ const ALLOWED_ORIGINS = [
 // Cloudflare Pages preview deployments pattern (includes hyphens for branch names)
 const PAGES_PREVIEW_PATTERN = /^https:\/\/[a-z0-9-]+\.edocviewer\.pages\.dev$/;
 
-// Only proxy to known certificate infrastructure domains
-const ALLOWED_DEST_PATTERNS = [
+// Known certificate infrastructure hosts. An entry matches the hostname itself
+// and its subdomains ("eparaksts.lv" matches "www.eparaksts.lv").
+const ALLOWED_HOSTS = [
   // Latvian eParaksts (LVRTC)
-  /^https?:\/\/(www\.)?eparaksts\.lv\//,            // eparaksts.lv (certs, CRLs)
-  /^https?:\/\/ocsp\.eparaksts\.lv(\/|$)/,          // OCSP responder
-
+  'eparaksts.lv',
   // Estonian SK ID Solutions
-  /^https?:\/\/c\.sk\.ee\//,                        // CA certificates
-  /^https?:\/\/aia\.sk\.ee\//,                      // AIA (issuer certs)
-  /^https?:\/\/www\.sk\.ee\/crls\//,                // CRLs
-  /^https?:\/\/ocsp\.sk\.ee(\/|$)/,                 // OCSP responder
-
+  'sk.ee',
   // Ukrainian CAs (Diia, Informjust)
-  /^https?:\/\/ca\.diia\.gov\.ua\//,                // Diia CA services
-  /^https?:\/\/ca\.informjust\.ua\//,               // Informjust OCSP/CRL
-
+  'ca.diia.gov.ua',
+  'ca.informjust.ua',
   // Slovak SNCA (National Security Authority CA)
-  /^https?:\/\/[^/]*\.snca\.gov\.sk(\/|$)/,         // *.snca.gov.sk (OCSP, CRLs, certs)
-
+  'snca.gov.sk',
   // Hungarian Microsec (government CA)
-  /^https?:\/\/[^/]*\.hiteles\.gov\.hu(\/|$)/,      // *.hiteles.gov.hu (OCSP, CRLs, certs)
-
+  'hiteles.gov.hu',
   // Hungarian Netlock (qualified trust services)
-  /^https?:\/\/[^/]*\.netlock\.hu\//,               // *.netlock.hu (AIA, CRL via CGI endpoints)
-
+  'netlock.hu',
   // Lithuanian VRM (government CA)
-  /^https?:\/\/nsc\.vrm\.lt\//,                     // OCSP responder
-
+  'nsc.vrm.lt',
   // Slovak/Czech Ardaco (TSP/OCSP)
-  /^https?:\/\/tsp\.ardaco\.com\//,                 // TSP/OCSP/CRL services
-
+  'tsp.ardaco.com',
   // Polish Eurocert
-  /^https?:\/\/services\.eurocert\.pl\//,           // OCSP services
-
+  'services.eurocert.pl',
   // FreeTSA (open timestamp authority)
-  /^https?:\/\/www\.freetsa\.org\//,                // CA certificates
-
-  // Generic patterns for other EU trust services
-  /^https?:\/\/[^/]*ocsp[^/]*\.[^/]+(\/|$)/,        // OCSP responders (hostname contains "ocsp")
-  /^https?:\/\/[^/]+\/.*ocsp/i,                     // OCSP responders (path contains "ocsp")
-  /^https?:\/\/aia\.[^/]+\//,                       // AIA endpoints (aia.*)
-  /^https?:\/\/[^/]+\/.*\.(crl|crt|cer|der|p7c|pem)(\?.*)?$/i,  // CRL/cert files by extension
+  'www.freetsa.org',
 ];
+
+// File types served by CRL distribution points and AIA CA-issuer endpoints
+const CERT_OR_CRL_PATH = /\.(crl|crt|cer|der|p7c|pem)$/i;
+
+const MAX_REDIRECTS = 3;
+// Large national CRLs exist (the Estonian ID card CRL is ~18 MB)
+const MAX_RESPONSE_BYTES = 50 * 1024 * 1024;
+const ALLOWED_PORTS = new Set(['', '80', '443', '8080']);
+
+// Response types passed through as-is; anything else is served as octet-stream
+const SAFE_CONTENT_TYPES = new Set([
+  'application/ocsp-response',
+  'application/pkix-crl',
+  'application/pkix-cert',
+  'application/x-x509-ca-cert',
+  'application/pkcs7-mime',
+  'application/x-pkcs7-certificates',
+  'application/x-pkcs7-crl',
+  'application/octet-stream',
+]);
 
 function isAllowedOrigin(origin: string | null): boolean {
   if (!origin) return false;
@@ -103,8 +105,58 @@ function isAllowedOrigin(origin: string | null): boolean {
   return false;
 }
 
-function isAllowedDestination(url: string): boolean {
-  return ALLOWED_DEST_PATTERNS.some((pattern) => pattern.test(url));
+function hostMatches(hostname: string, allowed: string): boolean {
+  return hostname === allowed || hostname.endsWith(`.${allowed}`);
+}
+
+function parseDestination(raw: string): URL | null {
+  let url: URL;
+  try {
+    url = new URL(raw);
+  } catch {
+    return null;
+  }
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') return null;
+  if (url.username || url.password) return null;
+  if (!ALLOWED_PORTS.has(url.port)) return null;
+  const hostname = url.hostname.toLowerCase();
+  // No IP literals or single-label / local names
+  if (/^[\d.]+$/.test(hostname) || hostname.includes(':') || !hostname.includes('.')) return null;
+  if (hostname === 'localhost' || hostname.endsWith('.localhost') || hostname.endsWith('.local')) {
+    return null;
+  }
+  return url;
+}
+
+/**
+ * Decide whether a request may be proxied to `url`.
+ * - Known certificate infrastructure hosts: GET and OCSP POST
+ * - Other hosts: OCSP POST to an OCSP-looking host, or GET of a certificate/CRL file
+ */
+function isAllowedDestination(url: URL, method: string, contentType: string | null): boolean {
+  const hostname = url.hostname.toLowerCase();
+  const isOcspPost = method === 'POST' && contentType === 'application/ocsp-request';
+
+  if (method === 'POST' && !isOcspPost) return false;
+
+  if (ALLOWED_HOSTS.some((allowed) => hostMatches(hostname, allowed))) {
+    return true;
+  }
+
+  if (isOcspPost) {
+    return hostname.split('.').some((label) => label.includes('ocsp')) || /ocsp/i.test(url.pathname);
+  }
+
+  return (
+    CERT_OR_CRL_PATH.test(url.pathname) ||
+    hostname.startsWith('aia.') ||
+    hostname.startsWith('crl.')
+  );
+}
+
+function safeContentType(value: string | null): string {
+  const type = (value || '').split(';')[0].trim().toLowerCase();
+  return SAFE_CONTENT_TYPES.has(type) ? type : 'application/octet-stream';
 }
 
 function corsError(message: string, status: number, origin: string): Response {
@@ -118,7 +170,9 @@ export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const origin = request.headers.get('Origin');
 
-    // Check Origin header (browsers can't spoof this)
+    // Check Origin header. This only keeps other websites from using the proxy
+    // from a browser; non-browser clients can send any Origin, so the
+    // destination checks below are what actually limit the proxy.
     if (!isAllowedOrigin(origin)) {
       return new Response('Forbidden', { status: 403 });
     }
@@ -141,13 +195,15 @@ export default {
     }
 
     // Get and validate destination URL
-    const url = new URL(request.url).searchParams.get('url');
-    if (!url) {
+    const rawUrl = new URL(request.url).searchParams.get('url');
+    if (!rawUrl) {
       return corsError('Missing url parameter', 400, origin!);
     }
 
-    if (!isAllowedDestination(url)) {
-      logToAxiom(env, ctx, 'blocked', url, request.method);
+    const contentType = request.headers.get('Content-Type');
+    const destination = parseDestination(rawUrl);
+    if (!destination || !isAllowedDestination(destination, request.method, contentType)) {
+      logToAxiom(env, ctx, 'blocked', rawUrl, request.method);
       return corsError('Destination not allowed', 400, origin!);
     }
 
@@ -157,59 +213,88 @@ export default {
       let response: Response | undefined;
 
       // Only use cache for GET requests (POST responses depend on request body)
+      const cacheKey = new Request(new URL(request.url).toString(), { method: 'GET' });
       if (!isPost) {
-        const cacheKey = new Request(new URL(request.url).toString(), request);
         response = await cache.match(cacheKey);
       }
 
       if (!response) {
-        // Cache miss or POST - fetch from origin
-        const fetchOptions: RequestInit = {
-          method: request.method,
-          headers: {
-            'User-Agent': 'edocviewer-cors-proxy/1.0',
-          },
-        };
-
-        // Forward Content-Type and body for POST requests
-        if (isPost) {
-          const contentType = request.headers.get('Content-Type');
-          if (contentType) {
-            (fetchOptions.headers as Record<string, string>)['Content-Type'] = contentType;
-          }
-          fetchOptions.body = await request.arrayBuffer();
+        const body = isPost ? await request.arrayBuffer() : undefined;
+        if (body && body.byteLength > 64 * 1024) {
+          return corsError('Request too large', 413, origin!);
         }
 
-        const originResponse = await fetch(url, fetchOptions);
+        // Follow redirects manually so every hop is checked against the allowlist
+        let target = destination;
+        let method = request.method;
+        let originResponse: Response | undefined;
+        for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
+          originResponse = await fetch(target.toString(), {
+            method,
+            redirect: 'manual',
+            headers: {
+              'User-Agent': 'edocviewer-cors-proxy/1.0',
+              ...(method === 'POST' && contentType ? { 'Content-Type': contentType } : {}),
+            },
+            body: method === 'POST' ? body : undefined,
+          });
 
-        const ttl = getCacheTtl(url);
+          const location = originResponse.headers.get('Location');
+          if (originResponse.status < 300 || originResponse.status >= 400 || !location) {
+            break;
+          }
+          if (hop === MAX_REDIRECTS) {
+            return corsError('Too many redirects', 502, origin!);
+          }
+          const next = parseDestination(new URL(location, target).toString());
+          // 303 (and historically 301/302) turn POST into GET
+          const nextMethod =
+            method === 'POST' && [301, 302, 303].includes(originResponse.status) ? 'GET' : method;
+          if (!next || !isAllowedDestination(next, nextMethod, contentType)) {
+            logToAxiom(env, ctx, 'blocked', location, nextMethod);
+            return corsError('Redirect destination not allowed', 502, origin!);
+          }
+          target = next;
+          method = nextMethod;
+        }
 
-        // Create response with cache headers
-        response = new Response(originResponse.body, {
-          status: originResponse.status,
+        const declaredLength = Number(originResponse!.headers.get('Content-Length') || 0);
+        if (declaredLength > MAX_RESPONSE_BYTES) {
+          return corsError('Response too large', 502, origin!);
+        }
+        const data = await originResponse!.arrayBuffer();
+        if (data.byteLength > MAX_RESPONSE_BYTES) {
+          return corsError('Response too large', 502, origin!);
+        }
+
+        const ttl = getCacheTtl(destination.toString());
+
+        response = new Response(data, {
+          status: originResponse!.status,
           headers: {
-            'Content-Type':
-              originResponse.headers.get('Content-Type') ||
-              'application/octet-stream',
+            'Content-Type': safeContentType(originResponse!.headers.get('Content-Type')),
             'Cache-Control': isPost ? 'no-store' : `public, max-age=${ttl}`,
           },
         });
 
         // Store in edge cache (only cache successful GET responses)
-        if (!isPost && originResponse.status === 200) {
-          const cacheKey = new Request(new URL(request.url).toString(), request);
-          await cache.put(cacheKey, response.clone());
+        if (!isPost && originResponse!.status === 200) {
+          ctx.waitUntil(cache.put(cacheKey, response.clone()));
         }
       }
 
-      // Add CORS headers to response
+      // Add CORS and safety headers to response
       const corsResponse = new Response(response.body, {
         status: response.status,
         headers: response.headers,
       });
       corsResponse.headers.set('Access-Control-Allow-Origin', origin!);
+      corsResponse.headers.set('Vary', 'Origin');
+      corsResponse.headers.set('X-Content-Type-Options', 'nosniff');
+      corsResponse.headers.set('Content-Security-Policy', "default-src 'none'; sandbox");
+      corsResponse.headers.set('Content-Disposition', 'attachment');
 
-      logToAxiom(env, ctx, 'accessed', url, request.method);
+      logToAxiom(env, ctx, 'accessed', destination.toString(), request.method);
       return corsResponse;
     } catch (error) {
       return corsError(`Proxy error: ${(error as Error).message}`, 502, origin!);
