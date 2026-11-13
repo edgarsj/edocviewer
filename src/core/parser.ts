@@ -229,6 +229,12 @@ export async function verifyEdocSignaturesQuick(
 
           // Map edockit status to our UI status - use status field as source of truth
           const edockitStatus = result.status as EdockitVerificationStatus;
+          const awaitsTimestamp =
+            edockitStatus === 'INDETERMINATE' &&
+            !!signature.signatureTimestamp &&
+            (result.limitations || []).some(
+              (limitation: VerificationLimitation) => limitation.code === 'CERT_EXPIRED_NO_POE',
+            );
 
           // Determine initial verification status based on edockit status
           let verificationStatus: VerificationStatus;
@@ -240,7 +246,10 @@ export async function verifyEdocSignaturesQuick(
               verificationStatus = 'failed';
               break;
             case 'INDETERMINATE':
-              verificationStatus = 'unknown';
+              // The quick pass skips timestamps, so a timestamped signature whose
+              // certificate has since expired can only be decided by the full
+              // verification (which uses the timestamp as proof of time)
+              verificationStatus = awaitsTimestamp ? 'pending' : 'unknown';
               break;
             case 'UNSUPPORTED':
               verificationStatus = 'unsupported';
@@ -260,6 +269,10 @@ export async function verifyEdocSignaturesQuick(
               : allErrors;
           } else if (result.statusMessage && edockitStatus !== 'VALID') {
             errorMessage = result.statusMessage;
+          }
+
+          if (awaitsTimestamp) {
+            errorMessage = null;
           }
 
           if (!allDocumentsSigned) {

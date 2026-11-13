@@ -389,7 +389,14 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
     } else if (isUnsupported) {
       statusTitle = msg("Verification not supported on this platform", { id: "signatures.unsupported" });
     } else if (isUnknown) {
-      statusTitle = msg("Could not verify certificate revocation status", { id: "signatures.unknown" });
+      const revocationOnly =
+        (limitations || []).length > 0 &&
+        (limitations || []).every((limitation) => limitation.code === "REVOCATION_UNKNOWN");
+      statusTitle = revocationOnly
+        ? msg("Could not verify certificate revocation status", { id: "signatures.unknown" })
+        : msg("Signature validity could not be fully determined", {
+            id: "signatures.indeterminate",
+          });
     } else if (valid) {
       statusTitle = msg("Valid signature", { id: "signatures.valid" });
     } else {

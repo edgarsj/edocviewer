@@ -109,6 +109,7 @@
 'signatures.details': `detaļas`,
 'signatures.detailsLink': `vairāk..`,
 'signatures.docsCheck': `Visi dokumenti parakstīti`,
+'signatures.indeterminate': `Paraksta derīgumu nevarēja pilnībā noteikt`,
 'signatures.invalid': `Nederīgs paraksts`,
 'signatures.noSignatures': `Nav parakstu`,
 'signatures.referencedFiles': `Parakstā iekļautie faili`,
