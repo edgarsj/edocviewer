@@ -12,6 +12,7 @@ import "@shoelace-style/shoelace/dist/components/button/button.js";
 import "@shoelace-style/shoelace/dist/components/icon/icon.js";
 import "@shoelace-style/shoelace/dist/components/spinner/spinner.js";
 import { SlDialog } from "@shoelace-style/shoelace";
+import { toBlobPart } from "../utils/blob";
 
 // We'll import our docx adapter dynamically when needed
 // import { renderDocx } from "../utils/docxAdapter";
@@ -347,7 +348,7 @@ export class EdocFilePreview extends LocaleAwareMixin(LitElement) {
    */
   private handleDownload() {
     if (this.fileData && this.fileName) {
-      const blob = new Blob([this.fileData], { type: this.mimeType });
+      const blob = new Blob([toBlobPart(this.fileData)], { type: this.mimeType });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -420,7 +421,7 @@ export class EdocFilePreview extends LocaleAwareMixin(LitElement) {
 
     // Create blob and object URL for images and PDFs
     if (isImage || isPdf) {
-      const blob = new Blob([this.fileData], { type: this.mimeType });
+      const blob = new Blob([toBlobPart(this.fileData)], { type: this.mimeType });
       this.objectUrl = URL.createObjectURL(blob);
     }
 

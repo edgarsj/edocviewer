@@ -1,3 +1,5 @@
+import { toBlobPart } from "./blob";
+
 /**
  * Universal download function that works in both regular browser and extension contexts
  * @param filename The name to save the file as
@@ -18,7 +20,7 @@ export function downloadFile(
     const blob =
       content instanceof Blob
         ? content
-        : new Blob([content], { type: mimeType });
+        : new Blob([toBlobPart(content)], { type: mimeType });
 
     // Create URL for the blob
     const url = URL.createObjectURL(blob);

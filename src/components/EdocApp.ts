@@ -30,6 +30,7 @@ import {
   verifyEdocSignaturesQuick,
   verifyEdocSignatureFull,
 } from "../core/parser";
+import { toBlobPart } from "../utils/blob";
 
 /**
  * Main application component for eDoc Viewer
@@ -798,7 +799,7 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
     }
 
     // Create a download link for a single file
-    const blob = new Blob([fileData]);
+    const blob = new Blob([toBlobPart(fileData)]);
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -851,7 +852,7 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
     // If it's a PDF and we're on mobile, open in a new tab directly
     if (isPDF && this.isMobileDevice()) {
       // Create blob and object URL
-      const blob = new Blob([fileData], { type: "application/pdf" });
+      const blob = new Blob([toBlobPart(fileData)], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
 
       // Open in new tab
@@ -894,7 +895,7 @@ export class EdocApp extends LocaleAwareMixin(LitElement) {
         }
 
         // Create download link
-        const blob = new Blob([fileData]);
+        const blob = new Blob([toBlobPart(fileData)]);
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;

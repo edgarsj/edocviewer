@@ -6,6 +6,7 @@
 // Add a static import at the top to ensure webpack detects this dependency
 // but don't use it directly - we'll still use dynamic import later
 import "docx-preview";
+import { toBlobPart } from "./blob";
 
 /**
  * Loads docx-preview and renders a DOCX file
@@ -22,7 +23,7 @@ export async function renderDocx(
     const docxPreview = await import("docx-preview");
 
     // Create a blob from the file data
-    const blob = new Blob([fileData], {
+    const blob = new Blob([toBlobPart(fileData)], {
       type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     });
 

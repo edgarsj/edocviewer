@@ -14,12 +14,26 @@ export interface SignerInfo {
 export interface RevocationInfo {
   isValid: boolean;
   status: "good" | "revoked" | "unknown" | "error";
-  method?: "ocsp" | "crl";
+  method?: "ocsp" | "crl" | "none";
 }
 
 export interface TimestampInfo {
+  /** Timestamp genTime formatted as yyyy-mm-dd HH:mm (local time) */
   time: string;
   valid: boolean;
+}
+
+/** Format a date as yyyy-mm-dd HH:mm in local time */
+export function formatDateTime(value: Date | string | undefined): string {
+  if (!value) {
+    return "";
+  }
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
 
 /** Status returned by edockit v0.3.0+ verification */
@@ -192,28 +206,8 @@ export async function verifyEdocSignaturesQuick(
             }
           }
 
-          // Extract signature date if available
-          if (signature.signingTime) {
-            // Format the signature date as yyyy-mm-dd HH:mm
-            try {
-              const date = new Date(signature.signingTime);
-
-              // Get date parts
-              const year = date.getFullYear();
-              const month = String(date.getMonth() + 1).padStart(2, "0");
-              const day = String(date.getDate()).padStart(2, "0");
-
-              // Get time parts
-              const hours = String(date.getHours()).padStart(2, "0");
-              const minutes = String(date.getMinutes()).padStart(2, "0");
-
-              // Format as yyyy-mm-dd HH:mm
-              signatureDate = `${year}-${month}-${day} ${hours}:${minutes}`;
-            } catch (e) {
-              console.error("Error formatting signature date:", e);
-              signatureDate = signature.signingTime || "";
-            }
-          }
+          // Signature date as yyyy-mm-dd HH:mm
+          signatureDate = formatDateTime(signature.signingTime);
 
           // Check if all document files are signed
           const signedFiles = signature.references || [];
@@ -377,8 +371,8 @@ export async function verifyEdocSignatureFull(
     // Extract timestamp info if available
     const timestamp: TimestampInfo | undefined = result.timestamp
       ? {
-          time: result.timestamp.time,
-          valid: result.timestamp.valid,
+          time: formatDateTime(result.timestamp.info?.genTime),
+          valid: result.timestamp.isValid,
         }
       : undefined;
 
