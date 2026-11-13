@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, rm, writeFile } from "node:fs/promises";
 import http from "node:http";
 import https from "node:https";
 import { dirname } from "node:path";
@@ -8,7 +8,12 @@ import {
 } from "edockit/trusted-list/build";
 import { getBundledTrustedListBundle } from "edockit/trusted-list/bundled";
 
-const OUTPUT_PATH = "public/assets/trusted-list.json";
+// Outside public/assets: the service worker precaches files under assets/
+// without a revision (they are assumed to have hashed names), so a list there
+// would never be refreshed for returning visitors.
+const OUTPUT_PATH = "public/trusted-list.json";
+// Location used by edocviewer 1.1.0 and earlier
+const LEGACY_OUTPUT_PATH = "public/assets/trusted-list.json";
 
 // EU member states (EL = Greece) and EEA countries. Every deploy must cover
 // all of them; signatures from a missing country would show "issuer not found".
@@ -134,6 +139,7 @@ if (missing.length > 0) {
 }
 
 await mkdir(dirname(OUTPUT_PATH), { recursive: true });
+await rm(LEGACY_OUTPUT_PATH, { force: true });
 await writeFile(OUTPUT_PATH, `${JSON.stringify(bundle)}\n`, "utf8");
 console.log(
   `Trusted list bundle generated at ${OUTPUT_PATH}: ${bundle.services.length} services from ${territoriesOf(bundle).size} territories`,
