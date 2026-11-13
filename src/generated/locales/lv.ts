@@ -125,6 +125,7 @@
 'signatures.verifying': `Paraksta sertifikāta pārbaude...`,
 'trustMatch.notFound': `Nav atrasts uzticamo sarakstā`,
 'trustMatch.notTrusted': `Nav uzticams`,
+'trustMatch.thirdCountry': `Trešās valsts uzticamo saraksts (nav pielīdzināms ES kvalificētam uzticamības pakalpojumam)`,
 'trustMatch.trusted': `Uzticams`,
     };
   

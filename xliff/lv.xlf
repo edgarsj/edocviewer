@@ -487,6 +487,10 @@
   <source>Not found in trusted list</source>
   <target>Nav atrasts uzticamo sarakstā</target>
 </trans-unit>
+<trans-unit id="trustMatch.thirdCountry">
+  <source>Third-country trusted list (not equivalent to an EU qualified trust service)</source>
+  <target>Trešās valsts uzticamo saraksts (nav pielīdzināms ES kvalificētam uzticamības pakalpojumam)</target>
+</trans-unit>
 </body>
 </file>
 </xliff>

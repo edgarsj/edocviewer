@@ -47,6 +47,8 @@ export interface TrustListMatchResult {
   trustedAtTime?: boolean;
   confidence?: 'exact' | 'ski_dn' | 'dn_only';
   country?: string;
+  /** Trusted-list source: "eu" (EU/EEA lists) or "ades" (third-country lists) */
+  source?: string;
   detail?: string;
 }
 

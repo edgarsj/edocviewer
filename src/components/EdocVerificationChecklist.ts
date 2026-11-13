@@ -67,6 +67,12 @@ export class EdocVerificationChecklist extends LocaleAwareMixin(LitElement) {
       margin-top: 0.125rem;
     }
 
+    .third-country {
+      font-size: 0.8rem;
+      color: var(--sl-color-warning-700);
+      margin-top: 0.125rem;
+    }
+
     .trust-section {
       margin-top: 1rem;
       padding-top: 0.75rem;
@@ -223,7 +229,15 @@ export class EdocVerificationChecklist extends LocaleAwareMixin(LitElement) {
               ${match.confidence
                 ? html`(<span class="confidence">${match.confidence}</span>)`
                 : nothing}
-              ${match.country ? html`— ${match.country}` : nothing}`
+              ${match.country ? html`— ${match.country}` : nothing}
+              ${match.source && match.source !== "eu"
+                ? html`<div class="third-country">
+                    ${msg(
+                      "Third-country trusted list (not equivalent to an EU qualified trust service)",
+                      { id: "trustMatch.thirdCountry" }
+                    )}
+                  </div>`
+                : nothing}`
           : msg("Not found in trusted list", { id: "trustMatch.notFound" })}
         ${match.detail ? html`<div>${match.detail}</div>` : nothing}
       </div>
