@@ -1,6 +1,7 @@
-import { writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import http from "node:http";
 import https from "node:https";
+import { dirname } from "node:path";
 import {
   fetchTrustedListBundleWithDiagnostics,
   mergeForwardUnreachableTerritories,
@@ -132,6 +133,7 @@ if (missing.length > 0) {
   process.exit(1);
 }
 
+await mkdir(dirname(OUTPUT_PATH), { recursive: true });
 await writeFile(OUTPUT_PATH, `${JSON.stringify(bundle)}\n`, "utf8");
 console.log(
   `Trusted list bundle generated at ${OUTPUT_PATH}: ${bundle.services.length} services from ${territoriesOf(bundle).size} territories`,
