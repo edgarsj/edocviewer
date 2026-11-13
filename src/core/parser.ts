@@ -139,7 +139,7 @@ async function getTrustListProvider() {
   if (!trustListProviderPromise) {
     trustListProviderPromise = import("edockit/trusted-list")
       .then(({ createTrustListProvider }) =>
-        createTrustListProvider({ url: "/assets/trusted-list.json" })
+        createTrustListProvider({ url: "/trusted-list.json" })
       )
       .catch((err) => {
         console.warn("Failed to load trust-list provider, verification will proceed without trust-list checks:", err);

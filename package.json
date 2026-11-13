@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "npm run localize:build && vite",
-    "ensure-trusted-list": "[ -f public/assets/trusted-list.json ] || npm run update-trusted-list",
+    "ensure-trusted-list": "[ -f public/trusted-list.json ] || npm run update-trusted-list",
     "typecheck": "tsc --noEmit -p .",
     "build:webapp": "npm run typecheck && npm run update-trusted-list && npm run localize:build && vite build",
     "preview": "vite preview",
