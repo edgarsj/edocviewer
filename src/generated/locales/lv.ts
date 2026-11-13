@@ -10,8 +10,8 @@
 
     export const templates = {
       'app.backButtonLabel': `Atpakaļ`,
-'app.badge_documents_viewed': `Apskatīti 50K+ dokumenti`,
-'app.badge_documents_viewed_tooltip': `Plausible analītika, maijs 2025 – jūnijs 2026`,
+'app.badge_documents_viewed': `Apskatīti 103K+ dokumenti`,
+'app.badge_documents_viewed_tooltip': `Plausible analītika, maijs 2025 – novembris 2026`,
 'app.check_updates': `Pārbaudīt atjauninājumus`,
 'app.checking_updates': `Pārbauda...`,
 'app.description': `Skatīt un pārbaudīt EU standarta ASiC-E un Latvijas eDoc elektroniskā paraksta failus (.asice, .sce, .edoc)`,
