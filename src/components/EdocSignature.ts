@@ -4,6 +4,11 @@ import { msg } from "@lit/localize";
 import { SignatureValidationResult, VerificationStatus, VerificationLimitation } from "../core/parser";
 import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
 import { openLegalModal } from "../utils/legalNavigation";
+import {
+  displayedQualification,
+  isQualifiedLevel,
+  qualificationLevelLabel,
+} from "../utils/qualification";
 import "@shoelace-style/shoelace/dist/components/details/details.js";
 import "@shoelace-style/shoelace/dist/components/badge/badge.js";
 import "@shoelace-style/shoelace/dist/components/icon/icon.js";
@@ -287,6 +292,28 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
       font-size: 2.5rem;
     }
 
+    .signature-level {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.125rem 0.625rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      border: 1px solid var(--sl-color-neutral-300);
+      background-color: var(--sl-color-neutral-50);
+      color: var(--sl-color-neutral-700);
+    }
+
+    .signature-level.qualified {
+      border-color: var(--sl-color-success-300);
+      background-color: var(--sl-color-success-50);
+      color: var(--sl-color-success-800);
+    }
+
+    .signature-level sl-icon {
+      font-size: 0.875rem;
+    }
+
     .status-icon-container.clickable {
       cursor: pointer;
       transition: transform 0.15s ease;
@@ -445,6 +472,7 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
         <div class="signature-header">
           <div class="signature-details">
             ${this.renderSignerInfo()} ${this.renderSignatureDate()}
+            ${this.renderSignatureLevel()}
           </div>
         </div>
 
@@ -501,6 +529,7 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
           .timestampTrustListMatch=${this.signature.timestampTrustListMatch}
           .signerName=${this.signature.signerInfo.signerName}
           .issuer=${this.signature.signerInfo.issuer}
+          .qualification=${displayedQualification(this.signature)}
         ></edoc-verification-checklist>
       </div>
     `;
@@ -541,6 +570,26 @@ export class EdocSignature extends LocaleAwareMixin(LitElement) {
         <sl-icon name="calendar" aria-hidden="true"></sl-icon>
         <span aria-label="${msg("Date", { id: "signatures.date" })}">
           ${signerInfo.signatureDate}
+        </span>
+      </div>
+    `;
+  }
+
+  private renderSignatureLevel() {
+    const qualification = displayedQualification(this.signature);
+    if (!qualification) {
+      return nothing;
+    }
+
+    const qualified = isQualifiedLevel(qualification.level);
+    return html`
+      <div>
+        <span class="signature-level ${qualified ? "qualified" : ""}">
+          <sl-icon
+            name="${qualified ? "patch-check-fill" : "patch-check"}"
+            aria-hidden="true"
+          ></sl-icon>
+          <span>${qualificationLevelLabel(qualification.level)}</span>
         </span>
       </div>
     `;

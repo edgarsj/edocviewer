@@ -1,8 +1,12 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import http from "node:http";
 import https from "node:https";
-import { fileURLToPath } from "node:url";
-import { generateTrustedListBundle } from "edockit/trusted-list/build";
+import { dirname } from "node:path";
+import {
+  fetchTrustedListBundleWithDiagnostics,
+  mergeForwardUnreachableTerritories,
+} from "edockit/trusted-list/build";
+import { getBundledTrustedListBundle } from "edockit/trusted-list/bundled";
 
 const OUTPUT_PATH = "public/assets/trusted-list.json";
 
@@ -81,57 +85,21 @@ function missingTerritories(bundle) {
   return REQUIRED_TERRITORIES.filter((territory) => !present.has(territory));
 }
 
-/**
- * Trusted-list snapshot shipped with the installed edockit version (generated
- * when that version was released). Returns null if it cannot be read.
- * TODO: use a public export once edockit provides one.
- */
-async function loadEdockitSnapshot() {
-  try {
-    const file = fileURLToPath(import.meta.resolve("edockit/trusted-list/bundled"));
-    const source = await readFile(file, "utf8");
-    const match = source.match(/^const trustedListBundle = (\{.*\});$/m);
-    return match ? JSON.parse(match[1]) : null;
-  } catch (error) {
-    console.warn(`Could not read edockit's trusted-list snapshot: ${error.message}`);
-    return null;
-  }
-}
-
-/** Copy the services of `territories` from `snapshot` into `bundle`. */
-function carryForward(bundle, snapshot, territories) {
-  const wanted = new Set(territories);
-  const dns = [...bundle.dns];
-  const dnIndex = new Map(dns.map((dn, index) => [dn, index]));
-  const sourceIndex = new Map(bundle.sources.map(([id], index) => [id, index]));
-  const carried = snapshot.services
-    .filter((service) => wanted.has(service[3]))
-    .map((service) => {
-      const dn = snapshot.dns[service[2]];
-      if (!dnIndex.has(dn)) {
-        dnIndex.set(dn, dns.length);
-        dns.push(dn);
-      }
-      const record = [service[0], service[1], dnIndex.get(dn), service[3], service[4], service[5]];
-      const sourceId = service[6] !== undefined ? snapshot.sources[service[6]]?.[0] : undefined;
-      if (sourceId !== undefined && sourceIndex.has(sourceId)) {
-        record.push(sourceIndex.get(sourceId));
-      }
-      return record;
-    });
-  return { ...bundle, dns, services: [...bundle.services, ...carried] };
-}
-
 const restoreFetch = installNativeFetchFallback();
 let bundle;
+let unreachable = [];
 try {
   for (const [index, options] of ATTEMPTS.entries()) {
-    const result = await generateTrustedListBundle({ outputPath: OUTPUT_PATH, ...options });
+    const result = await fetchTrustedListBundleWithDiagnostics(undefined, options);
     bundle = result.bundle;
+    unreachable = result.diagnostics.unreachableTerritories;
     const missing = missingTerritories(bundle);
     console.log(
       `Trusted list attempt ${index + 1}: ${bundle.services.length} services from ${territoriesOf(bundle).size} territories`,
     );
+    if (unreachable.length > 0) {
+      console.warn(`Trusted list download failed for: ${unreachable.join(", ")}`);
+    }
     if (missing.length === 0) {
       break;
     }
@@ -141,26 +109,32 @@ try {
   restoreFetch();
 }
 
-let missing = missingTerritories(bundle);
-if (missing.length > 0) {
-  const snapshot = await loadEdockitSnapshot();
-  const available = snapshot ? missing.filter((territory) => territoriesOf(snapshot).has(territory)) : [];
-  if (available.length > 0) {
-    bundle = carryForward(bundle, snapshot, available);
-    await writeFile(OUTPUT_PATH, `${JSON.stringify(bundle)}\n`, "utf8");
+// Fill territories whose download failed (and any required territory still
+// missing) from the trusted-list snapshot shipped with the installed edockit
+// version (generated when that version was released). Territories that were
+// downloaded but no longer list services stay removed.
+const fillFromSnapshot = new Set([...unreachable, ...missingTerritories(bundle)]);
+if (fillFromSnapshot.size > 0) {
+  const snapshot = getBundledTrustedListBundle();
+  const before = territoriesOf(bundle);
+  bundle = mergeForwardUnreachableTerritories(bundle, snapshot, fillFromSnapshot);
+  const carried = [...territoriesOf(bundle)].filter((territory) => !before.has(territory)).sort();
+  if (carried.length > 0) {
     console.warn(
-      `Carried forward ${available.join(", ")} from edockit's trusted-list snapshot ${snapshot.bundleId} (live download failed)`,
+      `Carried forward ${carried.join(", ")} from edockit's trusted-list snapshot ${snapshot.bundleId} (live download failed)`,
     );
   }
-  missing = missingTerritories(bundle);
 }
 
+const missing = missingTerritories(bundle);
 if (missing.length > 0) {
   // Fail the build so the previous deployment stays live
   console.error(`Trusted list incomplete (missing: ${missing.join(", ")}); failing the build.`);
   process.exit(1);
 }
 
+await mkdir(dirname(OUTPUT_PATH), { recursive: true });
+await writeFile(OUTPUT_PATH, `${JSON.stringify(bundle)}\n`, "utf8");
 console.log(
   `Trusted list bundle generated at ${OUTPUT_PATH}: ${bundle.services.length} services from ${territoriesOf(bundle).size} territories`,
 );

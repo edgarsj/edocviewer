@@ -495,6 +495,58 @@
   <source>Third-country trusted list (not equivalent to an EU qualified trust service)</source>
   <target>Trešās valsts uzticamo saraksts (nav pielīdzināms ES kvalificētam uzticamības pakalpojumam)</target>
 </trans-unit>
+<trans-unit id="qualification.QESig">
+  <source>Qualified electronic signature</source>
+  <target>Kvalificēts elektroniskais paraksts</target>
+</trans-unit>
+<trans-unit id="qualification.QESeal">
+  <source>Qualified electronic seal</source>
+  <target>Kvalificēts elektroniskais zīmogs</target>
+</trans-unit>
+<trans-unit id="qualification.AdESigQC">
+  <source>Advanced electronic signature with a qualified certificate</source>
+  <target>Uzlabots elektroniskais paraksts ar kvalificētu sertifikātu</target>
+</trans-unit>
+<trans-unit id="qualification.AdESealQC">
+  <source>Advanced electronic seal with a qualified certificate</source>
+  <target>Uzlabots elektroniskais zīmogs ar kvalificētu sertifikātu</target>
+</trans-unit>
+<trans-unit id="qualification.AdESig">
+  <source>Advanced electronic signature</source>
+  <target>Uzlabots elektroniskais paraksts</target>
+</trans-unit>
+<trans-unit id="qualification.AdESeal">
+  <source>Advanced electronic seal</source>
+  <target>Uzlabots elektroniskais zīmogs</target>
+</trans-unit>
+<trans-unit id="qualification.AdES">
+  <source>Advanced electronic signature or seal</source>
+  <target>Uzlabots elektroniskais paraksts vai zīmogs</target>
+</trans-unit>
+<trans-unit id="qualification.indeterminate">
+  <source>Signature level could not be determined</source>
+  <target>Paraksta līmeni nevarēja noteikt</target>
+</trans-unit>
+<trans-unit id="qualification.yes">
+  <source>yes</source>
+  <target>jā</target>
+</trans-unit>
+<trans-unit id="qualification.no">
+  <source>no</source>
+  <target>nē</target>
+</trans-unit>
+<trans-unit id="qualification.title">
+  <source>Signature level (eIDAS)</source>
+  <target>Paraksta līmenis (eIDAS)</target>
+</trans-unit>
+<trans-unit id="qualification.qualifiedCertificate">
+  <source>Qualified certificate</source>
+  <target>Kvalificēts sertifikāts</target>
+</trans-unit>
+<trans-unit id="qualification.qscd">
+  <source>Key in a qualified signature/seal creation device (QSCD)</source>
+  <target>Atslēga kvalificētā paraksta/zīmoga radīšanas ierīcē (QSCD)</target>
+</trans-unit>
 </body>
 </file>
 </xliff>

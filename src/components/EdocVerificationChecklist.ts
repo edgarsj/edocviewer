@@ -1,7 +1,13 @@
 import { LitElement, html, css, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { msg } from "@lit/localize";
-import { ChecklistItemResult, TrustListMatchResult, CertificateIssuerInfo } from "../core/parser";
+import {
+  ChecklistItemResult,
+  TrustListMatchResult,
+  CertificateIssuerInfo,
+  QualificationResult,
+} from "../core/parser";
+import { qualificationLevelLabel } from "../utils/qualification";
 import { LocaleAwareMixin } from "../mixins/LocaleAwareMixin";
 import "@shoelace-style/shoelace/dist/components/dialog/dialog.js";
 import "@shoelace-style/shoelace/dist/components/icon/icon.js";
@@ -123,6 +129,10 @@ export class EdocVerificationChecklist extends LocaleAwareMixin(LitElement) {
   @property({ type: Object })
   issuer?: CertificateIssuerInfo;
 
+  /** Signature qualification; only set when the signature was verified as valid */
+  @property({ type: Object })
+  qualification?: QualificationResult;
+
   public show() {
     const dialog = this.shadowRoot?.querySelector("sl-dialog") as SlDialog;
     dialog?.show();
@@ -177,8 +187,43 @@ export class EdocVerificationChecklist extends LocaleAwareMixin(LitElement) {
           `;
         })}
         </div>
+        ${this.renderQualification()}
         ${this.renderTrustInfo()}
       </sl-dialog>
+    `;
+  }
+
+  private renderQualification() {
+    const qualification = this.qualification;
+    if (!qualification) {
+      return nothing;
+    }
+
+    const yes = msg("yes", { id: "qualification.yes" });
+    const no = msg("no", { id: "qualification.no" });
+
+    return html`
+      <div class="trust-section">
+        <div class="trust-section-title">
+          ${msg("Signature level (eIDAS)", { id: "qualification.title" })}
+        </div>
+        <div class="trust-match">
+          <strong>${qualificationLevelLabel(qualification.level)}</strong>
+          <div>
+            ${msg("Qualified certificate", { id: "qualification.qualifiedCertificate" })}:
+            ${qualification.qualifiedCertificate ? yes : no}
+          </div>
+          ${qualification.qualifiedCertificate
+            ? html`<div>
+                ${msg("Key in a qualified signature/seal creation device (QSCD)", {
+                  id: "qualification.qscd",
+                })}:
+                ${qualification.qscd ? yes : no}
+              </div>`
+            : nothing}
+          ${qualification.notes.map((note) => html`<div>${note}</div>`)}
+        </div>
+      </div>
     `;
   }
 

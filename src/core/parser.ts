@@ -66,6 +66,30 @@ export interface TrustListMatchResult {
   detail?: string;
 }
 
+/** eIDAS signature qualification level from edockit */
+export type QualificationLevel =
+  | 'QESig'
+  | 'QESeal'
+  | 'AdESig-QC'
+  | 'AdESeal-QC'
+  | 'AdESig'
+  | 'AdESeal'
+  | 'AdES'
+  | 'INDETERMINATE';
+
+/** eIDAS signature qualification from edockit */
+export interface QualificationResult {
+  level: QualificationLevel;
+  /** English label from edockit */
+  label: string;
+  qualifiedCertificate: boolean;
+  certificateType?: 'esign' | 'eseal' | 'web';
+  /** Private key in a qualified signature/seal creation device */
+  qscd: boolean;
+  /** English explanations from edockit when the level is lower than qualified */
+  notes: string[];
+}
+
 /** UI verification status for display */
 export type VerificationStatus = 'pending' | 'verified' | 'failed' | 'unknown' | 'unsupported';
 
@@ -93,6 +117,8 @@ export interface SignatureValidationResult {
   trustListMatch?: TrustListMatchResult;
   /** Timestamp authority trust-list match result */
   timestampTrustListMatch?: TrustListMatchResult;
+  /** eIDAS qualification (only meaningful when verificationStatus is 'verified') */
+  qualification?: QualificationResult;
 }
 
 export interface EdocContainer {
@@ -296,6 +322,7 @@ export async function verifyEdocSignaturesQuick(
             checklist: result.checklist,
             trustListMatch: result.trustListMatch,
             timestampTrustListMatch: result.timestampTrustListMatch,
+            qualification: result.qualification,
           } as SignatureValidationResult;
         } catch (error) {
           console.error("Error verifying signature:", error);
@@ -442,6 +469,7 @@ export async function verifyEdocSignatureFull(
       checklist: result.checklist,
       trustListMatch: result.trustListMatch,
       timestampTrustListMatch: result.timestampTrustListMatch,
+      qualification: result.qualification,
     };
   } catch (error) {
     console.error("Error in full signature verification:", error);
