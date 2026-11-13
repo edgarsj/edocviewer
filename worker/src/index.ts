@@ -154,6 +154,34 @@ function isAllowedDestination(url: URL, method: string, contentType: string | nu
   );
 }
 
+/**
+ * Read a response body, stopping (and cancelling the stream) as soon as it
+ * exceeds `limit` bytes. Returns null when the limit is exceeded.
+ */
+async function readLimited(response: Response, limit: number): Promise<Uint8Array | null> {
+  if (!response.body) return new Uint8Array(0);
+  const reader = response.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    total += value.byteLength;
+    if (total > limit) {
+      await reader.cancel();
+      return null;
+    }
+    chunks.push(value);
+  }
+  const data = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) {
+    data.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return data;
+}
+
 function safeContentType(value: string | null): string {
   const type = (value || '').split(';')[0].trim().toLowerCase();
   return SAFE_CONTENT_TYPES.has(type) ? type : 'application/octet-stream';
@@ -262,8 +290,8 @@ export default {
         if (declaredLength > MAX_RESPONSE_BYTES) {
           return corsError('Response too large', 502, origin!);
         }
-        const data = await originResponse!.arrayBuffer();
-        if (data.byteLength > MAX_RESPONSE_BYTES) {
+        const data = await readLimited(originResponse!, MAX_RESPONSE_BYTES);
+        if (!data) {
           return corsError('Response too large', 502, origin!);
         }
 
